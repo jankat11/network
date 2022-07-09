@@ -1,0 +1,54 @@
+{% extends "network/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<h3 id="title"></h3>
+
+<div id="profileHeader" data-profile={{ user }}>
+</div>
+
+<div id="new_post_area" class="form-group">
+    <form class="post_form send" action="/" method="post">
+        {% csrf_token %}
+        <h5><label for="newPost">New Post</label></h5>
+        <textarea name="new_post" class="form-control newPost"  rows="4" placeholder="What are you thinking?"></textarea>
+        <input type="submit" id="post_button" class="btn btn-info" value="Post">
+        <input type="hidden" class="sendButton" name=postId value="">
+        <span class="charAmount"></span> 
+    </form>
+    
+</div>
+
+
+
+<div id="topPagination">
+</div>
+
+<div id="all_posts">
+</div>
+
+<div id="main">
+<nav id="bottomPagination" >
+    <ul class="pagination justify-content-end">
+        <li class="page-item">
+            <a class="page-link previousPage" style="display: none;" aria-label="Previous">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+      <select class="form-select selectItem" aria-label="Default select example">        
+      </select>
+      <li class="lead seperate">  /  </li>
+      <li class="page-item wrapperLast" ><a class="page-link lastPage"></a></li>
+      <li class="page-item">
+        <a class="page-link nextPage" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  
+</div>
+<script src="{% static 'network/icons.js' %}"></script>
+<script src="{% static 'network/script.js' %}"></script>
+{% endblock %}

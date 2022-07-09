@@ -1,0 +1,350 @@
+.body {
+    padding: 40px;
+    padding-bottom: 20px;
+}
+
+#new_post_area {
+    border: solid rgb(196, 192, 192) 1px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 5px rgba(104, 143, 175, 0.192)
+}
+
+#post_button {
+    margin-top: 5px;
+}
+
+.newPost {
+    width: 100%;
+    border: 1px solid rgb(153, 152, 152);
+    border-left: solid 3px rgba(68, 156, 172, 0.575);
+}
+
+.post {
+    border: solid rgb(196, 192, 192) 1px;
+    border-radius: 5px;
+}
+
+.postOwner {
+    font-weight: bolder;
+    margin-left: 5px;
+    padding-left: 5px;
+}
+.postOwner:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-thickness: 4px;
+    text-decoration-color: rgb(85, 93, 100);
+}
+
+.postClock {
+    color: rgb(100, 98, 98);
+    font-size: small;
+    margin-left: 20px;
+}
+
+.postDate {
+    color: rgb(100, 98, 98);
+    font-size: smaller;
+    margin-left: 10px;
+}
+
+.postContent {
+    margin-left: 5px;
+    padding: 5px;
+    width: auto;
+    margin-top: 10px;
+    color: black;
+    font-weight: 400;
+}
+
+.heart, .comment {
+    position: relative;  
+    display: inline-block;
+}
+.comment {
+    margin-left: 50px;
+}
+.heart {
+    
+    margin-left: 20px;
+}
+
+.heartCount {
+    margin-left: 5px;
+}
+.heartIcon:hover, .commentIcon:hover, #allPosts:hover, #following:hover, #profile:hover, .maker:hover, #notification:hover{
+    cursor: pointer;
+}
+
+#profileHeader {
+    border-radius: 30px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+    background-color: rgba(70, 124, 145, 0.089);
+    padding: 5px;
+    box-shadow: 0px 0px 2px 10px rgba(108, 160, 160, 0.226);
+}
+
+.userCount {
+    font-weight: bolder;
+    display: block;
+    padding-left: 25px;
+    position: relative;
+    top: 10px;
+}
+
+.joinedDate {
+    font-size: smaller;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(104, 102, 102);
+    padding: 20px;
+    display: block;
+}
+
+.userFollow {
+    font-weight:400;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+    
+}
+
+#userName {
+    font-size: 40px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 5px;
+    display: inline-block;
+    margin-left: 8%;
+    margin-top: 20px;
+    color: rgba(0, 0, 0, 0.651);
+    background-color: rgba(147, 201, 245, 0.158);
+    border-radius: 15px;
+    box-shadow: 0px 0px 10px 5px rgba(104, 143, 175, 0.274);
+   
+}
+
+.profilePhoto {
+    display: inline-block;
+    margin-left: 20px;
+    position: relative;
+    bottom: 10px;
+    background-color: rgba(147, 201, 245, 0.158);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 5px rgba(104, 143, 175, 0.479)
+}
+
+@keyframes erase {
+    0% {
+        opacity: 1;
+        height: 100%;
+        margin-bottom: 10px;
+    }
+
+    100% {
+        opacity: 0;
+        height: 0%;
+        margin-bottom: 0px;
+        padding: 0%;   
+        margin-bottom: 0px;    
+        background-color: black;
+        color: white;
+    }
+}
+.postItem {
+    box-shadow: 0px 0px 10px 5px rgba(104, 143, 175, 0.192);
+    padding-top: 5px;
+    animation-name: erase;
+    animation-duration: 0.33s;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
+}
+
+.postContent:hover {
+    cursor: default;
+}
+
+.followButton {
+  margin-top: 20px;
+  border-radius: 30px;
+  border: solid 3px;
+  position: absolute;
+  right: 7%;
+}
+
+.edit, .save, .delete{
+    margin-left: 40px;
+    font-size: 12px;
+    padding: 1px;
+    padding-bottom: 0px;
+    margin-bottom: 4px;
+}
+.save {
+    padding-top: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-top: 2px;
+    color: #5186cc;
+}
+
+
+.seperate{
+    color: rgb(76, 122, 151);
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.submitComment {
+    margin-bottom: 10px;
+    border: solid 1px  rgba(68, 157, 172, 0.178);
+}
+
+.commentWrapper {
+    width: 100%;
+    padding-left: 3%;
+    margin-top: 10px;
+    border-left: solid 3px rgba(68, 156, 172, 0.575);
+    
+}
+
+.commentText {
+    margin-top: 20px;
+    border-left: solid 3px rgba(68, 156, 172, 0.575);
+}
+
+.commentSection {
+    box-shadow: -10px 0px 5px 0px rgba(68, 157, 172, 0.151);
+}
+
+.charAmount {
+    float: right;
+    position: relative;
+    top: 5px;
+    right: 5px;
+
+    
+}
+
+.sendButton {
+    display: inline-block;
+}
+
+.loadInfo {
+    margin-left: 3%;
+    margin-top: 10px;
+    cursor: pointer;
+    display: inline-block;
+    font-style: italic;
+    color: gray;
+}
+
+.notLoad {
+    position: relative;
+    left: -8%;
+    padding-left: 0px;
+}
+
+.notTime {
+    color: gray;
+    font-size: small;
+    background-color: rgb(253, 253, 205);
+    padding-left: 2px;
+}
+
+.notBody {
+    font-weight: bold;
+    font-size: large;
+    margin-left: 3%;
+}
+
+.notItem {
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.person {
+    color: #0373db;
+}
+
+.maker {
+    margin-left: 10px;
+}
+
+.contentRepr {
+    font-weight: 400;
+    color: rgb(94, 94, 94);
+    
+}
+
+.selectItem {
+    color: rgba(58, 58, 247, 0.753);
+    border: solid 1px #7979792d;
+    border-radius: 2px 2px 2px 2px;
+    padding-left: 7px;
+    padding-right: 2px;
+    font-family: sans-serif;
+}
+
+.lastPage {
+    border: 1px solid #7979792d;
+    border-radius: 2px 0px 0px 2px;
+    font-family: sans-serif;
+}
+.lastPage:hover, .nextPage:hover, .previousPage:hover {
+    cursor: pointer;
+}
+
+.wrapperLast {
+    color: rgba(58, 58, 247, 0.753);
+}
+
+.nextPage {
+    margin-left: 0px;
+    border-left: 0px;
+}
+.previousPage {
+    border-right: 0px;
+}
+
+#notCount {
+    padding-left: 6px;
+    padding-right: 8px;
+    border: solid 1px #4faaff;
+    font-weight: 600;
+    font-size: small;
+    background-color: #4faaff;
+    color: white;
+    margin-left: -2px;
+    display: none;
+    padding-top: 0px;
+}
+.bi-bell {
+    position: relative;
+    bottom: 2px;
+}
+
+
+#proIcon {
+    position: relative;
+    top: 10px;
+    left: 3px;
+}
+
+.navbar-brand {
+margin-left: 20px;
+font-family: Optima;
+font-size: x-large;
+
+}
+
+.bi-globe2 {
+    background-image: linear-gradient(to right, rgb(253, 120, 120) , rgb(247, 247, 112));
+    margin-bottom: 5px;
+    color: #a2b8cc46;
+}
+
+.dots {
+    height: 50px;
+    width: 100%;
+    border-left: dotted 3px #449cac93;
+}
+
