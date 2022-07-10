@@ -417,8 +417,8 @@ function removePagination() {
 
 
 function deletePost(post)  {
-    console.log(post)  
-    if (confirm("Are sure to delete post?")) {
+    let apply = () => confirm("Are sure to delete post?")
+    if (apply()) {
         fetch(`/delete_post/${post.dataset.id}`)
         .then(response => response.json())
         .then(result => {
