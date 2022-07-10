@@ -30,5 +30,5 @@ urlpatterns = [
     path("home", views.home, name="home"),
     path("profile", views.profile, name="profile"),
     path("pages", views.pages, name="pages"),
-    path("pages", views.pages, name="post"),
+    path("post", views.post, name="post"),
 ]
