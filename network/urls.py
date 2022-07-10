@@ -32,3 +32,4 @@ urlpatterns = [
     path("pages", views.pages, name="pages"),
     path("post", views.post, name="post"),
 ]
+
