@@ -20,7 +20,7 @@ window.onpopstate = event => {
         let argS = event.state.section.slice(4).split("-")
         console.log(argS[0], argS[1], argS[2])
         removePagination()
-        getPosts(argS[0], argS[1], parseInt(argS[2]))
+        getPage(argS[0], argS[1], parseInt(argS[2]))
     }
 }
 
@@ -417,8 +417,7 @@ function removePagination() {
 
 
 function deletePost(post)  {
-    console.log(post)
-    
+    console.log(post)  
     if (confirm("Are sure to delete post?")) {
         fetch(`/delete_post/${post.dataset.id}`)
         .then(response => response.json())
@@ -522,7 +521,8 @@ function getPage() {
     if (arguments[0] != "notification" && arguments[0].slice(0,4) != "post") {
         clickPages(arguments[0], arguments[1])
         selectPages(arguments[0], arguments[1])
-        getPosts(arguments[0], arguments[1], pageNum = 1)
+        let pageNum = arguments[2] ? arguments[2] : 1
+        getPosts(arguments[0], arguments[1], pageNum)
     }
 }
 
@@ -670,6 +670,8 @@ function textCorrection(element) {
         element.value = corrected
     }
 }
+
+
 
 
 
