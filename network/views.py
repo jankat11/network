@@ -295,3 +295,6 @@ def profile(request):
 
 def pages(request):
     return HttpResponseRedirect(reverse("index"))
+
+def post(request):
+    return HttpResponseRedirect(reverse("index"))
