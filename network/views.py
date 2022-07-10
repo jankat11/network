@@ -220,6 +220,11 @@ def unlike_post(request, post_id):
     return JsonResponse({"success": "the like succesfully gotten back"}, status=200)
 
 
+@login_required
+def confirm(request):
+    return JsonResponse({"confirm" : "confirm"})
+
+
 def login_view(request):
     if request.method == "POST":
 
