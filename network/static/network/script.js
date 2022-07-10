@@ -7,26 +7,20 @@ const notification = document.querySelector("#notification")
 window.onpopstate = event => {
     if (event.state.section == "following") {
          followings()
-        bottomButtons()
     } else if (event.state.section.slice(0, 7) == "profile") {
          profilePage(event.state.section.slice(8))
-        bottomButtons()
     } else if (event.state.section == "notifications") {
          notificationPage()
-        bottomButtons()
     } else if (event.state.section == "allposts" || event.state.section == "home") {
          removePagination()
          getPage("all_posts")
-        bottomButtons()
     } else if (event.state.section.slice(0,4) == "post") {
          getThePost(event.state.section.slice(4))
-        bottomButtons()
     } else if (event.state.section.slice(0,4) == "page") {
         let argS = event.state.section.slice(4).split("-")
         console.log(argS[0], argS[1], argS[2])
         removePagination()
         getPosts(argS[0], argS[1], parseInt(argS[2]))
-        bottomButtons()
     }
 }
 
@@ -237,9 +231,9 @@ function createPostItem(post) {
     let date = `<span class="postDate">${edited}</span>`
     let heart = `<div class="heartIcon heart" data-id="${id}">${heartIcon}</div><span class="heartCount">${likes}</span>`
     let comment = `<div class="comment"><span class="commentIcon">💬</span> <span class="commentCount">${comments}</span> </div>`
-    let edit = `<button data-id="${id}" class="edit btn btn-outline-link btn-sm"></button>`
+    let edit = `<button data-id="${id}" onclick="editPage(event.target)" class="edit btn btn-outline-link btn-sm">🖊️EDIT</button>`
     let save = `<button data-id="${id}" class="save btn btn-outline-info btn-sm" style="display: none;">SAVE</button>`
-    let deletePost = `<button data-id="${id}" class="delete btn btn-outline-link btn-sm"></button>`
+    let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="delete btn btn-outline-link btn-sm">🗑️delete</button>`
     div.innerHTML = `${postOwner} ${clock}${date}${content}${heart}${comment}${post.isUsers ? edit + save + deletePost : ""}`
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
@@ -264,23 +258,9 @@ function getPosts(...args) {
                 document.querySelector("#all_posts").append(wrapperPost)
                 pages.style.display = "block"
                 document.querySelector("#bottomPagination").style.display = "block"
-                bottomButtons()
             });
             pagination(arguments[2], data.pageCount)
         }
-    });
-}
-
-
-function bottomButtons() {
-    document.querySelectorAll(".delete").forEach(button => {
-        button.innerHTML = del + " delete"
-        deletePage(button, button.parentElement)
-    });
-
-    document.querySelectorAll(".edit").forEach(button => {
-        button.innerHTML = editPen + " EDIT"
-        editPage(button)
     });
 }
 
@@ -372,7 +352,6 @@ function getComment(post, commentForm) {
                 wrapper.style.paddingLeft = "0%"
                 wrapper.style.borderLeft = "none"
             }
-            bottomButtons()
         }
         if (data.comments.length > 10 && data.list.length == 10) {
             let load = createLoadItem()
@@ -437,85 +416,83 @@ function removePagination() {
 }
 
 
-function deletePage(button, post) {
-    button.onclick = () => {
-        if (confirm("Are sure to delete post?")) {
-            let postId = post.dataset.id
-            fetch(`/delete_post/${postId}`)
-            .then(response => response.json())
-            .then(result => {
-                console.log(result)
-                if (result.success) {
-                    post.style.animationPlayState = 'running'
-                    post.addEventListener("animationend", () => post.remove())
-                    if (post.dataset.comment == "true") {
-                        let count = post.parentElement.parentElement.firstElementChild.childNodes[8].lastElementChild
-                        let after = post.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling
-                        if ([...after.classList][after.classList.length - 1] == "after") {
-                            after.childNodes[8].lastElementChild.innerHTML = parseInt(after.childNodes[8].lastElementChild.innerHTML) - 1
-                        } else {
-                            count.innerHTML = parseInt(count.innerHTML) - 1
-                        }
+function deletePost(post)  {
+    console.log(post)
+    
+    if (confirm("Are sure to delete post?")) {
+        fetch(`/delete_post/${post.dataset.id}`)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result)
+            if (result.success) {
+                post.style.animationPlayState = 'running'
+                post.addEventListener("animationend", () => post.remove())
+                if (post.dataset.comment == "true") {
+                    let count = post.parentElement.parentElement.firstElementChild.childNodes[8].lastElementChild
+                    let after = post.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling
+                    if ([...after.classList][after.classList.length - 1] == "after") {
+                        after.childNodes[8].lastElementChild.innerHTML = parseInt(after.childNodes[8].lastElementChild.innerHTML) - 1
+                    } else {
+                        count.innerHTML = parseInt(count.innerHTML) - 1
                     }
                 }
-            });
-        }
+            }
+        });
     }
 }
 
 
+
 function editPage(button) {
-    button.onclick = () => {
-        var saveButton;
-        button.style.display = "none"
-        let id = button.dataset.id
-        for (let node of document.querySelectorAll(".save")) {
-            if (node.dataset.id == id) {
-                saveButton = node;
-                break;
-            }
+    var saveButton;
+    button.style.display = "none"
+    let id = button.dataset.id
+    for (let node of document.querySelectorAll(".save")) {
+        if (node.dataset.id == id) {
+            saveButton = node;
+            break;
         }
-        saveButton.style.display = "inline-block"
-        let text = document.createElement("textarea")
-        text.className = "form-control newPost"
-        text.value = button.parentElement.childNodes[4].innerHTML
-        button.parentElement.childNodes[4].innerHTML = ""
-        button.parentElement.childNodes[4].appendChild(text)
-        text.oninput = () => {
-            if (text.value.length > 1000) {
-                saveButton.innerHTML = "Exceeded!"
-                saveButton.style.color = "red"
-                saveButton.disabled = true
-            } else {
-                saveButton.innerHTML = "SAVE"
-                saveButton.disabled = false
-                saveButton.style.color = "#5186cc"
-            }
+    }
+    saveButton.style.display = "inline-block"
+    let text = document.createElement("textarea")
+    text.className = "form-control newPost"
+    text.value = button.parentElement.childNodes[4].innerHTML
+    button.parentElement.childNodes[4].innerHTML = ""
+    button.parentElement.childNodes[4].appendChild(text)
+    text.oninput = () => {
+        if (text.value.length > 1000) {
+            saveButton.innerHTML = "Exceeded!"
+            saveButton.style.color = "red"
+            saveButton.disabled = true
+        } else {
+            saveButton.innerHTML = "SAVE"
+            saveButton.disabled = false
+            saveButton.style.color = "#5186cc"
         }
-        saveButton.onclick = () => {
-            if (!text.value) {
-                alert("The post must contain at least one character!")
-                return
-            }
-            textCorrection(text)
-            fetch(`/edit/${button.dataset.id}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    content: text.value
-                })
+    }
+    saveButton.onclick = () => {
+        if (!text.value) {
+            alert("The post must contain at least one character!")
+            return
+        }
+        textCorrection(text)
+        fetch(`/edit/${button.dataset.id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                content: text.value
             })
-            .then(response => response.json())
-            .then(result => {
-                console.log(result.success)
-                let edited = document.createElement("span")
-                edited.innerHTML = " |  " + " edited " + result.time
-                button.parentElement.childNodes[4].innerHTML = text.value
-                button.parentElement.childNodes[3].innerHTML = ""
-                button.parentElement.childNodes[3].append(edited)
-                button.style.display = "inline-block"
-                saveButton.style.display = "none"
-            });
-        }
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log(result.success)
+            let edited = document.createElement("span")
+            edited.innerHTML = " |  " + " edited " + result.time
+            button.parentElement.childNodes[4].innerHTML = text.value
+            button.parentElement.childNodes[3].innerHTML = ""
+            button.parentElement.childNodes[3].append(edited)
+            button.style.display = "inline-block"
+            saveButton.style.display = "none"
+        });
     }
 }
 
@@ -586,7 +563,6 @@ function getThePost() {
             document.querySelector("#all_posts").append(dots)
             getThePost(arguments[2], arguments[3])
         } 
-        bottomButtons() 
     })
 }
 
@@ -694,8 +670,6 @@ function textCorrection(element) {
         element.value = corrected
     }
 }
-
-
 
 
 
