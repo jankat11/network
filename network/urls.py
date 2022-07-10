@@ -22,6 +22,7 @@ urlpatterns = [
     path("get_notifications/<int:page>", views.get_notifications, name="get_notifications"),
     path("read_notifications", views.read_notifications, name="read_notifications"),
     path("get_post/<int:post_id>", views.get_post, name="get_post"),
+    path("confirm", views.confirm, name="confirm"),
 
     #index redirecting
     path("allposts", views.allposts, name="allposts"),
