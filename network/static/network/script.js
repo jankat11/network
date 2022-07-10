@@ -100,31 +100,31 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if ([...icon.classList].includes("postItem")) {
             if (header.dataset.profile != "AnonymousUser") {
                 getThePost(icon.id)
-                history.pushState({section: `post${icon.id}`}, "", `post${icon.id}`)
+                history.pushState({section: `post${icon.id}`}, "", `posts`)
             }
         } else if ([...icon.classList].includes("postContent")) {
             if (header.dataset.profile != "AnonymousUser") {
                 getThePost(icon.parentElement.id)
-                history.pushState({section: `post${icon.parentElement.id}`}, "", `post${icon.parentElement.id}`)
+                history.pushState({section: `post${icon.parentElement.id}`}, "", `posts`)
             }
         } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "reply") || icon.dataset.type == "reply") {
             if (icon.parentElement.parentElement.dataset.type == "reply") {
                 let postId = icon.parentElement.parentElement.dataset.main
                 let postId2 = icon.parentElement.parentElement.dataset.content
                 getThePost(postId, "noCom", postId2, "after")  
-                history.pushState({section: `post${postId}`}, "", `post${postId}`)
+                history.pushState({section: `post${postId}`}, "", `posts`)
             } else if (icon.dataset.type == "reply") {
                 getThePost(icon.dataset.main, "noCom", icon.dataset.content, "after")
-                history.pushState({section: `post${icon.dataset.main}`}, "", `post${icon.dataset.main}`)
+                history.pushState({section: `post${icon.dataset.main}`}, "", `posts`)
             }
         } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "like") || icon.dataset.type == "like") {
             if (icon.className == "toOpenPost") {
                 let postId = icon.parentElement.parentElement.dataset.content
                 getThePost(postId)
-                history.pushState({section: `post${postId}`}, "", `post${postId}`)
+                history.pushState({section: `post${postId}`}, "", `posts`)
             } else {
                 getThePost(icon.dataset.content)
-                history.pushState({section: `post${icon.dataset.content}`}, "", `post${icon.dataset.content}`)
+                history.pushState({section: `post${icon.dataset.content}`}, "", `posts`)
             }
         }
     }   
