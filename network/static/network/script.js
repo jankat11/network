@@ -7,20 +7,26 @@ const notification = document.querySelector("#notification")
 window.onpopstate = event => {
     if (event.state.section == "following") {
          followings()
+        bottomButtons()
     } else if (event.state.section.slice(0, 7) == "profile") {
          profilePage(event.state.section.slice(8))
+        bottomButtons()
     } else if (event.state.section == "notifications") {
          notificationPage()
+        bottomButtons()
     } else if (event.state.section == "allposts" || event.state.section == "home") {
          removePagination()
          getPage("all_posts")
+        bottomButtons()
     } else if (event.state.section.slice(0,4) == "post") {
          getThePost(event.state.section.slice(4))
+        bottomButtons()
     } else if (event.state.section.slice(0,4) == "page") {
         let argS = event.state.section.slice(4).split("-")
         console.log(argS[0], argS[1], argS[2])
         removePagination()
         getPosts(argS[0], argS[1], parseInt(argS[2]))
+        bottomButtons()
     }
 }
 
