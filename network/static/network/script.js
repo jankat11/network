@@ -5,6 +5,9 @@ const header = document.querySelector("#profileHeader")
 const notification = document.querySelector("#notification")
 
 window.onpopstate = event => {
+    if (event.persisted) {
+        window.location.reload(); 
+    }
     if (event.state.section == "following") {
          followings()
     } else if (event.state.section.slice(0, 7) == "profile") {
@@ -417,8 +420,7 @@ function removePagination() {
 
 
 function deletePost(post)  {
-    let apply = () => confirm("Are sure to delete post?")
-    if (apply()) {
+    if (confirm("Are sure to delete post?")) {
         fetch(`/delete_post/${post.dataset.id}`)
         .then(response => response.json())
         .then(result => {
