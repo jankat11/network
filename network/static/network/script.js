@@ -674,7 +674,7 @@ function selectPages(status, profile) {
             removePagination()
             document.querySelector("#bottomPagination").style.display = "none"
             let pro = profile ? profile : ""
-            history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `page${pageNum}`)
+            history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
             getPosts(status, profile, pageNum)
         }
     });
