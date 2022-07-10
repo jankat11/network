@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (header.dataset.profile != "AnonymousUser") {
                 removePagination()
                 getPage("profile", icon.innerHTML)
-                history.pushState({section: `profile-${icon.innerHTML}`}, "", `profile-${icon.innerHTML}`)
+                history.pushState({section: `profile-${icon.innerHTML}`}, "", `profile`)
             } else {
                 alert("Login to see profile.")
             }
@@ -142,7 +142,7 @@ if(profile) {
     let profileName = profile.firstElementChild.textContent
     profile.onclick = () => {
         profilePage(profileName)
-        history.pushState({section: `profile-${profileName}`}, "", `profile-${profileName}`);
+        history.pushState({section: `profile-${profileName}`}, "", `profile`);
     }
 }
 
