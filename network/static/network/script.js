@@ -100,31 +100,31 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if ([...icon.classList].includes("postItem")) {
             if (header.dataset.profile != "AnonymousUser") {
                 getThePost(icon.id)
-                history.pushState({section: `post${icon.id}`}, "", `posts`)
+                history.pushState({section: `post${icon.id}`}, "", `post`)
             }
         } else if ([...icon.classList].includes("postContent")) {
             if (header.dataset.profile != "AnonymousUser") {
                 getThePost(icon.parentElement.id)
-                history.pushState({section: `post${icon.parentElement.id}`}, "", `posts`)
+                history.pushState({section: `post${icon.parentElement.id}`}, "", `post`)
             }
         } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "reply") || icon.dataset.type == "reply") {
             if (icon.parentElement.parentElement.dataset.type == "reply") {
                 let postId = icon.parentElement.parentElement.dataset.main
                 let postId2 = icon.parentElement.parentElement.dataset.content
                 getThePost(postId, "noCom", postId2, "after")  
-                history.pushState({section: `post${postId}`}, "", `posts`)
+                history.pushState({section: `post${postId}`}, "", `post`)
             } else if (icon.dataset.type == "reply") {
                 getThePost(icon.dataset.main, "noCom", icon.dataset.content, "after")
-                history.pushState({section: `post${icon.dataset.main}`}, "", `posts`)
+                history.pushState({section: `post${icon.dataset.main}`}, "", `post`)
             }
         } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "like") || icon.dataset.type == "like") {
             if (icon.className == "toOpenPost") {
                 let postId = icon.parentElement.parentElement.dataset.content
                 getThePost(postId)
-                history.pushState({section: `post${postId}`}, "", `posts`)
+                history.pushState({section: `post${postId}`}, "", `post`)
             } else {
                 getThePost(icon.dataset.content)
-                history.pushState({section: `post${icon.dataset.content}`}, "", `posts`)
+                history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
             }
         }
     }   
@@ -659,7 +659,7 @@ function clickPages(status, profile) {
             document.querySelector("#bottomPagination").style.display = "none"
             let pro = profile ? profile : ""
             console.log(status, profile, pageNum)
-            history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `page${pageNum}`)
+            history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
             getPosts(status, profile, pageNum)
             
         }
