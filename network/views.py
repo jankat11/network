@@ -290,5 +290,6 @@ def notifications(request):
 def home(request):
     return HttpResponseRedirect(reverse("index"))
 
+
 def profile(request):
     return HttpResponseRedirect(reverse("index"))
