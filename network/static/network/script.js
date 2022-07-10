@@ -236,7 +236,7 @@ function createPostItem(post) {
     let comment = `<div class="comment"><span class="commentIcon">💬</span> <span class="commentCount">${comments}</span> </div>`
     let edit = `<button data-id="${id}" onclick="editPage(event.target)" class="edit btn btn-outline-link btn-sm">🖊️EDIT</button>`
     let save = `<button data-id="${id}" class="save btn btn-outline-info btn-sm" style="display: none;">SAVE</button>`
-    let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="delete btn btn-outline-link btn-sm">🗑️delete</button>`
+    let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement, confirm('Are sure to delete post?'))" class="delete btn btn-outline-link btn-sm">🗑️delete</button>`
     div.innerHTML = `${postOwner} ${clock}${date}${content}${heart}${comment}${post.isUsers ? edit + save + deletePost : ""}`
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
@@ -419,8 +419,9 @@ function removePagination() {
 }
 
 
-function deletePost(post)  {
-    if (confirm("Are sure to delete post?")) {
+function deletePost(post, answer)  {
+    console.log(post)  
+    if (answer) {
         fetch(`/delete_post/${post.dataset.id}`)
         .then(response => response.json())
         .then(result => {
