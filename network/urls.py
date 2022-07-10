@@ -29,5 +29,6 @@ urlpatterns = [
     path("notifications", views.notifications, name="notifications"),
     path("home", views.home, name="home"),
     path("profile", views.profile, name="profile"),
-    path("pages", views.pages, name="pages")
+    path("pages", views.pages, name="pages"),
+    path("pages", views.pages, name="post"),
 ]
