@@ -421,7 +421,12 @@ function removePagination() {
 
 function deletePost(post)  {
     console.log(post)  
-    if (window["confirm"]('Are sure to delete post?')) {
+    fetch("/confirm")
+    .then(response => response.json())
+    .then(result => {
+        let answer = result.confirm
+    
+    if (window[answer]('Are sure to delete post?')) {
         fetch(`/delete_post/${post.dataset.id}`)
         .then(response => response.json())
         .then(result => {
@@ -441,6 +446,7 @@ function deletePost(post)  {
             }
         });
     }
+})
 }
 
 
@@ -673,8 +679,6 @@ function textCorrection(element) {
         element.value = corrected
     }
 }
-
-
 
 
 
