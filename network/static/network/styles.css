@@ -63,7 +63,7 @@
     }   
 }
 @media (max-width: 1000px) {.heartIcon, .heartCount, .commentIcon, .commentCount{
-    font-size: 30px;
+    font-size: 40px;
     position: relative;
     top: 3px;
     }   
