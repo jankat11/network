@@ -9,25 +9,20 @@
     }   
 }
 
-@media (max-width: 500px)  {.postClock, .postDate{
-    margin-left: 0px;
+@media (max-width: 1024px)  {.postClock, .postDate{
     position: relative;
-    top: 7px;
-    line-height: 0px;
+    top: 10px;
+    letter-spacing: 0px;
+    font-weight: 100;
     }   
 }
-@media (max-width: 500px)  {.postOwner{
-   
+
+
+
+@media (max-width: 1024px)  {.postOwner{
     display: block;
-    }   
-}
-
-@media (max-width: 500px)  {.postOwner{
-   
     height: 10px;
-    position: relative;
-
-
+    font-size: large;
     }   
 }
 
