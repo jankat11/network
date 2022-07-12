@@ -2,7 +2,11 @@
     padding: 40px;
     padding-bottom: 20px;
 }
-
+@media (max-width: 500px)  {.body{
+    padding: 10px;
+    padding-bottom: 20px;
+    }   
+}
 #new_post_area {
     border: solid rgb(196, 192, 192) 1px;
     padding: 20px;
