@@ -95,9 +95,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Login to see profile.")
             }
         } else if (icon.className == "commentIcon") {
-            icon.parentElement.parentElement.style.backgroundColor = "aliceblue";
-            let status = icon.parentElement.parentElement.dataset.comment
-            comment(icon.parentElement.parentElement, icon, status)
+            if (header.dataset.profile == "AnonymousUser") {
+                window.location.href = `/login`
+            }
+            comment(icon.parentElement.parentElement, icon)
         } else if ([...icon.classList].includes("postItem")) {
             if (header.dataset.profile != "AnonymousUser") {
                 getThePost(icon.id)
@@ -244,7 +245,7 @@ function createPostItem(post) {
 }
 
 
-function getPosts(...args) {
+function getPosts() {
     fetch(`/all_posts/${arguments[0]}-${arguments[1]}/${arguments[2]}`)
     .then(response => response.json())
     .then(data => {
@@ -266,7 +267,7 @@ function getPosts(...args) {
 }
 
 
-function createCommentForm(post, commentForm, status) {
+function createCommentForm(post, commentForm) {
     commentForm.setAttribute("action", "/comment")
     commentForm.setAttribute("onsubmit", "return false;")
     commentForm.lastElementChild.setAttribute("value", `${post.dataset.id}`)
@@ -282,12 +283,12 @@ function createCommentForm(post, commentForm, status) {
 }
 
 
-function comment(post, icon, status) {
+function comment(post, icon) {
     if (icon.innerHTML == "💬") {
-        icon.innerHTML = "💬...";
-        post.style.backgroundColor = "aliceblue";
-        let commentForm = document.querySelector(".send").cloneNode(true);
-        createCommentForm(post, commentForm, status);
+        icon.innerHTML = "💬..."
+        post.style.backgroundColor = "aliceblue"
+        let commentForm = document.querySelector(".send").cloneNode(true)
+        createCommentForm(post, commentForm)
         commentForm.childNodes["7"].onclick = () => {
             if (!commentForm.childNodes["5"].value) {
                 alert("The post must contain at least one character!")
@@ -306,7 +307,7 @@ function comment(post, icon, status) {
                 console.log(result);
                 commentForm.childNodes["5"].value = ""
                 removeCommentSections(icon, post)
-                comment(post, icon, status)
+                comment(post, icon)
             });
             icon.nextElementSibling.innerHTML = parseInt(icon.nextElementSibling.innerHTML) + 1
             window.location.href = `#${post.dataset.id}`
@@ -504,9 +505,10 @@ function editPage(button) {
             console.log(result.success)
             let edited = document.createElement("span")
             edited.innerHTML = " |  " + " edited " + result.time
+            console.log(button.parentElement.childNodes)
             button.parentElement.childNodes[4].innerHTML = text.value
-            button.parentElement.childNodes[3].innerHTML = ""
-            button.parentElement.childNodes[3].append(edited)
+            button.parentElement.childNodes[2].innerHTML = ""
+            button.parentElement.childNodes[2].append(edited)
             button.style.display = "inline-block"
             saveButton.style.display = "none"
         });
@@ -557,7 +559,7 @@ function getThePost() {
         let div = createPostItem(post)
         document.querySelector("#all_posts").append(div)
         if (arguments[1] != "noCom") {
-            comment(div, div.childNodes[8].firstElementChild, div.dataset.comment )
+            comment(div, div.childNodes[8].firstElementChild)
         }
         if (arguments[1] == "after") {
             div.classList.add("after")
@@ -685,7 +687,6 @@ function textCorrection(element) {
         element.value = element.value.replace("\n", "<br>");
     };
 };
-
 
 
 
