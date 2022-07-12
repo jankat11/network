@@ -286,10 +286,10 @@ function createCommentForm(post, commentForm, status) {
 
 function comment(post, icon, status) {
     if (icon.innerHTML == "💬") {
-        icon.innerHTML = "💬..."
-        post.style.backgroundColor = "aliceblue"
-        let commentForm = document.querySelector(".send").cloneNode(true)
-        createCommentForm(post, commentForm, status)
+        icon.innerHTML = "💬...";
+        post.style.backgroundColor = "aliceblue";
+        let commentForm = document.querySelector(".send").cloneNode(true);
+        createCommentForm(post, commentForm, status);
         commentForm.childNodes["7"].onclick = () => {
             if (!commentForm.childNodes["5"].value) {
                 alert("The post must contain at least one character!")
