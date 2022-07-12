@@ -11,9 +11,9 @@
 
 @media (max-width: 1024px)  {.postClock, .postDate{
     position: relative;
-    top: 10px;
+    bottom: 5px;
     letter-spacing: 0px;
-    font-weight: 400;
+    font-weight: 300;
     }   
 }
 
@@ -21,11 +21,9 @@
 
 @media (max-width: 1024px)  {.postOwner{
     display: block;
-    height: 10px;
     font-size: large;
     }   
 }
-
 
 #new_post_area {
     border: solid rgb(196, 192, 192) 1px;
