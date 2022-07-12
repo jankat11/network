@@ -58,12 +58,14 @@
     font-weight: 400;
 }
 
-@media (max-width: 1000px) { .postContent, .delete, .edit, .heartIcon, .heartCount, .commentIcon, .commentCount{
-    font-size: xx-large;
+@media (max-width: 1000px) { .postContent {
+    font-size: 40px;
     }   
 }
 @media (max-width: 1000px) {.heartIcon, .heartCount, .commentIcon, .commentCount{
-    font-size: x-large;
+    font-size: 30px;
+    position: relative;
+    top: 3px;
     }   
 }
 @media (max-width: 1000px) {.delete, .edit{
@@ -77,6 +79,7 @@
 @media (max-width: 1000px) {.deleteHidden, .editHidden{
     position: relative;
     bottom: 3px;
+    font-size: 30px;
     }   
 }
 
@@ -86,6 +89,7 @@
     left: 80px;
     }   
 }
+
 
 
 .heart, .comment {
