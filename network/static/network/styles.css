@@ -58,6 +58,15 @@
     font-weight: 400;
 }
 
+@media (max-width: 1000px) { .postOwner {
+    font-size: xx-large
+    }   
+}
+@media (max-width: 1000px) { .postDate, .postClock{
+    font-size: x-large
+    }   
+}
+
 @media (max-width: 1000px) { .postContent {
     font-size: 40px;
     }   
@@ -89,7 +98,6 @@
     left: 80px;
     }   
 }
-
 
 
 .heart, .comment {
