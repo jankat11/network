@@ -2,11 +2,36 @@
     padding: 40px;
     padding-bottom: 20px;
 }
+
 @media (max-width: 500px)  {.body{
     padding: 10px;
     padding-bottom: 20px;
     }   
 }
+
+@media (max-width: 500px)  {.postClock, .postDate{
+    margin-left: 0px;
+    position: relative;
+    top: 7px;
+    line-height: 0px;
+    }   
+}
+@media (max-width: 500px)  {.postOwner{
+   
+    display: block;
+    }   
+}
+
+@media (max-width: 500px)  {.postOwner{
+   
+    height: 10px;
+    position: relative;
+
+
+    }   
+}
+
+
 #new_post_area {
     border: solid rgb(196, 192, 192) 1px;
     padding: 20px;
@@ -43,14 +68,16 @@
 
 .postClock {
     color: rgb(100, 98, 98);
-    font-size: small;
-    margin-left: 20px;
+    font-size: smaller;
+    margin-left: 5px;
+    padding-left: 5px;
 }
 
 .postDate {
     color: rgb(100, 98, 98);
     font-size: smaller;
-    margin-left: 10px;
+
+  
 }
 
 .postContent {
