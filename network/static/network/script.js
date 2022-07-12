@@ -131,14 +131,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     }   
-})
+});
 
 
 if(following) {
     following.addEventListener("click", () => { 
         followings()
         history.pushState({section: "following"}, "", `following`);
-    })
+    });
 } 
 
 if(profile) {
@@ -192,7 +192,7 @@ function getProfile(user) {
     .then(response => response.json())
     .then(profile => {
         let followButton = `<button id="${user}" class="btn btn-outline-info followButton">follow</button>`
-        let unfollowButton = `<button id="${user}" class="btn btn-outline-danger followButton">unfollow</button>`
+        let unfollowButton = `<button id="${user}" class="btn btn-outline-secondary followButton">unfollow</button>`
         let button = profile.followed ? unfollowButton : followButton
         let image = `<img class="profilePhoto" width=55 src="/static/network/profile.png"></img>`
         let joined = `<span class="joinedDate"><span id="calendar"></span> joined ${profile.joined.split(",")[0]}</span>`
@@ -235,9 +235,11 @@ function createPostItem(post) {
     let heart = `<div class="heartIcon heart" data-id="${id}">${heartIcon}</div><span class="heartCount">${likes}</span>`
     let comment = `<div class="comment"><span class="commentIcon">💬</span> <span class="commentCount">${comments}</span> </div>`
     let edit = `<button data-id="${id}" onclick="editPage(event.target)" class="edit btn btn-outline-link btn-sm">🖊️EDIT</button>`
+    let editHidden = `<button data-id="${id}" onclick="editPage(event.target)" class="editHidden btn btn-outline-link btn-lg">🖊️EDIT</button>`
     let save = `<button data-id="${id}" class="save btn btn-outline-info btn-sm" style="display: none;">SAVE</button>`
-    let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="delete btn btn-outline-link btn-sm">🗑️delete</button>`
-    div.innerHTML = `${postOwner} ${clock}${date}${content}${heart}${comment}${post.isUsers ? edit + save + deletePost : ""}`
+    let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="delete btn btn-outline-link btn-sm hidden-xs">🗑️delete</button>`
+    let deletePostHidden = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="deleteHidden btn btn-outline-link visible-xs-block">🗑️delete</button>`
+    div.innerHTML = `${postOwner} ${clock}${date}${content}${heart}${comment}${post.isUsers ? edit + editHidden + save + deletePost + deletePostHidden: ""}`
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
     div.className = "post form-group postItem border border-light"
@@ -419,7 +421,10 @@ function removePagination() {
 }
 
 
-function deletePost(post)  {
+function deletePost(post)  { 
+    let text = [...post.parentElement.childNodes][[...post.parentElement.childNodes].length - 1].firstElementChild.nextElementSibling.nextElementSibling
+    let button = text.nextElementSibling
+    post.parentElement.style.paddingBottom = "0px"
     if (confirm('Are sure to delete post?')) {
         fetch(`/delete_post/${post.dataset.id}`)
         .then(response => response.json())
@@ -427,7 +432,22 @@ function deletePost(post)  {
             console.log(result)
             if (result.success) {
                 post.style.animationPlayState = 'running'
-                post.addEventListener("animationend", () => post.remove())
+                post.addEventListener("animationend", () => {
+                    if (post.dataset.nocom == "noCom") {
+                        while(post.nextElementSibling) {
+                            post.nextElementSibling.remove()
+                        }  
+                    }
+                    if ([...post.childNodes][8].firstElementChild.innerHTML == "💬...") {
+                        text.style.margin = "0px";
+                        button.style.margin = "0px";
+                        [...post.parentElement.childNodes].forEach(node => {
+                            node.style.height = "0%";
+                            node.remove()
+                        })
+                    }
+                    post.remove()
+                })
                 if (post.dataset.comment == "true") {
                     let count = post.parentElement.parentElement.firstElementChild.childNodes[8].lastElementChild
                     let after = post.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling
@@ -441,6 +461,7 @@ function deletePost(post)  {
         });
     }
 }
+
 
 
 function editPage(button) {
@@ -545,6 +566,7 @@ function getThePost() {
         if (arguments[1] == "after") {
             div.classList.add("after")
         } else if (arguments[1] == "noCom") {
+            div.setAttribute("data-nocom", "noCom")
             div.childNodes[8].firstElementChild.onclick = () => {
                 document.querySelectorAll(".dots").forEach(item => {
                     let nodes = []
@@ -641,10 +663,8 @@ function clickPages(status, profile) {
             removePagination()
             document.querySelector("#bottomPagination").style.display = "none"
             let pro = profile ? profile : ""
-            console.log(status, profile, pageNum)
             history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
-            getPosts(status, profile, pageNum)
-            
+            getPosts(status, profile, pageNum)    
         }
     });
 }
@@ -665,12 +685,12 @@ function selectPages(status, profile) {
 
 
 function textCorrection(element) {
-    let corrected = ""
     while (element.value.includes("\n")) {
-        corrected = element.value.replace("\n", "<br>")
-        element.value = corrected
-    }
-}
+        element.value = element.value.replace("\n", "<br>");
+    };
+};
+
+
 
 
 
