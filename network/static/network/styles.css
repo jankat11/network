@@ -58,46 +58,40 @@
     font-weight: 400;
 }
 
-@media (max-width: 1000px) { .postOwner {
+@media (max-width: 500px) { .postOwner {
     font-size: xx-large
     }   
 }
-@media (max-width: 1000px) { .postDate, .postClock{
+@media (max-width: 500px) { .postDate, .postClock{
     font-size: x-large
     }   
 }
 
-@media (max-width: 1000px) { .postContent {
+@media (max-width: 500px) { .postContent {
     font-size: 40px;
     }   
 }
-@media (max-width: 1000px) {.heartIcon, .heartCount, .commentIcon, .commentCount{
+@media (max-width: 500px) {.heartIcon, .heartCount, .commentIcon, .commentCount{
     font-size: 40px;
     position: relative;
     top: 3px;
     }   
 }
-@media (max-width: 1000px) {.delete, .edit{
+@media (max-width: 500px) {.delete, .edit{
     display: none;
     }   
 }
-@media (min-width: 1000px) {.deleteHidden, .editHidden{
+@media (min-width: 501px) {.deleteHidden, .editHidden{
     display: none;
     }   
 }
-@media (max-width: 1000px) {.deleteHidden, .editHidden{
+@media (max-width: 500px) {.deleteHidden, .editHidden{
     position: relative;
     bottom: 3px;
     font-size: 30px;
     }   
 }
 
-@media (min-width: 1001px) and (max-width: 1200px) { #letterboard {
-    width: 58em;
-    position: relative;
-    left: 80px;
-    }   
-}
 
 
 .heart, .comment {
