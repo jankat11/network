@@ -229,15 +229,15 @@ function createPostItem(post) {
     let comments = post.thePost.comments
     let content = `<p class="lead postContent">${post.thePost.content}</p><div class="contentBottomLine"></div>`
     let postOwner = `<span class="postOwner">${post.thePost.owner}</span>`
-    let clock = `<span class="postClock">${time[1]}, ${time[0]}</span>`
-    let edited = post.thePost.updated ? (" |  " + " edited " + post.thePost.updated) : " "
+    let clock = `<span class="postClock">${time[1]} ${time[0]}</span>`
+    let edited = post.thePost.updated ? (" | edited " + post.thePost.updated) : " "
     let date = `<span class="postDate">${edited}</span>`
     let heart = `<div class="heartIcon heart" data-id="${id}">${heartIcon}</div><span class="heartCount">${likes}</span>`
     let comment = `<div class="comment"><span class="commentIcon">💬</span> <span class="commentCount">${comments}</span> </div>`
     let edit = `<button data-id="${id}" onclick="editPage(event.target)" class="edit btn btn-outline-link btn-sm">🖊️edit</button>`
     let save = `<button data-id="${id}" class="save btn btn-outline-info btn-sm" style="display: none;">SAVE</button>`
     let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="delete btn btn-outline-link btn-sm hidden-xs">🗑️delete</button>`
-    div.innerHTML = `${postOwner} ${clock}${date}${content}${heart}${comment}${post.isUsers ? edit + save + deletePost: ""}`
+    div.innerHTML = `${postOwner}${clock}${date} ${content}${heart}${comment}${post.isUsers ? edit + save + deletePost: ""}`
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
     div.className = "post form-group postItem border border-light"
