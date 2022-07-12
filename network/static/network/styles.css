@@ -58,41 +58,6 @@
     font-weight: 400;
 }
 
-@media (max-width: 500px) { .postOwner {
-    font-size: xx-large
-    }   
-}
-@media (max-width: 500px) { .postDate, .postClock{
-    font-size: x-large
-    }   
-}
-
-@media (max-width: 500px) { .postContent {
-    font-size: 40px;
-    }   
-}
-@media (max-width: 500px) {.heartIcon, .heartCount, .commentIcon, .commentCount{
-    font-size: 40px;
-    position: relative;
-    top: 3px;
-    }   
-}
-@media (max-width: 500px) {.delete, .edit{
-    display: none;
-    }   
-}
-@media (min-width: 501px) {.deleteHidden, .editHidden{
-    display: none;
-    }   
-}
-@media (max-width: 500px) {.deleteHidden, .editHidden{
-    position: relative;
-    bottom: 3px;
-    font-size: 30px;
-    }   
-}
-
-
 
 .heart, .comment {
     position: relative;  
