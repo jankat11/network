@@ -58,6 +58,36 @@
     font-weight: 400;
 }
 
+@media (max-width: 1000px) { .postContent, .delete, .edit, .heartIcon, .heartCount, .commentIcon, .commentCount{
+    font-size: xx-large;
+    }   
+}
+@media (max-width: 1000px) {.heartIcon, .heartCount, .commentIcon, .commentCount{
+    font-size: x-large;
+    }   
+}
+@media (max-width: 1000px) {.delete, .edit{
+    display: none;
+    }   
+}
+@media (min-width: 1000px) {.deleteHidden, .editHidden{
+    display: none;
+    }   
+}
+@media (max-width: 1000px) {.deleteHidden, .editHidden{
+    position: relative;
+    bottom: 3px;
+    }   
+}
+
+@media (min-width: 1001px) and (max-width: 1200px) { #letterboard {
+    width: 58em;
+    position: relative;
+    left: 80px;
+    }   
+}
+
+
 .heart, .comment {
     position: relative;  
     display: inline-block;
@@ -171,13 +201,16 @@
   right: 7%;
 }
 
-.edit, .save, .delete{
-    margin-left: 40px;
-    font-size: 12px;
+.edit, .save, .delete, .deleteHidden, .editHidden{
+    margin-left: 40px;  
     padding: 1px;
     padding-bottom: 0px;
     margin-bottom: 4px;
 }
+.edit, .save, .delete {
+    font-size: 12px;
+}
+
 .save {
     padding-top: 0px;
     padding-left: 2px;
