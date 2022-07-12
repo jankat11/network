@@ -234,8 +234,8 @@ function createPostItem(post) {
     let date = `<span class="postDate">${edited}</span>`
     let heart = `<div class="heartIcon heart" data-id="${id}">${heartIcon}</div><span class="heartCount">${likes}</span>`
     let comment = `<div class="comment"><span class="commentIcon">💬</span> <span class="commentCount">${comments}</span> </div>`
-    let edit = `<button data-id="${id}" onclick="editPage(event.target)" class="edit btn btn-outline-link btn-sm">🖊️EDIT</button>`
-    let editHidden = `<button data-id="${id}" onclick="editPage(event.target)" class="editHidden btn btn-outline-link btn-lg">🖊️EDIT</button>`
+    let edit = `<button data-id="${id}" onclick="editPage(event.target)" class="edit btn btn-outline-link btn-sm">🖊️edit</button>`
+    let editHidden = `<button data-id="${id}" onclick="editPage(event.target)" class="editHidden btn btn-outline-link btn-lg">🖊️edit</button>`
     let save = `<button data-id="${id}" class="save btn btn-outline-info btn-sm" style="display: none;">SAVE</button>`
     let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="delete btn btn-outline-link btn-sm hidden-xs">🗑️delete</button>`
     let deletePostHidden = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="deleteHidden btn btn-outline-link visible-xs-block">🗑️delete</button>`
