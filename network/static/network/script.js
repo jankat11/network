@@ -237,7 +237,7 @@ function createPostItem(post) {
     let edit = `<button data-id="${id}" onclick="editPage(event.target)" class="edit btn btn-outline-link btn-sm">🖊️edit</button>`
     let save = `<button data-id="${id}" class="save btn btn-outline-info btn-sm" style="display: none;">SAVE</button>`
     let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="delete btn btn-outline-link btn-sm hidden-xs">🗑️delete</button>`
-    div.innerHTML = `${postOwner} ${clock}${date}${content}${heart}${comment}${post.isUsers ? edit + editHidden + save + deletePost + deletePostHidden: ""}`
+    div.innerHTML = `${postOwner} ${clock}${date}${content}${heart}${comment}${post.isUsers ? edit + save + deletePost: ""}`
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
     div.className = "post form-group postItem border border-light"
