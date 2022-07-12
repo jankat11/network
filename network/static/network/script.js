@@ -229,7 +229,7 @@ function createPostItem(post) {
     let comments = post.thePost.comments
     let content = `<p class="lead postContent">${post.thePost.content}</p><div class="contentBottomLine"></div>`
     let postOwner = `<span class="postOwner">${post.thePost.owner}</span>`
-    let clock = `<span class="postClock">${time[1]} ${time[0]}</span>`
+    let clock = `<span class="postClock">${time[0]} ${time[1]}</span>`
     let edited = post.thePost.updated ? (" | edited " + post.thePost.updated) : " "
     let date = `<span class="postDate">${edited}</span>`
     let heart = `<div class="heartIcon heart" data-id="${id}">${heartIcon}</div><span class="heartCount">${likes}</span>`
