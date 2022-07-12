@@ -95,9 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Login to see profile.")
             }
         } else if (icon.className == "commentIcon") {
-            if (header.dataset.profile == "AnonymousUser") {
-                window.location.href = `/login`
-            }
+
             let status = icon.parentElement.parentElement.dataset.comment
             comment(icon.parentElement.parentElement, icon, status)
         } else if ([...icon.classList].includes("postItem")) {
