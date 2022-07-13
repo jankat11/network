@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
     removePagination()
     getPage("all_posts")
 
-    window.onclick = event => {
+    $(window).click(function(event) {
         let icon = event.target
         let likes = icon.nextElementSibling
         console.log(icon)    
@@ -95,7 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Login to see profile.")
             }
         } else if (icon.className == "commentIcon") {
-            $(`#${icon.dataset.id}`).css("background-color", "aliceblue");
             if (header.dataset.profile == "AnonymousUser") {
                 window.location.href = `/login`
             }
@@ -130,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
             }
         }
-    }   
+    });   
 });
 
 
