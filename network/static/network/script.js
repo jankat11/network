@@ -657,6 +657,9 @@ $(window).click(function(event) {
             if (header.dataset.profile == "AnonymousUser") {
                 window.location.href = `/login`
             }
+            if (event.persisted) {
+                window.location.reload(); 
+            }
             comment(icon.parentElement.parentElement, icon)
         } else if ([...icon.classList].includes("postItem")) {
             if (header.dataset.profile != "AnonymousUser") {
