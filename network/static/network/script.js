@@ -360,16 +360,6 @@ function deletePost(post)  {
                         post.nextElementSibling.remove()
                     }  
                 }
-                if ([...post.childNodes][8].firstElementChild.innerHTML == "💬...") {
-                    text.style.margin = "0px";
-                    button.style.margin = "0px";
-                    [...post.parentElement.childNodes].forEach(node => {
-                        node.style.height = "0%";
-                        node.remove()
-                    })
-                }
-                
-                
                 if (post.dataset.comment == "true") {
                     let count = post.parentElement.parentElement.firstElementChild.childNodes[8].lastElementChild
                     let after = post.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling
@@ -378,6 +368,14 @@ function deletePost(post)  {
                     } else {
                         count.innerHTML = parseInt(count.innerHTML) - 1
                     }
+                }
+                if ([...post.childNodes][8].firstElementChild.innerHTML == "💬...") {
+                    text.style.margin = "0px";
+                    button.style.margin = "0px";
+                    [...post.parentElement.childNodes].forEach(node => {
+                        node.style.height = "0%";
+                        node.remove()
+                    })
                 }
                 post.remove()
             }
