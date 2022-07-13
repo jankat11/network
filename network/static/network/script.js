@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Login to see profile.")
             }
         } else if (icon.className == "commentIcon") {
+            $(`#${icon.dataset.id}`).css("background-color", "aliceblue");
             if (header.dataset.profile == "AnonymousUser") {
                 window.location.href = `/login`
             }
