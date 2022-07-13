@@ -286,7 +286,8 @@ function createCommentForm(post, commentForm) {
 function comment(post, icon) {
     if (icon.innerHTML == "💬") {
         icon.innerHTML = "💬..."
-        post.style.backgroundColor = "aliceblue"
+        let id = post.dataset.id
+        $(`#${id}`).css("background-color", "aliceblue");
         let commentForm = document.querySelector(".send").cloneNode(true)
         createCommentForm(post, commentForm)
         commentForm.childNodes["7"].onclick = () => {
