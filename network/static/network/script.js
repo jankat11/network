@@ -366,10 +366,10 @@ function deletePost(post)  {
                     [...post.parentElement.childNodes].forEach(node => {
                         node.style.height = "0%";
                         node.remove()
-                    });
+                    })
                 }
-                post.remove()
-            
+                
+                
                 if (post.dataset.comment == "true") {
                     let count = post.parentElement.parentElement.firstElementChild.childNodes[8].lastElementChild
                     let after = post.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling
@@ -379,6 +379,7 @@ function deletePost(post)  {
                         count.innerHTML = parseInt(count.innerHTML) - 1
                     }
                 }
+                post.remove()
             }
         });
     }
