@@ -158,30 +158,9 @@
     box-shadow: 0px 0px 10px 5px rgba(104, 143, 175, 0.479)
 }
 
-@keyframes erase {
-    0% {
-        opacity: 1;
-        height: 100%;
-        margin-bottom: 10px;
-    }
-
-    100% {
-        opacity: 0;
-        height: 0%;
-        margin-bottom: 0px;
-        padding: 0%;   
-        margin-bottom: 0px;    
-        background-color: black;
-        color: white;
-    }
-}
 .postItem {
     box-shadow: 0px 0px 10px 5px rgba(104, 143, 175, 0.192);
     padding-top: 5px;
-    animation-name: erase;
-    animation-duration: 0.33s;
-    animation-fill-mode: forwards;
-    animation-play-state: paused;
 }
 
 .postContent:hover {
