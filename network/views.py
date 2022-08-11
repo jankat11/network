@@ -17,9 +17,9 @@ from .models import User, Post, Notification
 
 class LoginForm(forms.Form):
     username = forms.CharField(min_length=2, max_length=30, label="", strip=True,
-        widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control"}))
+        widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
     password = forms.CharField(label="", min_length=6, 
-        widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control"}))
+        widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
 
 
 

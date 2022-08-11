@@ -25,6 +25,13 @@
     }   
 }
 
+@media (min-width: 1024px)  {.login{
+    width: 50%;
+    }   
+}
+
+
+
 #new_post_area {
     border: solid rgb(196, 192, 192) 1px;
     padding: 20px;
