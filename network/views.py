@@ -1,4 +1,5 @@
 
+import email
 import json
 import time
 
@@ -21,6 +22,15 @@ class LoginForm(forms.Form):
     password = forms.CharField(label="", min_length=6, 
         widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
 
+class RegisterForm(forms.Form):
+    username = forms.CharField(label="", min_length=2, strip=True, max_length=30, 
+        widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
+    email = forms.EmailField(label="",
+        widget=forms.EmailInput(attrs={"placeholder": "Email", "class": "form-control form-group login"}))
+    password = forms.CharField(label="", min_length=6, 
+        widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
+    confirmation = forms.CharField(label="", min_length=6,
+        widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password", "class": "form-control form-group login"}))
 
 
 def index(request):
@@ -266,11 +276,13 @@ def register(request):
         confirmation = request.POST["confirmation"]
         if password == "":
             return render(request, "network/register.html", {
-                "message": "Please fill requirements"
+                "message": "Please fill requirements",
+                "registerForm": RegisterForm()
             })
         if password != confirmation:
             return render(request, "network/register.html", {
-                "message": "Passwords must match."
+                "message": "Passwords must match.",
+                "registerForm": RegisterForm()
             })
 
         # Attempt to create new user
@@ -279,12 +291,15 @@ def register(request):
             user.save()
         except IntegrityError:
             return render(request, "network/register.html", {
-                "message": "Username already taken."
+                "message": "Username already taken.",
+                "registerForm": RegisterForm()
             })
         login(request, user)
         return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "network/register.html")
+        return render(request, "network/register.html", {
+            "registerForm": RegisterForm()
+        })
 
 
 # For history status http redirections:
