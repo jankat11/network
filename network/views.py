@@ -10,9 +10,15 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
+from django import forms
 
 
 from .models import User, Post, Notification
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=30)
+    password = forms.CharField()
+
 
 
 def index(request):
@@ -234,10 +240,13 @@ def login_view(request):
             return HttpResponseRedirect(reverse("index"))
         else:
             return render(request, "network/login.html", {
-                "message": "Invalid username and/or password."
+                "message": "Invalid username and/or password.",
+                "loginForm": LoginForm()
             })
     else:
-        return render(request, "network/login.html")
+        return render(request, "network/login.html", {
+            "loginForm" : LoginForm()
+        })
 
 
 def logout_view(request):
