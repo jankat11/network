@@ -1,7 +1,7 @@
 
-import email
 import json
 import time
+from tkinter import Widget
 
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
@@ -13,14 +13,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django import forms
 
-
 from .models import User, Post, Notification
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(min_length=2, max_length=30, label="", strip=True,
         widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
     password = forms.CharField(label="", min_length=6, 
         widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
+
 
 class RegisterForm(forms.Form):
     username = forms.CharField(label="", min_length=2, strip=True, max_length=30, 
@@ -31,6 +32,11 @@ class RegisterForm(forms.Form):
         widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
     confirmation = forms.CharField(label="", min_length=6,
         widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password", "class": "form-control form-group login"}))
+
+
+class PostForm(forms.Form):
+    new_post = forms.CharField(label="", max_length=1000,
+        widget=forms.Textarea(attrs={"placeholder": "What are you thinking?", "class": "form-control newPost", "rows": "4"}))
 
 
 def index(request):
@@ -44,10 +50,13 @@ def index(request):
     if len(request.user.username) != 0:
         not_count = Notification.objects.filter(owner=request.user, read=False).all().count()
         return render(request, "network/index.html", {
-            "not_count": not_count
+            "not_count": not_count,
+            "postForm": PostForm()
         })
     else:
-        return render(request, "network/index.html")
+        return render(request, "network/index.html", {
+            "postForm": PostForm()
+        })
 
 
 def all_posts(request, post_type, page=1):

@@ -12,7 +12,7 @@
     <form class="post_form send" action="/" method="post">
         {% csrf_token %}
         <h5><label for="newPost">New Post</label></h5>
-        <textarea name="new_post" class="form-control newPost"  rows="4" placeholder="What are you thinking?"></textarea>
+        {{ postForm }}
         <input type="submit" id="post_button" class="btn btn-info" value="Post">
         <input type="hidden" class="sendButton" name=postId value="">
         <span class="charAmount"></span> 
