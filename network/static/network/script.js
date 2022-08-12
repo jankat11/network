@@ -66,6 +66,13 @@ if(following) {
     });
 } 
 
+if(document.querySelector("#followingM")) {
+    document.querySelector("#followingM").addEventListener("click", () => { 
+        followings()
+        history.pushState({section: "following"}, "", `following`);
+    });
+} 
+
 if(profile) {
     let profileName = profile.firstElementChild.textContent
     profile.onclick = () => {
@@ -109,6 +116,15 @@ if(document.querySelector("#allPosts")) {
         history.pushState({section: "allposts"}, "", `allposts`)
     });
 }
+
+if(document.querySelector("#allPostsM")) {
+    document.querySelector("#allPostsM").addEventListener("click", () => {
+        removePagination()
+        getPage("all_posts")
+        history.pushState({section: "allposts"}, "", `allposts`)
+    });
+}
+
 
 function getProfile(user) {
     header.style.display = "block"

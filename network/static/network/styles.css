@@ -26,7 +26,6 @@
 }
 
 
-
 @media (max-width: 1024px)  {.postOwner{
     display: block;
     font-size: large;
@@ -39,16 +38,12 @@
 }
 
 
-#mobileBar {
-    margin-right: 20px;
-}
-
 #navbarToggleExternalContent {
     text-align: left;
     background-color: rgb(238, 238, 238);
     width: 120px;
     position: absolute;
-    right: 20px;
+    right: 0px;
 }
 
 #new_post_area {
@@ -124,7 +119,7 @@
 .heartCount {
     margin-left: 5px;
 }
-.heartIcon:hover, .commentIcon:hover, #allPosts:hover, #following:hover, #profile:hover, .maker:hover, #notification:hover{
+.heartIcon:hover, .commentIcon:hover, #allPosts:hover, #allPostsM:hover, #following:hover, #followingM:hover, #profile:hover, .maker:hover, #notification:hover{
     cursor: pointer;
 }
 
