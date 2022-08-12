@@ -40,12 +40,15 @@ class PostForm(forms.Form):
 
 def index(request):
     if request.method == "POST":
-        the_content = request.POST["new_post"]
-        if len(the_content) > 1000:
-            return HttpResponse("<h1>Your post is over the character limit.!</h1>")
-        Post.objects.create(owner=request.user, content=the_content)
-        return HttpResponseRedirect(reverse("index"))
-
+        form = PostForm(request.POST)
+        if form.is_valid():
+            the_content = form.cleaned_data["new_post"]
+            if len(the_content) > 1000:
+                return HttpResponse("<h1>Your post is over the character limit.!</h1>")
+            Post.objects.create(owner=request.user, content=the_content)
+            return HttpResponseRedirect(reverse("index"))
+        else:
+            return HttpResponseRedirect(reverse("index"))
     if len(request.user.username) != 0:
         not_count = Notification.objects.filter(owner=request.user, read=False).all().count()
         return render(request, "network/index.html", {
@@ -250,8 +253,10 @@ def login_view(request):
     if request.method == "POST":
 
         # Attempt to sign user in
-        username = request.POST["username"]
-        password = request.POST["password"]
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
         user = authenticate(request, username=username, password=password)
 
         # Check if authentication successful
@@ -276,12 +281,15 @@ def logout_view(request):
 
 def register(request):
     if request.method == "POST":
-        username = request.POST["username"]
-        email = request.POST["email"]
 
-        # Ensure password matches confirmation
-        password = request.POST["password"]
-        confirmation = request.POST["confirmation"]
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            email = form.cleaned_data["email"]
+            # Ensure password matches confirmation
+            password = form.cleaned_data["password"]
+            confirmation = form.cleaned_data["confirmation"]
+
         if password == "":
             return render(request, "network/register.html", {
                 "message": "Please fill requirements",
