@@ -3,6 +3,14 @@
     padding-bottom: 20px;
 }
 
+@media (max-width: 1024px)  {#desktopBar{
+    display: none;
+    }   
+}
+@media (min-width: 1023px)  {#mobileBar{
+    display: none;
+    }   
+}
 @media (max-width: 500px)  {.body{
     padding: 10px;
     padding-bottom: 20px;
@@ -31,6 +39,17 @@
 }
 
 
+#mobileBar {
+    margin-right: 20px;
+}
+
+#navbarToggleExternalContent {
+    text-align: left;
+    background-color: rgb(238, 238, 238);
+    width: 120px;
+    position: absolute;
+    right: 20px;
+}
 
 #new_post_area {
     border: solid rgb(196, 192, 192) 1px;
@@ -352,7 +371,7 @@ font-size: x-large;
 }
 
 .bi-globe2 {
-    background-image: linear-gradient(to right, rgb(253, 120, 120) , rgb(247, 247, 112));
+    background-image: linear-gradient(to right, rgb(250, 123, 123) , rgb(247, 247, 112));
     margin-bottom: 5px;
     color: #a2b8cc46;
 }
