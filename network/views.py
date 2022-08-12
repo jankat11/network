@@ -1,7 +1,6 @@
 
 import json
 import time
-from tkinter import Widget
 
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
