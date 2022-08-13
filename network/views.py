@@ -38,6 +38,8 @@ class PostForm(forms.Form):
         widget=forms.Textarea(attrs={"placeholder": "What are you thinking?", "class": "form-control newPost", "rows": "4"}))
 
 
+
+
 def index(request):
     if request.method == "POST":
         form = PostForm(request.POST)
@@ -251,7 +253,9 @@ def unlike_post(request, post_id):
 
 @login_required
 def search(request):
-    return render(request, "network/search.html")
+    pattern = request.GET["user"]
+    users = User.objects.filter(username__contains=pattern).all()
+    return JsonResponse([user.username for user in users], safe=False)
 
 def login_view(request):
     if request.method == "POST":

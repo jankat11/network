@@ -61,6 +61,22 @@ document.addEventListener("DOMContentLoaded", () => {
     getPage("all_posts")
 });
 
+document.querySelectorAll(".searchB").forEach(button => {
+    button.onclick = () => {
+        document.querySelector("#searchResults").innerHTML = ""
+        let value =  button.parentElement.previousElementSibling.value
+        fetch(`/search?user=${value}`)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            for (let user of data) {
+                let div = document.createElement("div")
+                div.innerHTML = `<div>${person}${user}</div>`
+                document.querySelector("#searchResults").append(div)
+            }
+        })
+    }
+})
 
 if(following) {
     following.addEventListener("click", () => { 
