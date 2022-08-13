@@ -17,6 +17,18 @@
     }   
 }
 
+@media (max-width: 500px)  {#mobileSiteIcon{
+    margin-left: 0px;
+    }   
+}
+
+
+@media (max-width: 500px)  {#title{
+    margin-left: 10px;
+    }   
+}
+
+
 @media (max-width: 1024px)  {.postClock, .postDate{
     position: relative;
     bottom: 5px;
