@@ -112,7 +112,7 @@ if(document.querySelector("#notificationM")) {
 
 if(document.querySelector(".mLink")) {
     document.querySelectorAll(".mLink").forEach(link => {
-        link.onclick = () => document.querySelector(".navbar-toggler").click()
+        link.onclick = () => document.querySelector(".hamburger").click()
     })
 }
 
