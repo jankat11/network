@@ -66,6 +66,17 @@
     box-shadow: 0px 0px 10px 5px rgba(104, 143, 175, 0.192)
 }
 
+.searchButton {
+    border: none;
+    position: relative;
+    bottom: 2px;
+}
+
+.searchButton:focus {
+    border: none;
+    outline: none;
+}
+
 #post_button {
     margin-top: 5px;
 }
