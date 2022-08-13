@@ -347,7 +347,7 @@
     border-right: 0px;
 }
 
-#notCount {
+#notCount, #notCountM{
     padding-left: 6px;
     padding-right: 8px;
     border: solid 1px #4faaff;
@@ -359,6 +359,8 @@
     display: none;
     padding-top: 0px;
 }
+
+
 .bi-bell {
     position: relative;
     bottom: 2px;

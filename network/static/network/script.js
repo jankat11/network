@@ -47,11 +47,14 @@ document.addEventListener("DOMContentLoaded", () => {
     history.pushState({section: `home`}, "", `home`)
     if (header.dataset.profile != "AnonymousUser") {
         let notCount = document.querySelector("#notCount")
+        let notCountM = document.querySelector("#notCountM")
         let notIcon = document.querySelector("#notIcon")
+        let notIconM = document.querySelector("#notIconM")
         if(notCount.innerHTML != 0) {
             notCount.style.display = "inline-block"
-
+            notCountM.style.display = "inline-block"
             notIcon.setAttribute("fill", "#1e99ff")
+            notIconM.setAttribute("fill", "#1e99ff")
         }
     } 
     removePagination()
@@ -88,6 +91,14 @@ if(notification) {
     }
 }
 
+if(document.querySelector("#notificationM")) {
+    document.querySelector("#notificationM").onclick = () => {
+        notificationPage()
+        history.pushState({section: "notifications"}, "", `notifications`)
+    }
+}
+
+
 
 function followings() {
     removePagination()
@@ -101,7 +112,9 @@ function profilePage(profileName) {
 
 function notificationPage() {
     document.querySelector("#notCount").style.display = "none"
+    document.querySelector("#notCountM").style.display = "none"
     document.querySelector("#notIcon").setAttribute("fill", "currentColor")
+    document.querySelector("#notIconM").setAttribute("fill", "currentColor")
     removePagination()
     getPage("notification")
     fetch("read_notifications")
