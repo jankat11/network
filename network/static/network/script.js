@@ -84,6 +84,17 @@ if(profile) {
     }
 }
 
+if(document.querySelector("#profileM")) {
+    let profileName = document.querySelector("#profileM").firstElementChild.dataset.profile
+
+    document.querySelector("#profileM").onclick = () => {
+        console.log("hello", profileName)
+        profilePage(profileName)
+        history.pushState({section: `profile-${profileName}`}, "", `profile`);
+    }
+}
+
+
 if(notification) {
     notification.onclick = () => {
         notificationPage()
@@ -99,6 +110,11 @@ if(document.querySelector("#notificationM")) {
 }
 
 
+if(document.querySelector(".mLink")) {
+    document.querySelectorAll(".mLink").forEach(link => {
+        link.onclick = () => document.querySelector(".navbar-toggler").click()
+    })
+}
 
 function followings() {
     removePagination()
