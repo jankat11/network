@@ -251,7 +251,7 @@ def unlike_post(request, post_id):
 
 @login_required
 def search(request):
-    pass
+    return render(request, "network/search.html")
 
 def login_view(request):
     if request.method == "POST":
