@@ -64,6 +64,9 @@
     right: 10px;
 }
 
+#proArea:hover, #notArea:hover {
+    cursor: pointer;
+}
 
 #navbarToggleExternalContent {
     text-align: left;
