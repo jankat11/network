@@ -49,6 +49,21 @@
     }   
 }
 
+#searArea {
+    position: relative;
+    right: 13px;
+}
+
+#proArea {
+    position: relative;
+    right: 15px;
+}
+
+#notArea {
+    position: relative;
+    right: 10px;
+}
+
 
 #navbarToggleExternalContent {
     text-align: left;
@@ -298,6 +313,11 @@
 .notLoad {
     position: relative;
     left: -8%;
+    padding-left: 0px;
+}
+
+#notificationM {
+    padding-right: 0px;
     padding-left: 0px;
 }
 
