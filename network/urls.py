@@ -7,6 +7,7 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
+    path("search", views.search, name="search"),
 
     # APIs
     path("get_profile/<str:user_name>", views.get_profile, name="get_profile"),

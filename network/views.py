@@ -21,7 +21,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(label="", min_length=6, 
         widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
 
-
+ 
 class RegisterForm(forms.Form):
     username = forms.CharField(label="", min_length=2, strip=True, max_length=30, 
         widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
@@ -248,6 +248,10 @@ def unlike_post(request, post_id):
 
     return JsonResponse({"success": "the like succesfully gotten back"}, status=200)
 
+
+@login_required
+def search(request):
+    pass
 
 def login_view(request):
     if request.method == "POST":
