@@ -51,6 +51,16 @@
                     </li>
 
                     <li class="nav-item">
+                      <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search user" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" type="button">Search</button>
+                        </div>
+                      </div>
+                    </li>
+
+
+                    <li class="nav-item">
                         <a class="nav-link" id="logout" href="{% url 'logout' %}">Log Out</a>
                     </li>
                 {% else %}
@@ -126,7 +136,12 @@
 
               <div class="collapse" id="searchIcon">
                 <div class="bg-light p-4">
-                  <span >Toggleable via the navbar brand.</span>
+                  <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Search user" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button">Search</button>
+                    </div>
+                  </div>
                 </div>
               </div>
         
