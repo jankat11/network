@@ -73,15 +73,21 @@ document.querySelectorAll(".searchB").forEach(button => {
         .then(response => response.json())
         .then(data => {
             if (data.length == 0) {
-                document.querySelector("#searchResults").innerHTML = "No results"
+                document.querySelector("#searchResults").innerHTML = "No result."
             }
             console.log(data)
             for (let user of data) {
-                let div = document.createElement("div")
-                div.innerHTML = `${person}${user}`
-                div.className = "proResult"
-                document.querySelector("#searchResults").append(div)
-                div.onclick = () => {
+                let br = document.createElement("br")
+                let span1 = document.createElement("span")
+                span1.innerHTML = `${person}`
+                let span2 = document.createElement("span")
+                span2.innerHTML = `${user}`
+                span2.className = "proResult"
+                document.querySelector("#searchResults").append(span1)
+                document.querySelector("#searchResults").append(span2)
+                document.querySelector("#searchResults").append(br)
+    
+                span2.onclick = () => {
                     removePagination()
                     getPage("profile", user)
                     history.pushState({section: `profile-${user}`}, "", `profile`)
