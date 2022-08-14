@@ -72,15 +72,25 @@ document.querySelectorAll(".searchB").forEach(button => {
         fetch(`/search?user=${value}`)
         .then(response => response.json())
         .then(data => {
+            if (data.length == 0) {
+                document.querySelector("#searchResults").innerHTML = "No results"
+            }
             console.log(data)
             for (let user of data) {
                 let div = document.createElement("div")
                 div.innerHTML = `<div>${person}${user}</div>`
+                div.className = "proResult"
                 document.querySelector("#searchResults").append(div)
+                div.onclick = () => {
+                    removePagination()
+                    getPage("profile", user)
+                    history.pushState({section: `profile-${user}`}, "", `profile`)
+                }
             }
-        })
+        });
     }
-})
+});
+
 
 if(following) {
     following.addEventListener("click", () => { 

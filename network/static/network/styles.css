@@ -73,6 +73,10 @@
     cursor: pointer;
 }
 
+.proResult {
+    width: fit-content;
+}
+
 #navbarToggleExternalContent {
     text-align: left;
     background-color: rgb(238, 238, 238);
