@@ -91,6 +91,7 @@ document.querySelectorAll(".searchB").forEach(button => {
                     removePagination()
                     getPage("profile", user)
                     history.pushState({section: `profile-${user}`}, "", `profile`)
+                    document.querySelector("#searArea").click()
                 }
             }
         });
