@@ -74,7 +74,9 @@
 }
 
 .proResult {
-    
+    position: relative;
+    left: 3px;
+    top: 2px;
 }
 
 #navbarToggleExternalContent {
