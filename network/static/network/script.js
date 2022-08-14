@@ -146,7 +146,7 @@ function notificationPage() {
     document.querySelector("#notCount").style.display = "none"
     document.querySelector("#notCountM").style.display = "none"
     document.querySelector("#notIcon").setAttribute("fill", "currentColor")
-    document.querySelector("#notIconM").setAttribute("fill", "currentColor")
+    document.querySelector("#notIconM").setAttribute("fill", "gray")
     removePagination()
     getPage("notification")
     fetch("read_notifications")
