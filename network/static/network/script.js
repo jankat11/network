@@ -78,7 +78,7 @@ document.querySelectorAll(".searchB").forEach(button => {
             console.log(data)
             for (let user of data) {
                 let div = document.createElement("div")
-                div.innerHTML = `<div>${person}${user}</div>`
+                div.innerHTML = `${person}${user}`
                 div.className = "proResult"
                 document.querySelector("#searchResults").append(div)
                 div.onclick = () => {
