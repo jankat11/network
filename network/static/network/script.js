@@ -63,8 +63,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.querySelectorAll(".searchB").forEach(button => {
     button.onclick = () => {
-        document.querySelector("#searchResults").innerHTML = ""
         let value =  button.parentElement.previousElementSibling.value
+        if (!value) {
+            alert("enter at least one character")
+            return
+        }
+        document.querySelector("#searchResults").innerHTML = ""
         fetch(`/search?user=${value}`)
         .then(response => response.json())
         .then(data => {

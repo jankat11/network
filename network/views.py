@@ -38,6 +38,9 @@ class PostForm(forms.Form):
         widget=forms.Textarea(attrs={"placeholder": "What are you thinking?", "class": "form-control newPost", "rows": "4"}))
 
 
+class SearchForm(forms.Form):
+    user = forms.CharField(label="", min_length=1, 
+        widget=forms.TextInput(attrs={"placeholder": "Search profile", "class": "form-control searchInput"}))
 
 
 def index(request):
@@ -55,11 +58,13 @@ def index(request):
         not_count = Notification.objects.filter(owner=request.user, read=False).all().count()
         return render(request, "network/index.html", {
             "not_count": not_count,
-            "postForm": PostForm()
+            "postForm": PostForm(),
+            "searchForm": SearchForm()
         })
     else:
         return render(request, "network/index.html", {
-            "postForm": PostForm()
+            "postForm": PostForm(),
+            "searchForm": SearchForm()
         })
 
 

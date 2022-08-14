@@ -49,6 +49,11 @@
     }   
 }
 
+
+.searchInput:focus {
+    outline: none !important;
+}
+
 #searArea {
     position: relative;
     right: 20px;
