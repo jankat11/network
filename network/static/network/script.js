@@ -68,12 +68,26 @@ document.querySelectorAll(".searchB").forEach(button => {
             alert("enter at least one character")
             return
         }
-        document.querySelector("#searchResults").innerHTML = ""
+        let results = document.querySelector("#searchResults")
+        results.innerHTML = ""
         let page = 1
-        getUserSearch(value, page)
+        getUserSearch(value, page, results)
     }
 });
 
+document.querySelectorAll(".searchB2").forEach(button => {
+    button.onclick = () => {
+        let value =  button.parentElement.previousElementSibling.value
+        if (!value) {
+            alert("enter at least one character")
+            return
+        }
+        let results = document.querySelector("#searchResults2")
+        results.innerHTML = ""
+        let page = 1
+        getUserSearch(value, page, results)
+    }
+});
 
 if(following) {
     following.addEventListener("click", () => { 
@@ -194,12 +208,12 @@ function getProfile(user) {
 }
 
 
-function getUserSearch(value, page) {
+function getUserSearch(value, page, results) {
     fetch(`/search/${value}/${page}`)
     .then(response => response.json())
     .then(data => {
         if (data.length == 0) {
-            document.querySelector("#searchResults").innerHTML = "No result."
+            results.innerHTML = "No result."
         }
         console.log(data)
         for (let user of data) {
@@ -209,9 +223,9 @@ function getUserSearch(value, page) {
             let span2 = document.createElement("span")
             span2.innerHTML = `${user}`
             span2.className = "proResult"
-            document.querySelector("#searchResults").append(span1)
-            document.querySelector("#searchResults").append(span2)
-            document.querySelector("#searchResults").append(br)
+            results.append(span1)
+            results.append(span2)
+            results.append(br)
 
             span2.onclick = () => {
                 removePagination()
@@ -224,17 +238,17 @@ function getUserSearch(value, page) {
             let moreResult = document.createElement("div")
             moreResult.className = "moreResult"
             moreResult.innerHTML = "More result..."
-            document.querySelector("#searchResults").append(moreResult)
+            results.append(moreResult)
             moreResult.onclick = () => {
                 moreResult.remove()
-                getUserSearch(value, page + 1)
+                getUserSearch(value, page + 1, results)
             }
         }
         if (document.querySelector("#desktopS")) {
             document.querySelector("#desktopS").setAttribute("data-bs-target", "")
             document.querySelector("#closeSearch").onclick = () => {
                 document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
-                
+
             }
         }
     });
