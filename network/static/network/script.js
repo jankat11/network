@@ -129,6 +129,8 @@ if(document.querySelector(".mLink")) {
     })
 }
 
+
+
 function followings() {
     removePagination()
     getPage("following")
@@ -226,6 +228,13 @@ function getUserSearch(value, page) {
             moreResult.onclick = () => {
                 moreResult.remove()
                 getUserSearch(value, page + 1)
+            }
+        }
+        if (document.querySelector("#desktopS")) {
+            document.querySelector("#desktopS").setAttribute("data-bs-target", "")
+            document.querySelector("#closeSearch").onclick = () => {
+                document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+                
             }
         }
     });
