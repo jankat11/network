@@ -122,6 +122,8 @@
     float: right;
     position: relative;
     bottom: 20px;
+    border-radius: 10px;
+    padding: 2px;
 }
 
 #post_button {
