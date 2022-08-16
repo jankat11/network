@@ -7,7 +7,6 @@ urlpatterns = [
     path("login", views.login_view, name="login"),
     path("logout", views.logout_view, name="logout"),
     path("register", views.register, name="register"),
-    path("search/<str:user>/<int:page>", views.search, name="search"),
 
     # APIs
     path("get_profile/<str:user_name>", views.get_profile, name="get_profile"),
@@ -23,6 +22,7 @@ urlpatterns = [
     path("get_notifications/<int:page>", views.get_notifications, name="get_notifications"),
     path("read_notifications", views.read_notifications, name="read_notifications"),
     path("get_post/<int:post_id>", views.get_post, name="get_post"),
+    path("search/<str:user>/<int:page>", views.search, name="search"),
   
 
     #index redirecting
