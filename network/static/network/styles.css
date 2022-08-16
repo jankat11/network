@@ -79,6 +79,13 @@
     top: 2px;
 }
 
+.moreResult {
+    margin-top: 20px;
+    cursor: pointer;
+    font-style: italic;
+    color: gray;
+}
+
 #navbarToggleExternalContent {
     text-align: left;
     background-color: rgb(238, 238, 238);

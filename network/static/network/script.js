@@ -69,32 +69,8 @@ document.querySelectorAll(".searchB").forEach(button => {
             return
         }
         document.querySelector("#searchResults").innerHTML = ""
-        fetch(`/search?user=${value}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.length == 0) {
-                document.querySelector("#searchResults").innerHTML = "No result."
-            }
-            console.log(data)
-            for (let user of data) {
-                let br = document.createElement("br")
-                let span1 = document.createElement("span")
-                span1.innerHTML = `${person}`
-                let span2 = document.createElement("span")
-                span2.innerHTML = `${user}`
-                span2.className = "proResult"
-                document.querySelector("#searchResults").append(span1)
-                document.querySelector("#searchResults").append(span2)
-                document.querySelector("#searchResults").append(br)
-    
-                span2.onclick = () => {
-                    removePagination()
-                    getPage("profile", user)
-                    history.pushState({section: `profile-${user}`}, "", `profile`)
-                    document.querySelector("#searArea").click()
-                }
-            }
-        });
+        let page = 1
+        getUserSearch(value, page)
     }
 });
 
@@ -214,6 +190,47 @@ function getProfile(user) {
         }
     });
 }
+
+
+function getUserSearch(value, page) {
+    fetch(`/search/${value}/${page}`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.length == 0) {
+            document.querySelector("#searchResults").innerHTML = "No result."
+        }
+        console.log(data)
+        for (let user of data) {
+            let br = document.createElement("br")
+            let span1 = document.createElement("span")
+            span1.innerHTML = `${person}`
+            let span2 = document.createElement("span")
+            span2.innerHTML = `${user}`
+            span2.className = "proResult"
+            document.querySelector("#searchResults").append(span1)
+            document.querySelector("#searchResults").append(span2)
+            document.querySelector("#searchResults").append(br)
+
+            span2.onclick = () => {
+                removePagination()
+                getPage("profile", user)
+                history.pushState({section: `profile-${user}`}, "", `profile`)
+                document.querySelector("#searArea").click()
+            }
+        }
+        if (data.length >= 10) {
+            let moreResult = document.createElement("div")
+            moreResult.className = "moreResult"
+            moreResult.innerHTML = "More result..."
+            document.querySelector("#searchResults").append(moreResult)
+            moreResult.onclick = () => {
+                moreResult.remove()
+                getUserSearch(value, page + 1)
+            }
+        }
+    });
+}
+
 
 
 function follow(status, user) {

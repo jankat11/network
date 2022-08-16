@@ -16,14 +16,14 @@ from .models import User, Post, Notification
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(min_length=2, max_length=30, label="", strip=True,
+    username = forms.CharField(min_length=2, max_length=45, label="", strip=True,
         widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
     password = forms.CharField(label="", min_length=6, 
         widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
 
  
 class RegisterForm(forms.Form):
-    username = forms.CharField(label="", min_length=2, strip=True, max_length=30, 
+    username = forms.CharField(label="", min_length=2, strip=True, max_length=45, 
         widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
     email = forms.EmailField(label="",
         widget=forms.EmailInput(attrs={"placeholder": "Email", "class": "form-control form-group login"}))
@@ -257,10 +257,10 @@ def unlike_post(request, post_id):
 
 
 @login_required
-def search(request):
-    pattern = request.GET["user"]
-    users = User.objects.filter(username__contains=pattern).all()
-    return JsonResponse([user.username for user in users], safe=False)
+def search(request, user, page):  
+    users = User.objects.filter(username__contains=user).all()
+    result = Paginator(sorted([user.username for user in users]), 10)
+    return JsonResponse(result.page(page).object_list, safe=False)
 
 def login_view(request):
     if request.method == "POST":

@@ -86,7 +86,7 @@
 
               {% if user.is_authenticated %}
               <div class="nav-item" id="proArea">
-                <a class="nav-link" id="profileM"><img width=18 src="/static/network/profileIcon.png" data-profile={{ user.username }}></img></a>
+                <a class="nav-link" id="profileM"><img width=18 src="/static/network/profileIcon.png" data-profile="{{ user.username }}"></img></a>
               </div>
 
               <button id="searArea" class="navbar-toggler searchButton" type="button" data-bs-toggle="collapse" data-bs-target="#searchIcon" aria-controls="searchIcon" aria-expanded="false" aria-label="Toggle navigation">
