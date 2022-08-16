@@ -79,6 +79,10 @@
     top: 2px;
 }
 
+.proResult:hover {
+    cursor: pointer;
+}
+
 .moreResult {
     margin-top: 20px;
     cursor: pointer;

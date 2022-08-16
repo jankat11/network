@@ -262,6 +262,7 @@ def search(request, user, page):
     result = Paginator(sorted([user.username for user in users]), 10)
     return JsonResponse(result.page(page).object_list, safe=False)
 
+
 def login_view(request):
     if request.method == "POST":
 
@@ -303,28 +304,34 @@ def register(request):
             password = form.cleaned_data["password"]
             confirmation = form.cleaned_data["confirmation"]
 
-        if password == "":
-            return render(request, "network/register.html", {
-                "message": "Please fill requirements",
-                "registerForm": RegisterForm()
-            })
-        if password != confirmation:
-            return render(request, "network/register.html", {
-                "message": "Passwords must match.",
-                "registerForm": RegisterForm()
-            })
+            if password == "":
+                return render(request, "network/register.html", {
+                    "message": "Please fill requirements",
+                    "registerForm": RegisterForm()
+                })
+            if password != confirmation:
+                return render(request, "network/register.html", {
+                    "message": "Passwords must match.",
+                    "registerForm": RegisterForm()
+                })
 
-        # Attempt to create new user
-        try:
-            user = User.objects.create_user(username, email, password)
-            user.save()
-        except IntegrityError:
+            # Attempt to create new user
+            try:
+                user = User.objects.create_user(username, email, password)
+                user.save()
+
+            except IntegrityError:
+                return render(request, "network/register.html", {
+                    "message": "Username already taken.",
+                    "registerForm": RegisterForm()
+                })
+            login(request, user)
+            return HttpResponseRedirect(reverse("index"))
+        else:
             return render(request, "network/register.html", {
-                "message": "Username already taken.",
+                "message": "Check for valid e-mail address or username",
                 "registerForm": RegisterForm()
             })
-        login(request, user)
-        return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html", {
             "registerForm": RegisterForm()
