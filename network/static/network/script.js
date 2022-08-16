@@ -244,7 +244,7 @@ function getUserSearch(value, page, results) {
                 getUserSearch(value, page + 1, results)
             }
         }
-        if (document.querySelector("#desktopS")) {
+        if (results.id == "searchResults2") {
             document.querySelector("#desktopS").setAttribute("data-bs-target", "")
             document.querySelector("#closeSearch").onclick = () => {
                 document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
