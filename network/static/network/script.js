@@ -197,7 +197,7 @@ function getProfile(user) {
         let joined = `<span class="joinedDate"><span id="calendar"></span> joined ${profile.joined.split(",")[0]}</span>`
         let followers = `<span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span>`
         let follows = `<span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span>`
-        header.innerHTML = `${image}${userName}${profile.selfProfile == user || !profile.selfProfile ? "" : button}${followers}${follows}${joined}`
+        header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="followInfo">${followers}${follows}${joined}</div>${profile.selfProfile == user || !profile.selfProfile ? "" : button}</div>`
         document.querySelector("#calendar").innerHTML = calendar
 
         if (profile.selfProfile != user) {
