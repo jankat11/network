@@ -291,8 +291,14 @@
     margin-bottom: 20px;
 }
 
+#followerLink, #followLink {
+    color: black;
+}
 
-
+.followTitle {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
 
 #profileM {
     position: relative;

@@ -187,7 +187,7 @@ if(document.querySelector("#allPostsM")) {
 
 
 function getProfile(user) {
-    document.querySelector("#all_posts").innerHTML = `<div class="collapse followerArea" id="followerArea"><div class="card card-body"><b>Followers:</b><div id="listFw"></div></div></div><div class="collapse followArea" id="followArea"><div class="card card-body"><b>Follows:</b><div id="listF"></div></div></div>`
+    document.querySelector("#all_posts").innerHTML = `<div class="collapse followerArea" id="followerArea"><div class="card card-body"><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea" id="followArea"><div class="card card-body"><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
     header.style.display = "block"
     let userName = `<div id="userName">${user}</div>`
     fetch(`/get_profile/${user}`)
@@ -210,23 +210,53 @@ function getProfile(user) {
             $('.followArea').collapse("hide");
             document.querySelector("#listFw").innerHTML = ""
             for (let follower of profile.followerList) {
-                let userNm = document.createElement("div")
-                userNm.innerHTML = `${follower}`
-                document.querySelector("#listFw").append(userNm)
+                let results = document.querySelector("#listFw")
+                createSearchResult(follower, results)
             }
         }
         document.querySelector("#followLink").onclick = () => {
             $('.followerArea').collapse("hide");
             document.querySelector("#listF").innerHTML = ""
             for (let following of profile.followList) {
-                let userNm = document.createElement("div")
-                userNm.innerHTML = `${following}`
-                document.querySelector("#listF").append(userNm)
+                let results = document.querySelector("#listF")
+                createSearchResult(following, results)
             }
         }
     });
 }
 
+function getPersonIcon() {
+    let span = document.createElement("span")
+    span.innerHTML = `${roundedPerson}`
+    return span
+}
+
+function createBr() {
+    let br = document.createElement("div")
+    br.innerHTML = "<br>"
+    return br
+}
+
+function createPersonSpan(user) {
+    let span = document.createElement("span")
+    span.innerHTML = `${user}`
+    span.className = "proResult"
+    return span
+}
+
+function createSearchResult(user, results) {
+    let personIcon = getPersonIcon()
+    let personName = createPersonSpan(user)
+    results.append(personIcon)
+    results.append(personName)
+    results.append(createBr())
+    personName.onclick = () => {
+        removePagination()
+        getPage("profile", user)
+        history.pushState({section: `profile-${user}`}, "", `profile`)
+        document.querySelector("#searArea").click()
+    }
+}
 
 function getUserSearch(value, page, results) {
     fetch(`/search/${value}/${page}`)
@@ -237,23 +267,9 @@ function getUserSearch(value, page, results) {
         }
         console.log(data)
         for (let user of data) {
-            let br = document.createElement("br")
-            let span1 = document.createElement("span")
-            span1.innerHTML = `${person}`
-            let span2 = document.createElement("span")
-            span2.innerHTML = `${user}`
-            span2.className = "proResult"
-            results.append(span1)
-            results.append(span2)
-            results.append(br)
-
-            span2.onclick = () => {
-                removePagination()
-                getPage("profile", user)
-                history.pushState({section: `profile-${user}`}, "", `profile`)
-                document.querySelector("#searArea").click()
-            }
+            createSearchResult(user, results)
         }
+        
         if (data.length >= 10) {
             let moreResult = document.createElement("div")
             moreResult.className = "moreResult"
