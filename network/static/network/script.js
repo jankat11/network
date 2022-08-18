@@ -270,7 +270,7 @@ function createSearchResult(user, results) {
         removePagination()
         getPage("profile", user)
         history.pushState({section: `profile-${user}`}, "", `profile`)
-        document.querySelector("#searArea").click()
+        $('.mobileSearchArea').collapse("hide");
     }
 }
 
