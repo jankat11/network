@@ -108,6 +108,7 @@ if(profile) {
     profile.onclick = () => {
         profilePage(profileName)
         history.pushState({section: `profile-${profileName}`}, "", `profile`);
+        $('.collapse').collapse("hide");
     }
 }
 
@@ -118,6 +119,7 @@ if(document.querySelector("#profileM")) {
         console.log("hello", profileName)
         profilePage(profileName)
         history.pushState({section: `profile-${profileName}`}, "", `profile`);
+        $('.collapse').collapse("hide");
     }
 }
 
