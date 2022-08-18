@@ -187,7 +187,7 @@ if(document.querySelector("#allPostsM")) {
 
 
 function getProfile(user) {
-    document.querySelector("#all_posts").innerHTML = `<div class="collapse" id="followerArea"><div class="card card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.</div></div>`
+    document.querySelector("#all_posts").innerHTML = `<div class="collapse followerArea" id="followerArea"><div class="card card-body"><b>Followers:</b></div></div><div class="collapse followArea" id="followArea"><div class="card card-body"><b>Follows:</b></div></div>`
     header.style.display = "block"
     let userName = `<div id="userName">${user}</div>`
     fetch(`/get_profile/${user}`)
@@ -198,15 +198,19 @@ function getProfile(user) {
         let button = profile.followed ? unfollowButton : followButton
         let image = `<img class="profilePhoto" width=55 src="/static/network/profile.png"></img>`
         let joined = `<span class="joinedDate"><span id="calendar"></span> joined ${profile.joined.split(",")[0]}</span>`
-        let followers = `<a  data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span></a>`
-        let follows = `<a  data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span></a>`
-        
+        let followers = `<a id="followerLink" data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span></a>`
+        let follows = `<a id="followLink" data-bs-toggle="collapse" href="#followArea"  aria-expanded="false" aria-controls="followArea"><span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span></a>`
         header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="followInfo">${followers}${follows}${joined}</div>${profile.selfProfile == user || !profile.selfProfile ? "" : button}</div>`
         document.querySelector("#calendar").innerHTML = calendar
-
         if (profile.selfProfile != user) {
             theButton = document.querySelector(`.followButton`)
             theButton.onclick = () => follow(theButton.innerHTML, user);
+        }
+        document.querySelector("#followerLink").onclick = () => {
+            $('.followArea').collapse("hide");
+        }
+        document.querySelector("#followLink").onclick = () => {
+            $('.followerArea').collapse("hide");
         }
     });
 }
