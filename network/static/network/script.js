@@ -187,7 +187,7 @@ if(document.querySelector("#allPostsM")) {
 
 
 function getProfile(user) {
-    document.querySelector("#all_posts").innerHTML = `<div class="collapse followerArea" id="followerArea"><div class="card card-body"><b>Followers:</b></div></div><div class="collapse followArea" id="followArea"><div class="card card-body"><b>Follows:</b></div></div>`
+    document.querySelector("#all_posts").innerHTML = `<div class="collapse followerArea" id="followerArea"><div class="card card-body"><b>Followers:</b><div id="listFw"></div></div></div><div class="collapse followArea" id="followArea"><div class="card card-body"><b>Follows:</b><div id="listF"></div></div></div>`
     header.style.display = "block"
     let userName = `<div id="userName">${user}</div>`
     fetch(`/get_profile/${user}`)
@@ -208,9 +208,21 @@ function getProfile(user) {
         }
         document.querySelector("#followerLink").onclick = () => {
             $('.followArea').collapse("hide");
+            document.querySelector("#listFw").innerHTML = ""
+            for (let follower of profile.followerList) {
+                let userNm = document.createElement("div")
+                userNm.innerHTML = `${follower}`
+                document.querySelector("#listFw").append(userNm)
+            }
         }
         document.querySelector("#followLink").onclick = () => {
             $('.followerArea').collapse("hide");
+            document.querySelector("#listF").innerHTML = ""
+            for (let following of profile.followList) {
+                let userNm = document.createElement("div")
+                userNm.innerHTML = `${following}`
+                document.querySelector("#listF").append(userNm)
+            }
         }
     });
 }

@@ -157,9 +157,11 @@ def get_comment(request, post_id, page=1):
 def get_profile(request, user_name):
     user = User.objects.get(username=user_name)
     followers = user.followers
-        
+    follows = user.follows
     return JsonResponse({
-        "follows" : user.follows.count(),
+        "followerList": [follower.username for follower in followers.all()],
+        "followList": [follow.username for follow in follows.all()],
+        "follows" : follows.count(),
         "followers" : followers.count(),
         "joined" : user.joined(),
         "selfProfile": request.user.username,
