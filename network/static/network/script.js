@@ -187,7 +187,8 @@ if(document.querySelector("#allPostsM")) {
 
 
 function getProfile(user) {
-    document.querySelector("#all_posts").innerHTML = `<div class="collapse followerArea" id="followerArea"><div class="card card-body"><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea" id="followArea"><div class="card card-body"><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
+    document.querySelector("#all_posts").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div class="card card-body"><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div class="card card-body"><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
+    let closeButton = '<div id="closeWrap2"><button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#searchIcon2" aria-controls="searchIcon2" aria-expanded="false" aria-label="Toggle navigation" id="closeSearch2">close</button></div>'
     header.style.display = "block"
     let userName = `<div id="userName">${user}</div>`
     fetch(`/get_profile/${user}`)
@@ -206,24 +207,36 @@ function getProfile(user) {
             theButton = document.querySelector(`.followButton`)
             theButton.onclick = () => follow(theButton.innerHTML, user);
         }
+        let closeBtn = document.createElement("div")
+        closeBtn.innerHTML = `${closeButton}`
         document.querySelector("#followerLink").onclick = () => {
             $('.followArea').collapse("hide");
-            document.querySelector("#listFw").innerHTML = ""
-            for (let follower of profile.followerList) {
-                let results = document.querySelector("#listFw")
-                createSearchResult(follower, results)
-            }
+            createFollowList(document.querySelector("#listFw"), profile.followerList, closeBtn)
         }
         document.querySelector("#followLink").onclick = () => {
             $('.followerArea').collapse("hide");
-            document.querySelector("#listF").innerHTML = ""
-            for (let following of profile.followList) {
-                let results = document.querySelector("#listF")
-                createSearchResult(following, results)
-            }
+            createFollowList(document.querySelector("#listF"), profile.followList, closeBtn)
         }
     });
 }
+
+
+function createFollowList(results, list, button) {
+    results.innerHTML = ""
+    for (let following of list) {
+        createSearchResult(following, results)
+    }
+    createCloseBtn(results, button)
+}
+
+
+function createCloseBtn(results, closeBtn) {
+    results.append(closeBtn)
+    closeBtn.onclick = () => {
+        $('.theFollowArea').collapse("hide");
+    }
+}
+
 
 function getPersonIcon() {
     let span = document.createElement("span")
@@ -231,11 +244,13 @@ function getPersonIcon() {
     return span
 }
 
+
 function createBr() {
     let br = document.createElement("div")
     br.innerHTML = "<br>"
     return br
 }
+
 
 function createPersonSpan(user) {
     let span = document.createElement("span")
@@ -243,6 +258,7 @@ function createPersonSpan(user) {
     span.className = "proResult"
     return span
 }
+
 
 function createSearchResult(user, results) {
     let personIcon = getPersonIcon()
@@ -257,6 +273,7 @@ function createSearchResult(user, results) {
         document.querySelector("#searArea").click()
     }
 }
+
 
 function getUserSearch(value, page, results) {
     fetch(`/search/${value}/${page}`)
@@ -289,7 +306,6 @@ function getUserSearch(value, page, results) {
         }
     });
 }
-
 
 
 function follow(status, user) {

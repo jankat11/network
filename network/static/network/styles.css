@@ -132,12 +132,12 @@
 }
 
 
-#closeWrap {
+#closeWrap, #closeWrap2 {
     display: flex;
     justify-content: flex-end;
 }
 
-#closeSearch {
+#closeSearch, #closeSearch2 {
     border-radius: 16px;
     padding: 3px;
     letter-spacing: 1px;
