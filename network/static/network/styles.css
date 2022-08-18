@@ -249,6 +249,10 @@
     color: rgba(0, 0, 0, 0.651);
 }
 
+#userName:hover {
+    cursor: default
+}
+
 .proBottom {
     display: flex;
     justify-content: space-between;
