@@ -185,6 +185,7 @@ if(document.querySelector("#allPostsM")) {
 
 
 function getProfile(user) {
+    document.querySelector("#all_posts").innerHTML = `<div class="collapse" id="followerArea"><div class="card card-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.</div></div>`
     header.style.display = "block"
     let userName = `<div id="userName">${user}</div>`
     fetch(`/get_profile/${user}`)
@@ -195,8 +196,9 @@ function getProfile(user) {
         let button = profile.followed ? unfollowButton : followButton
         let image = `<img class="profilePhoto" width=55 src="/static/network/profile.png"></img>`
         let joined = `<span class="joinedDate"><span id="calendar"></span> joined ${profile.joined.split(",")[0]}</span>`
-        let followers = `<span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span>`
-        let follows = `<span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span>`
+        let followers = `<a  data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span></a>`
+        let follows = `<a  data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span></a>`
+        
         header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="followInfo">${followers}${follows}${joined}</div>${profile.selfProfile == user || !profile.selfProfile ? "" : button}</div>`
         document.querySelector("#calendar").innerHTML = calendar
 
@@ -298,8 +300,10 @@ function getPosts() {
     .then(response => response.json())
     .then(data => {
         if (data.posts.length == 0) {
+            let noPost = document.createElement("h4")
+            noPost.innerHTML = "No post yet!"
             document.querySelector("#main").style.display = "none"
-            document.querySelector("#all_posts").innerHTML = "<h4>No post yet!</h4>"
+            document.querySelector("#all_posts").append(noPost)
         } else {
             data.posts.forEach(post => {
                 let div = createPostItem(post)

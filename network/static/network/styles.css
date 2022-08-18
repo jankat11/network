@@ -260,7 +260,6 @@
     float: right;
     align-self: flex-end;
     margin: 5px;
-
   }
 
 .followInfo {
@@ -286,9 +285,13 @@
 .userFollow {
     font-weight:400;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-
-    
 }
+
+#followerArea  {
+    margin-bottom: 20px;
+}
+
+
 
 
 #profileM {
