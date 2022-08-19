@@ -157,9 +157,10 @@ def get_comment(request, post_id, page=1):
 def get_profile(request, user_name):
     user = User.objects.get(username=user_name)
     followers = user.followers
-    follows = user.follows
+    about = user.about
     return JsonResponse({
-        "follows" : follows.count(),
+        "about": about,
+        "follows" : user.follows.count(),
         "followers" : followers.count(),
         "joined" : user.joined(),
         "selfProfile": request.user.username,
@@ -171,10 +172,8 @@ def get_follow_results(request, user_name, page):
     follower_page = ""
     follow_page = ""
     user = User.objects.get(username=user_name)
-    followers = user.followers
-    follows = user.follows
-    follower_list = Paginator([follower.username for follower in followers.all()], 30)
-    follow_list = Paginator([follow.username for follow in follows.all()], 30)
+    follower_list = Paginator([follower.username for follower in user.followers.all()], 30)
+    follow_list = Paginator([follow.username for follow in user.follows.all()], 30)
     try:
         follower_page = follower_list.page(page).object_list 
     except:

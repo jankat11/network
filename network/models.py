@@ -7,6 +7,7 @@ SLICE = 5
 
 class User(AbstractUser):
     follows = models.ManyToManyField("self", blank=True, symmetrical=False, related_name="followers") 
+    about = models.CharField(max_length=140, blank=True, null=True)
     
     def joined(self):
         return self.date_joined.strftime("%b %Y, %I:%M %p")
