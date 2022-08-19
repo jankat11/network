@@ -159,13 +159,33 @@ def get_profile(request, user_name):
     followers = user.followers
     follows = user.follows
     return JsonResponse({
-        "followerList": [follower.username for follower in followers.all()],
-        "followList": [follow.username for follow in follows.all()],
         "follows" : follows.count(),
         "followers" : followers.count(),
         "joined" : user.joined(),
         "selfProfile": request.user.username,
         "followed": followers.filter(username=request.user.username).count() != 0
+    })
+
+
+def get_follow_results(request, user_name, page):
+    follower_page = ""
+    follow_page = ""
+    user = User.objects.get(username=user_name)
+    followers = user.followers
+    follows = user.follows
+    follower_list = Paginator([follower.username for follower in followers.all()], 30)
+    follow_list = Paginator([follow.username for follow in follows.all()], 30)
+    try:
+        follower_page = follower_list.page(page).object_list 
+    except:
+        pass
+    try:
+        follow_page = follow_list.page(page).object_list
+    except:
+        pass
+    return JsonResponse({
+        "followerList": follower_page,
+        "followList": follow_page
     })
 
 

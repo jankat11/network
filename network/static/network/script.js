@@ -211,20 +211,45 @@ function getProfile(user) {
         closeBtn.innerHTML = `${closeButton}`
         document.querySelector("#followerLink").onclick = () => {
             $('.followArea').collapse("hide");
-            createFollowList(document.querySelector("#listFw"), profile.followerList, closeBtn)
+            getFollowList(user, document.querySelector("#listFw"), closeBtn)  
         }
         document.querySelector("#followLink").onclick = () => {
             $('.followerArea').collapse("hide");
-            createFollowList(document.querySelector("#listF"), profile.followList, closeBtn)
+            getFollowList(user, document.querySelector("#listF"), closeBtn)
         }
     });
 }
 
 
-function createFollowList(results, list, button) {
-    results.innerHTML = ""
+function getFollowList(user, results, closeBtn) {
+    let page = arguments[3] ? arguments[3] : 1
+    console.log(page)
+    fetch(`/get_follow_results/${user}/${page}`)
+    .then(response => response.json())
+    .then(data => {
+        let list = [data.followerList, data.followList]
+        if (results == document.querySelector("#listFw")) {
+            createFollowList(results, list[0], closeBtn, page, user)
+        }  else if (results == document.querySelector("#listF")) {
+            createFollowList(results, list[1], closeBtn, page, user)
+        }
+    });
+}
+
+
+function createFollowList(results, list, button, page, user) {
+    if (page == 1) {
+        results.innerHTML = ""
+    }
     for (let following of list) {
         createSearchResult(following, results)
+    }
+    if (list.length >= 30) {
+        let moreIcon = createMoreIcon(results)
+        moreIcon.onclick = () => {
+            moreIcon.remove()
+            getFollowList(user, results, button, parseInt(page)+1)
+        }
     }
     createCloseBtn(results, button)
 }
@@ -286,25 +311,34 @@ function getUserSearch(value, page, results) {
         for (let user of data) {
             createSearchResult(user, results)
         }
-        
         if (data.length >= 10) {
-            let moreResult = document.createElement("div")
-            moreResult.className = "moreResult"
-            moreResult.innerHTML = "More result..."
-            results.append(moreResult)
-            moreResult.onclick = () => {
-                moreResult.remove()
-                getUserSearch(value, page + 1, results)
-            }
+            getMoreResultFunc(results, page, getUserSearch, value)
         }
         if (results.id == "searchResults2") {
             document.querySelector("#desktopS").setAttribute("data-bs-target", "")
             document.querySelector("#closeSearch").onclick = () => {
                 document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
-
             }
         }
     });
+}
+
+
+function createMoreIcon(results) {
+    let moreResult = document.createElement("div")
+    moreResult.className = "moreResult"
+    moreResult.innerHTML = "More results..."
+    results.append(moreResult)
+    return moreResult
+}
+
+
+function getMoreResultFunc(results, page, func, value) {
+    let moreResult = createMoreIcon(results)
+    moreResult.onclick = () => {
+        moreResult.remove()
+        func(value, page + 1, results)
+    }
 }
 
 

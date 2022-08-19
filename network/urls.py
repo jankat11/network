@@ -11,6 +11,7 @@ urlpatterns = [
 
     # APIs
     path("get_profile/<str:user_name>", views.get_profile, name="get_profile"),
+    path("get_follow_results/<str:user_name>/<int:page>", views.get_follow_results, name="get_follow_results"),
     path("all_posts/<str:post_type>/<int:page>", views.all_posts, name="all_posts"),
     path("like_post/<int:post_id>", views.like_post, name="like_post"),
     path("unlike_post/<int:post_id>", views.unlike_post, name="unlike_post"),
