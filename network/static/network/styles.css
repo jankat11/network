@@ -303,6 +303,11 @@
     margin-bottom: 20px;
 }
 
+.remainChar {
+    color: gray;
+    font-size: small;
+}
+
 .aboutUser {
     margin-left: 25px;
     padding-right: 30px;

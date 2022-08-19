@@ -172,7 +172,7 @@ def get_profile(request, user_name):
 def edit_about_user(request):
     if request.method == "PUT":
         about = json.loads(request.body)
-        request.user.about = about["content"]
+        request.user.about = about["content"].replace("\n", " ").strip()
         request.user.save()
         return JsonResponse({
             "success": "succesfully edited"

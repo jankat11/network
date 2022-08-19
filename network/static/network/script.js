@@ -229,27 +229,42 @@ function editAboutUser() {
     document.querySelector("#aboutInfo").onclick = function () {
         this.innerHTML = `<button id="saveInfo" class="btn btn-outline-secondary btn-sm">save</button>`
         let textArea = document.createElement("textarea")
+        let remainChar = document.createElement("span")
         let info = document.querySelector("#aboutUser").innerHTML
+        let charLength = info.length
+        remainChar.innerHTML = `${charLength}/140`
+        remainChar.className = "remainChar"
         textArea.className = "aboutTextEdit form-control shadow-none"
+        textArea.setAttribute("maxlength", "140")
         textArea.autofocus = true
         textArea.innerHTML = info
         document.querySelector("#aboutUser").innerHTML = ""
         document.querySelector("#aboutUser").append(textArea)
+        document.querySelector("#aboutUser").append(remainChar)
         document.querySelector("#aboutInfo").id = "saveAboutButton"
-        document.querySelector("#saveAboutButton").onclick = function () {
-            this.id = "aboutInfo"
-            this.innerHTML = `${editPen}about you`
-            fetch(`/edit_about_user`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    content: textArea.value
-                })
+        textArea.oninput = function () {
+            charLength = this.value.length
+            remainChar.innerHTML = `${charLength}/140`
+        } 
+        saveAbout(textArea)
+    }
+}
+
+
+function saveAbout(textArea) {
+    document.querySelector("#saveAboutButton").onclick = function () {
+        this.id = "aboutInfo"
+        this.innerHTML = `${editPen}about you`
+        fetch(`/edit_about_user`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                content: textArea.value
             })
-            .then(response => response.json())
-            .then(result => console.log(result))
-            document.querySelector("#aboutUser").innerHTML = textArea.value
-            editAboutUser()
-        }
+        })
+        .then(response => response.json())
+        .then(result => console.log(result))
+        document.querySelector("#aboutUser").innerHTML = textArea.value
+        editAboutUser()
     }
 }
 
