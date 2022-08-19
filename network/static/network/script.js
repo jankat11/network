@@ -609,6 +609,9 @@ function editPage(button) {
     let text = document.createElement("textarea")
     text.className = "form-control newPost"
     text.value = button.parentElement.childNodes[4].innerHTML
+    while (text.value.includes("<br>")) {
+        text.value = text.value.replace("<br>", "\n");
+    };
     button.parentElement.childNodes[4].innerHTML = ""
     button.parentElement.childNodes[4].appendChild(text)
     text.oninput = () => {
