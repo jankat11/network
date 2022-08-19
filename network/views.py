@@ -40,7 +40,7 @@ class PostForm(forms.Form):
 
 class SearchForm(forms.Form):
     user = forms.CharField(label="", min_length=1, 
-        widget=forms.TextInput(attrs={"placeholder": "Search profile", "class": "form-control searchInput"}))
+        widget=forms.TextInput(attrs={"placeholder": "Search profile", "class": "form-control searchInput shadow-none"}))
 
 
 def index(request):
