@@ -309,6 +309,22 @@
     display: inline-block;
     width: 90%;
     word-wrap: break-word;
+    cursor: default;
+}
+
+#aboutInfo {
+    font-weight: 500;
+    color: gray;
+    padding: 2px;
+    float: right;
+    position: relative;
+    bottom: 46px;
+    margin-right: 10px;
+}
+
+#aboutInfo:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
 
 .twoFollow {

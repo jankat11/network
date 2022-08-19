@@ -193,6 +193,7 @@ function getProfile(user) {
     fetch(`/get_profile/${user}`)
     .then(response => response.json())
     .then(profile => {
+        let aboutInfo = `<span id="aboutInfo">${editPen}about you</span>`
         let about = `<div id="aboutUser">${profile.about ? profile.about : ""}</div>`
         let followButton = `<button id="${user}" class="btn btn-outline-info followButton">follow</button>`
         let unfollowButton = `<button id="${user}" class="btn btn-outline-secondary followButton">unfollow</button>`
@@ -201,7 +202,7 @@ function getProfile(user) {
         let joined = `<span class="joinedDate"><span id="calendar"></span> joined ${profile.joined.split(",")[0]}</span>`
         let followers = `<a id="followerLink" data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span></a>`
         let follows = `<a id="followLink" data-bs-toggle="collapse" href="#followArea"  aria-expanded="false" aria-controls="followArea"><span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span></a>`
-        header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="twoFollow">${followers}${follows}</div>${about}${joined}${profile.selfProfile == user || !profile.selfProfile ? "" : button}</div>`
+        header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="twoFollow">${followers}${follows}</div>${about}${joined}${profile.selfProfile == user || !profile.selfProfile ? aboutInfo : button}</div>`
         document.querySelector("#calendar").innerHTML = calendar
         if (profile.selfProfile != user) {
             theButton = document.querySelector(`.followButton`)
