@@ -168,6 +168,17 @@ def get_profile(request, user_name):
     })
 
 
+@csrf_exempt
+def edit_about_user(request):
+    if request.method == "PUT":
+        about = json.loads(request.body)
+        request.user.about = about["content"]
+        request.user.save()
+        return JsonResponse({
+            "success": "succesfully edited"
+        })
+        
+
 def get_follow_results(request, user_name, page):
     follower_page = ""
     follow_page = ""

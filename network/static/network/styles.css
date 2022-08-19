@@ -303,16 +303,26 @@
     margin-bottom: 20px;
 }
 
-#aboutUser {
+.aboutUser {
     margin-left: 25px;
+    padding-right: 30px;
     margin-top: 10px;
     display: inline-block;
-    width: 90%;
+    width: 100%;
     word-wrap: break-word;
     cursor: default;
 }
 
-#aboutInfo {
+.aboutTextEdit{
+    width: 100%;
+    background-color: rgba(206, 236, 248, 0.089);
+}
+.aboutTextEdit:focus{
+    background-color: rgba(206, 236, 248, 0.089);
+    border-color: rgba(128, 128, 128, 0.185);
+}
+
+#aboutInfo, .aboutInfo {
     font-weight: 500;
     color: gray;
     padding: 2px;
@@ -346,7 +356,6 @@
     cursor: default;
 }
 
-
 .edit, .save, .delete, .deleteHidden, .editHidden{
     margin-left: 40px;  
     padding: 1px;
@@ -362,9 +371,14 @@
     padding-left: 2px;
     padding-right: 2px;
     margin-top: 2px;
-    color: #5186cc;
 }
 
+#saveInfo {
+    border-radius: 15px;
+    padding: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
 
 .seperate{
     color: rgb(76, 122, 151);

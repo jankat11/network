@@ -25,6 +25,7 @@ urlpatterns = [
     path("read_notifications", views.read_notifications, name="read_notifications"),
     path("get_post/<int:post_id>", views.get_post, name="get_post"),
     path("search/<str:user>/<int:page>", views.search, name="search"),
+    path("edit_about_user", views.edit_about_user, name="edit_about_user"),
   
 
     #index redirecting

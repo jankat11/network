@@ -193,8 +193,8 @@ function getProfile(user) {
     fetch(`/get_profile/${user}`)
     .then(response => response.json())
     .then(profile => {
-        let aboutInfo = `<span id="aboutInfo">${editPen}about you</span>`
-        let about = `<div id="aboutUser">${profile.about ? profile.about : ""}</div>`
+        let aboutInfo = `<span id="aboutInfo" class="aboutInfo">${editPen}about you</span>`
+        let about = `<div id="aboutUser" class="aboutUser">${profile.about ? profile.about : ""}</div>`
         let followButton = `<button id="${user}" class="btn btn-outline-info followButton">follow</button>`
         let unfollowButton = `<button id="${user}" class="btn btn-outline-secondary followButton">unfollow</button>`
         let button = profile.followed ? unfollowButton : followButton
@@ -205,8 +205,11 @@ function getProfile(user) {
         header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="twoFollow">${followers}${follows}</div>${about}${joined}${profile.selfProfile == user || !profile.selfProfile ? aboutInfo : button}</div>`
         document.querySelector("#calendar").innerHTML = calendar
         if (profile.selfProfile != user) {
-            theButton = document.querySelector(`.followButton`)
+            let theButton = document.querySelector(`.followButton`)
             theButton.onclick = () => follow(theButton.innerHTML, user);
+        }
+        if (document.querySelector("#aboutInfo")) {
+            editAboutUser()
         }
         let closeBtn = document.createElement("div")
         closeBtn.innerHTML = `${closeButton}`
@@ -219,6 +222,35 @@ function getProfile(user) {
             getFollowList(user, document.querySelector("#listF"), closeBtn)
         }
     });
+}
+
+
+function editAboutUser() {
+    document.querySelector("#aboutInfo").onclick = function () {
+        this.innerHTML = `<button id="saveInfo" class="btn btn-outline-secondary btn-sm">save</button>`
+        let textArea = document.createElement("textarea")
+        let info = document.querySelector("#aboutUser").innerHTML
+        textArea.className = "aboutTextEdit form-control shadow-none"
+        textArea.autofocus = true
+        textArea.innerHTML = info
+        document.querySelector("#aboutUser").innerHTML = ""
+        document.querySelector("#aboutUser").append(textArea)
+        document.querySelector("#aboutInfo").id = "saveAboutButton"
+        document.querySelector("#saveAboutButton").onclick = function () {
+            this.id = "aboutInfo"
+            this.innerHTML = `${editPen}about you`
+            fetch(`/edit_about_user`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    content: textArea.value
+                })
+            })
+            .then(response => response.json())
+            .then(result => console.log(result))
+            document.querySelector("#aboutUser").innerHTML = textArea.value
+            editAboutUser()
+        }
+    }
 }
 
 
