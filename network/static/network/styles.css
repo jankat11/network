@@ -70,11 +70,11 @@
 }
 
 #title {
-    color: #07405aa6;
+    color: #07405adc;
 }
 
 #labelForNewPost {
-    color: #07405adc;
+    color: #07405aa6;
 }
 
 .searchInput:focus {
@@ -156,6 +156,10 @@
     letter-spacing: 1px;
 }
 
+#searchResults, #searchResults2 {
+    margin-left: 20px;
+}
+
 #post_button {
     margin-top: 5px;
     background-color: #07405aa6;
@@ -177,6 +181,7 @@
     font-weight: bolder;
     margin-left: 5px;
     padding-left: 5px;
+    color: #07405a;
 }
 .postOwner:hover {
     cursor: pointer;
@@ -260,7 +265,7 @@
     margin: 5px;
     width: 80%;
     word-wrap: break-word;
-    color: rgba(0, 0, 0, 0.651);
+    color: #07405a;
 }
 
 #userName:hover {

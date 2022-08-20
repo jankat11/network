@@ -13,6 +13,7 @@ window.onpopstate = event => {
     } else if (event.state.section.slice(0, 7) == "profile") {
          profilePage(event.state.section.slice(8))
     } else if (event.state.section.slice(0, 1) == "C"){
+        document.querySelector("#title").innerHTML = ""
         let list = event.state.section.split("-")
         if (list.length == 2) {
             getProfile(event.state.section.slice(9))
@@ -196,7 +197,7 @@ if(document.querySelector("#allPostsM")) {
 
 function getProfile(user) {
     document.querySelector("#followResultArea").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
-    let closeButton = '<div id="closeWrap2"><button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#searchIcon2" aria-controls="searchIcon2" aria-expanded="false" aria-label="Toggle navigation" id="closeSearch2">close</button></div>'
+    let closeButtonFollow = '<div id="closeWrap2"><button class="btn btn-outline-secondary" type="button" id="closeSearch2">close</button></div>'
     document.querySelector("#postTab").innerHTML = `<span class="postTabMain" id="postsTitle">Posts</span><span class="postTabMain" id="commentsTitle">Comments</span><hr  id="postTabBottom">`
     header.style.display = "block"
     let userName = `<div id="userName">${user}</div>`
@@ -223,7 +224,7 @@ function getProfile(user) {
             editAboutUser()
         }
         let closeBtn = document.createElement("div")
-        closeBtn.innerHTML = `${closeButton}`
+        closeBtn.innerHTML = `${closeButtonFollow}`
         document.querySelector("#followerLink").onclick = () => {
             $('.followArea').collapse("hide");
             getFollowList(user, document.querySelector("#listFw"), closeBtn)  
@@ -301,7 +302,7 @@ function editAboutUser() {
 function saveAbout(textArea) {
     document.querySelector("#saveAboutButton").onclick = function () {
         this.id = "aboutInfo"
-        this.innerHTML = `${editPen}about you`
+        this.innerHTML = `${editPen}about`
         fetch(`/edit_about_user`, {
             method: 'PUT',
             body: JSON.stringify({
@@ -389,8 +390,10 @@ function createSearchResult(user, results) {
     personName.onclick = () => {
         removePagination()
         getPage("profile", user)
+        document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
         history.pushState({section: `profile-${user}`}, "", `profile`)
         $('.mobileSearchArea').collapse("hide");
+        $('.desktopSearchArea').collapse("hide");
     }
 }
 
