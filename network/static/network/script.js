@@ -14,7 +14,6 @@ window.onpopstate = event => {
          profilePage(event.state.section.slice(8))
     } else if (event.state.section.slice(0, 1) == "C"){
         let list = event.state.section.split("-")
-
         if (list.length == 2) {
             getProfile(event.state.section.slice(9))
             getPostHelper("profile", event.state.section.slice(9), 1, "comment")
@@ -22,9 +21,6 @@ window.onpopstate = event => {
             getProfile(list[1])
             getPostHelper("profile", list[1], list[2], "comment")
         }
-
-
-
     } else if (event.state.section == "notifications") {
         notificationPage()
     } else if (event.state.section == "allposts" || event.state.section == "home") {
@@ -199,7 +195,7 @@ if(document.querySelector("#allPostsM")) {
 
 
 function getProfile(user) {
-    document.querySelector("#followResultArea").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div class="card card-body"><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div class="card card-body"><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
+    document.querySelector("#followResultArea").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
     let closeButton = '<div id="closeWrap2"><button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#searchIcon2" aria-controls="searchIcon2" aria-expanded="false" aria-label="Toggle navigation" id="closeSearch2">close</button></div>'
     document.querySelector("#postTab").innerHTML = `<span class="postTabMain" id="postsTitle">Posts</span><span class="postTabMain" id="commentsTitle">Comments</span><hr  id="postTabBottom">`
     header.style.display = "block"
@@ -209,7 +205,7 @@ function getProfile(user) {
     .then(profile => {
         let aboutInfo = `<span id="aboutInfo" class="aboutInfo">${editPen}about</span>`
         let about = `<div id="aboutUser" class="aboutUser">${profile.about ? profile.about : ""}</div>`
-        let followButton = `<button id="${user}" class="btn btn-outline-info followButton">follow</button>`
+        let followButton = `<button id="${user}" class="btn btn-outline-info followsB followButton">follow</button>`
         let unfollowButton = `<button id="${user}" class="btn btn-outline-secondary followButton">unfollow</button>`
         let button = profile.followed ? unfollowButton : followButton
         let image = `<img class="profilePhoto" width=55 src="/static/network/profile.png"></img>`
@@ -258,10 +254,12 @@ function getPostHelper(profile, user, num, status) {
     if (status == "comment") {
         document.querySelector("#commentsTitle").style.textDecoration = "underline"
         document.querySelector("#commentsTitle").style.textDecorationThickness = "5px"
+        document.querySelector("#commentsTitle").style.textDecorationColor = "#497070"
         document.querySelector("#commentsTitle").previousElementSibling.style.textDecoration = "none"
     } else if (status == "post") {
         document.querySelector("#postsTitle").style.textDecoration = "underline"
         document.querySelector("#postsTitle").style.textDecorationThickness = "5px"
+        document.querySelector("#postsTitle").style.textDecorationColor = "#497070"
         document.querySelector("#postsTitle").nextElementSibling.style.textDecoration = "none"
     }
     removePagination() 
