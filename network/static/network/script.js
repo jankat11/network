@@ -186,7 +186,7 @@ if(document.querySelector("#allPostsM")) {
 
 
 function getProfile(user) {
-    document.querySelector("#all_posts").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div class="card card-body"><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div class="card card-body"><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
+    document.querySelector("#followResultArea").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div class="card card-body"><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div class="card card-body"><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
     let closeButton = '<div id="closeWrap2"><button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#searchIcon2" aria-controls="searchIcon2" aria-expanded="false" aria-label="Toggle navigation" id="closeSearch2">close</button></div>'
     header.style.display = "block"
     let userName = `<div id="userName">${user}</div>`
@@ -203,6 +203,7 @@ function getProfile(user) {
         let followers = `<a id="followerLink" data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span></a>`
         let follows = `<a id="followLink" data-bs-toggle="collapse" href="#followArea"  aria-expanded="false" aria-controls="followArea"><span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span></a>`
         header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="twoFollow">${followers}${follows}</div>${about}${joined}${profile.selfProfile == user || !profile.selfProfile ? aboutInfo : button}</div>`
+        document.querySelector("#postTab").innerHTML = `<span class="postTabMain" id="postsTitle">Posts</span><span class="postTabMain" id="commentsTitle">Comments</span><hr  id="postTabBottom">`
         document.querySelector("#calendar").innerHTML = calendar
         if (profile.selfProfile != user) {
             let theButton = document.querySelector(`.followButton`)
@@ -221,8 +222,19 @@ function getProfile(user) {
             $('.followerArea').collapse("hide");
             getFollowList(user, document.querySelector("#listF"), closeBtn)
         }
+        document.querySelectorAll(".postTabMain").forEach(item => togglePostTab(item.id))
+        
     });
 }
+
+function togglePostTab(id) {
+    document.querySelector(`#${id}`).onclick = function () {
+        this.style.textDecoration = "underline"
+        this.style.textDecorationThickness = "5px"
+        id == "commentsTitle" ? this.previousElementSibling.style.textDecoration = "none" : this.nextElementSibling.style.textDecoration = "none"
+    }
+}
+
 
 
 function editAboutUser() {
@@ -704,6 +716,8 @@ function editPage(button) {
 function getPage() {
     document.querySelector("#main").style.display = "block"
     document.querySelector("#all_posts").innerHTML = ""
+    document.querySelector("#postTab").innerHTML = ""
+    document.querySelector("#followResultArea").innerHTML = ""
     header.style.display = "none"
     let form = document.querySelector("#new_post_area")
     let title = document.querySelector("#title")

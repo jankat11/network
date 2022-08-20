@@ -286,6 +286,36 @@
     display: block;
 }
 
+#postTab {
+    font-weight: bold;
+    font-size: large;
+}
+
+#postTabBottom {
+    position: relative;
+    bottom: 10px;
+}
+
+#commentsTitle {
+    margin-left: 50px;
+}
+
+#postsTitle {
+    text-decoration: underline;
+    text-decoration-thickness: 5px;
+}
+
+#postsTitle, #commentsTitle {
+    color: rgba(0, 0, 0, 0.562);
+    position: relative;
+    top: 5px;
+}
+
+#postsTitle:hover, #commentsTitle:hover {
+    cursor: pointer;
+}
+
+
 .userFollow {
     font-weight:500;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
