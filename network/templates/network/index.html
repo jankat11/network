@@ -17,7 +17,7 @@
 <div id="new_post_area" class="form-group">
     <form class="post_form send" action="/" method="post">
         {% csrf_token %}
-        <h5><label for="newPost">New Post</label></h5>
+        <h5 id="labelForNewPost"><label for="newPost">New Post</label></h5>
         {{ postForm }}
         <input type="submit" id="post_button" class="btn btn-info" value="Post">
         <input type="hidden" class="sendButton" name=postId value="">
