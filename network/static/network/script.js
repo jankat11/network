@@ -227,6 +227,7 @@ function getProfile(user) {
     });
 }
 
+
 function togglePostTab(id) {
     document.querySelector(`#${id}`).onclick = function () {
         this.style.textDecoration = "underline"
@@ -234,7 +235,6 @@ function togglePostTab(id) {
         id == "commentsTitle" ? this.previousElementSibling.style.textDecoration = "none" : this.nextElementSibling.style.textDecoration = "none"
     }
 }
-
 
 
 function editAboutUser() {
@@ -796,6 +796,7 @@ function cleanPage() {
     document.querySelector("#profileHeader").style.display = "none"
     document.querySelector("#main").style.display = "none"
     document.querySelector("#topPagination").style.display = "none"
+    document.querySelector("#postTab").innerHTML = ""
 }
 
 

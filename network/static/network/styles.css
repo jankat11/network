@@ -305,13 +305,13 @@
     text-decoration-thickness: 5px;
 }
 
-#postsTitle, #commentsTitle {
+.postTabMain {
     color: rgba(0, 0, 0, 0.562);
     position: relative;
     top: 5px;
 }
 
-#postsTitle:hover, #commentsTitle:hover {
+.postTabMain:hover {
     cursor: pointer;
 }
 
@@ -420,7 +420,7 @@
 }
 
 .seperate{
-    color: rgb(76, 122, 151);
+    color: gray;
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -513,7 +513,7 @@
 }
 
 .selectItem {
-    color: rgba(58, 58, 247, 0.753);
+    color: gray;
     border: solid 1px #7979792d;
     border-radius: 2px 2px 2px 2px;
     padding-left: 7px;
@@ -531,7 +531,7 @@
 }
 
 .wrapperLast {
-    color: rgba(58, 58, 247, 0.753);
+    color: gray;
 }
 
 .nextPage {
