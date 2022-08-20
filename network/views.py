@@ -95,7 +95,6 @@ def all_posts(request, post_type, page=1, status="post"):
             "pageCount" : pages.num_pages or "zero"
         })
     elif post_type.split("-")[0] == "profile":
-       
         user_name = post_type.split("-")[1]
         the_user = User.objects.get(username=user_name)
         posts = []

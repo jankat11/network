@@ -12,8 +12,21 @@ window.onpopstate = event => {
          followings()
     } else if (event.state.section.slice(0, 7) == "profile") {
          profilePage(event.state.section.slice(8))
+    } else if (event.state.section.slice(0, 1) == "C"){
+        let list = event.state.section.split("-")
+
+        if (list.length == 2) {
+            getProfile(event.state.section.slice(9))
+            getPostHelper("profile", event.state.section.slice(9), 1, "comment")
+        } else if (list.length == 3) {
+            getProfile(list[1])
+            getPostHelper("profile", list[1], list[2], "comment")
+        }
+
+
+
     } else if (event.state.section == "notifications") {
-         notificationPage()
+        notificationPage()
     } else if (event.state.section == "allposts" || event.state.section == "home") {
          removePagination()
          getPage("all_posts")
@@ -188,6 +201,7 @@ if(document.querySelector("#allPostsM")) {
 function getProfile(user) {
     document.querySelector("#followResultArea").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div class="card card-body"><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div class="card card-body"><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
     let closeButton = '<div id="closeWrap2"><button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#searchIcon2" aria-controls="searchIcon2" aria-expanded="false" aria-label="Toggle navigation" id="closeSearch2">close</button></div>'
+    document.querySelector("#postTab").innerHTML = `<span class="postTabMain" id="postsTitle">Posts</span><span class="postTabMain" id="commentsTitle">Comments</span><hr  id="postTabBottom">`
     header.style.display = "block"
     let userName = `<div id="userName">${user}</div>`
     fetch(`/get_profile/${user}`)
@@ -203,7 +217,7 @@ function getProfile(user) {
         let followers = `<a id="followerLink" data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span></a>`
         let follows = `<a id="followLink" data-bs-toggle="collapse" href="#followArea"  aria-expanded="false" aria-controls="followArea"><span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span></a>`
         header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="twoFollow">${followers}${follows}</div>${about}${joined}${profile.selfProfile == user || !profile.selfProfile ? aboutInfo : button}</div>`
-        document.querySelector("#postTab").innerHTML = `<span class="postTabMain" id="postsTitle">Posts</span><span class="postTabMain" id="commentsTitle">Comments</span><hr  id="postTabBottom">`
+        
         document.querySelector("#calendar").innerHTML = calendar
         if (profile.selfProfile != user) {
             let theButton = document.querySelector(`.followButton`)
@@ -222,28 +236,34 @@ function getProfile(user) {
             $('.followerArea').collapse("hide");
             getFollowList(user, document.querySelector("#listF"), closeBtn)
         }
-        document.querySelectorAll(".postTabMain").forEach(item => togglePostTab(item.id, user))
-        
+        document.querySelectorAll(".postTabMain").forEach(item => togglePostTab(item.id, user)) 
     });
 }
 
 
 function togglePostTab(id, user) {
     document.querySelector(`#${id}`).onclick = function () {
-        this.style.textDecoration = "underline"
-        this.style.textDecorationThickness = "5px"
         if (id == "commentsTitle") {
-            this.previousElementSibling.style.textDecoration = "none"
             getPostHelper("profile", user, 1, "comment")
+            history.pushState({section: `Cprofile-${user}`}, "", `profile`)
         } else if (id == "postsTitle") {
-            this.nextElementSibling.style.textDecoration = "none"
             getPostHelper("profile", user, 1, "post")
+            history.pushState({section: `profile-${user}`}, "", `profile`)
         }
     }
 }
 
 
 function getPostHelper(profile, user, num, status) {
+    if (status == "comment") {
+        document.querySelector("#commentsTitle").style.textDecoration = "underline"
+        document.querySelector("#commentsTitle").style.textDecorationThickness = "5px"
+        document.querySelector("#commentsTitle").previousElementSibling.style.textDecoration = "none"
+    } else if (status == "post") {
+        document.querySelector("#postsTitle").style.textDecoration = "underline"
+        document.querySelector("#postsTitle").style.textDecorationThickness = "5px"
+        document.querySelector("#postsTitle").nextElementSibling.style.textDecoration = "none"
+    }
     removePagination() 
     document.querySelector("#all_posts").innerHTML = ""
     document.querySelector("#topPagination").style.display = "none"
@@ -251,7 +271,6 @@ function getPostHelper(profile, user, num, status) {
     getPosts(profile, user, num, status)
     clickPages(profile, user, status)
     selectPages(profile, user, status)
-    
 }
 
 
@@ -884,7 +903,11 @@ function clickPages(status, profile, type) {
             removePagination()
             document.querySelector("#bottomPagination").style.display = "none"
             let pro = profile ? profile : ""
-            history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
+            if (type == "comment") {
+                history.pushState({section: `Cprofile-${profile}-${pageNum}`}, "", `profile`)
+            } else {
+                history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
+            }
             getPosts(status, profile, pageNum, type)    
         }
     });
@@ -898,7 +921,11 @@ function selectPages(status, profile, type) {
             removePagination()
             document.querySelector("#bottomPagination").style.display = "none"
             let pro = profile ? profile : ""
-            history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
+            if (type == "comment") {
+                history.pushState({section: `Cprofile-${profile}-${pageNum}`}, "", `profile`)
+            } else {
+                history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
+            }
             getPosts(status, profile, pageNum, type)
         }
     });
