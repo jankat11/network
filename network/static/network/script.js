@@ -193,7 +193,7 @@ function getProfile(user) {
     fetch(`/get_profile/${user}`)
     .then(response => response.json())
     .then(profile => {
-        let aboutInfo = `<span id="aboutInfo" class="aboutInfo">${editPen}about you</span>`
+        let aboutInfo = `<span id="aboutInfo" class="aboutInfo">${editPen}about</span>`
         let about = `<div id="aboutUser" class="aboutUser">${profile.about ? profile.about : ""}</div>`
         let followButton = `<button id="${user}" class="btn btn-outline-info followButton">follow</button>`
         let unfollowButton = `<button id="${user}" class="btn btn-outline-secondary followButton">unfollow</button>`
