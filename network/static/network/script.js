@@ -222,18 +222,36 @@ function getProfile(user) {
             $('.followerArea').collapse("hide");
             getFollowList(user, document.querySelector("#listF"), closeBtn)
         }
-        document.querySelectorAll(".postTabMain").forEach(item => togglePostTab(item.id))
+        document.querySelectorAll(".postTabMain").forEach(item => togglePostTab(item.id, user))
         
     });
 }
 
 
-function togglePostTab(id) {
+function togglePostTab(id, user) {
     document.querySelector(`#${id}`).onclick = function () {
         this.style.textDecoration = "underline"
         this.style.textDecorationThickness = "5px"
-        id == "commentsTitle" ? this.previousElementSibling.style.textDecoration = "none" : this.nextElementSibling.style.textDecoration = "none"
+        if (id == "commentsTitle") {
+            this.previousElementSibling.style.textDecoration = "none"
+            getPostHelper("profile", user, 1, "comment")
+        } else if (id == "postsTitle") {
+            this.nextElementSibling.style.textDecoration = "none"
+            getPostHelper("profile", user, 1, "post")
+        }
     }
+}
+
+
+function getPostHelper(profile, user, num, status) {
+    removePagination() 
+    document.querySelector("#all_posts").innerHTML = ""
+    document.querySelector("#topPagination").style.display = "none"
+    document.querySelector("#main").style.display = "none"
+    getPosts(profile, user, num, status)
+    clickPages(profile, user, status)
+    selectPages(profile, user, status)
+    
 }
 
 
@@ -440,7 +458,7 @@ function createPostItem(post) {
 
 
 function getPosts() {
-    fetch(`/all_posts/${arguments[0]}-${arguments[1]}/${arguments[2]}`)
+    fetch(`/all_posts/${arguments[0]}-${arguments[1]}/${arguments[2]}/${arguments[3]}`)
     .then(response => response.json())
     .then(data => {
         if (data.posts.length == 0) {
@@ -449,17 +467,22 @@ function getPosts() {
             document.querySelector("#main").style.display = "none"
             document.querySelector("#all_posts").append(noPost)
         } else {
-            data.posts.forEach(post => {
-                let div = createPostItem(post)
-                let wrapperPost = document.createElement("div")
-                wrapperPost.append(div)
-                document.querySelector("#all_posts").append(wrapperPost)
-                pages.style.display = "block"
-                document.querySelector("#bottomPagination").style.display = "block"
-            });
-            pagination(arguments[2], data.pageCount)
+            getPostsList(data, arguments[2])
         }
     });
+}
+
+
+function getPostsList(data, page) {
+    data.posts.forEach(post => {
+        let div = createPostItem(post)
+        let wrapperPost = document.createElement("div")
+        wrapperPost.append(div)
+        document.querySelector("#all_posts").append(wrapperPost)
+        pages.style.display = "block"
+        document.querySelector("#bottomPagination").style.display = "block"
+    });
+    pagination(page, data.pageCount)
 }
 
 
@@ -738,10 +761,10 @@ function getPage() {
     }
     arguments[0] == "all_posts" && following ? form.style.display = "block" : form.style.display = "none"
     if (arguments[0] != "notification" && arguments[0].slice(0,4) != "post") {
-        clickPages(arguments[0], arguments[1])
-        selectPages(arguments[0], arguments[1])
+        clickPages(arguments[0], arguments[1], "post")
+        selectPages(arguments[0], arguments[1], "post")
         let pageNum = arguments[2] ? arguments[2] : 1
-        getPosts(arguments[0], arguments[1], pageNum)
+        getPosts(arguments[0], arguments[1], pageNum, "post")
     }
 }
 
@@ -854,7 +877,7 @@ function getRepr(notification, content) {
 }
 
 
-function clickPages(status, profile) {
+function clickPages(status, profile, type) {
     document.querySelectorAll(".page-link").forEach(pageButton => {
         pageButton.onclick = () => {
             let pageNum = parseInt(pageButton.dataset.page)
@@ -862,13 +885,13 @@ function clickPages(status, profile) {
             document.querySelector("#bottomPagination").style.display = "none"
             let pro = profile ? profile : ""
             history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
-            getPosts(status, profile, pageNum)    
+            getPosts(status, profile, pageNum, type)    
         }
     });
 }
 
 
-function selectPages(status, profile) {
+function selectPages(status, profile, type) {
     document.querySelectorAll(".form-select").forEach(pageButton => {
         pageButton.onchange = () => {
             let pageNum = parseInt(pageButton.value)
@@ -876,7 +899,7 @@ function selectPages(status, profile) {
             document.querySelector("#bottomPagination").style.display = "none"
             let pro = profile ? profile : ""
             history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
-            getPosts(status, profile, pageNum)
+            getPosts(status, profile, pageNum, type)
         }
     });
 }

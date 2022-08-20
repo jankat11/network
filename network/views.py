@@ -68,7 +68,7 @@ def index(request):
         })
 
 
-def all_posts(request, post_type, page=1):
+def all_posts(request, post_type, page=1, status="post"):
     if post_type.split("-")[0] == "all_posts":
         posts = []
         for post in Post.objects.filter(comment=False).order_by("-id"):
@@ -99,7 +99,7 @@ def all_posts(request, post_type, page=1):
         user_name = post_type.split("-")[1]
         the_user = User.objects.get(username=user_name)
         posts = []
-        for post in Post.objects.filter(owner=the_user, comment=False).order_by("-id"):
+        for post in Post.objects.filter(owner=the_user, comment=False if status == "post" else True).order_by("-id"):
             is_users_post = post.owner == request.user
             liked_before =  request.user in post.likers.all()
             posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
