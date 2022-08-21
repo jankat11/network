@@ -454,7 +454,6 @@ function follow(status, user) {
 function createPostItem(post) {
     let type = arguments[1] ? arguments[1] : ""
     let order = arguments[2] ? arguments[2] : "otherThanFirst"
-    console.log("this is type:", type)
     if (type === "post") {
         return createPost(post)
     } else if (type === "comment") {
@@ -479,6 +478,12 @@ function createCommentTree(post, order) {
     hr.className = "postGroupHr postGroupHr-top"
     order == "otherThanFirst" ? div.append(hr) : ""
     div.append(postRoot)
+    postRoot ? postRoot.classList.add("tree") : ""
+    postMain.classList.add("tree")
+    postComment.classList.add("tree")
+    smallDots.classList.add("tree")
+    largeDots.classList.add("tree")
+    largeDotsPillow.classList.add("tree")
     postRoot ? div.append(largeDots) : ""
     postRoot ? div.append(largeDotsPillow) : ""
     div.append(postMain)
@@ -616,10 +621,14 @@ function removeCommentSections(icon, post) {
     icon.innerHTML = "💬"
     post.style.backgroundColor = "white"
     post.parentElement.style.paddingBottom = "0px"
-    while (post.parentElement.lastElementChild.dataset.id != post.dataset.id) {
-        post.parentElement.lastElementChild.remove()
+    while (post.nextElementSibling) {
+        while (post.nextElementSibling.classList.contains("tree")) {
+            post = post.nextElementSibling
+        }
+        post.nextElementSibling.remove()  
     }
 }
+
 
 
 function getComment(post, commentForm) {
@@ -985,6 +994,24 @@ function textCorrection(element) {
 };
 
 
+function blockBottomComments(postDiv, icon) {
+    let parent = postDiv.parentElement
+    while (postDiv.nextElementSibling) {
+        postDiv.nextElementSibling.style.display = "none"
+        postDiv = postDiv.nextElementSibling
+    }
+    icon.onclick = () => {
+        parent.childNodes.forEach(node => {
+            if (node.style != undefined) {
+                if (node.style.display == "none") {  
+                    node.style.display = "block"
+                }
+            }
+        });
+    }
+}
+
+
 $(window).click(function(event) {
         let icon = event.target
         let likes = icon.nextElementSibling
@@ -1029,7 +1056,10 @@ $(window).click(function(event) {
             if (event.persisted) {
                 window.location.reload(); 
             }
+            console.log(icon.innerHTML.length)
+            icon.innerHTML.length == 2 ? blockBottomComments(icon.parentElement.parentElement, icon) : ""
             comment(icon.parentElement.parentElement, icon)
+            
         } else if ([...icon.classList].includes("postItem")) {
             if (header.dataset.profile != "AnonymousUser") {
                 getThePost(icon.id)
