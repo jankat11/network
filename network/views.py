@@ -35,7 +35,7 @@ class RegisterForm(forms.Form):
 
 class PostForm(forms.Form):
     new_post = forms.CharField(label="", max_length=1000,
-        widget=forms.Textarea(attrs={"placeholder": "What are you thinking?", "class": "form-control newPost", "rows": "4"}))
+        widget=forms.Textarea(attrs={"placeholder": "What are you thinking?", "class": "form-control newPost shadow-none", "rows": "4"}))
 
 
 class SearchForm(forms.Form):
@@ -101,7 +101,32 @@ def all_posts(request, post_type, page=1, status="post"):
         for post in Post.objects.filter(owner=the_user, comment=False if status == "post" else True).order_by("-id"):
             is_users_post = post.owner == request.user
             liked_before =  request.user in post.likers.all()
-            posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
+            if status == "post":
+                posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
+            else:
+                post_main = post.comment_to
+                post_root_to_json = ""
+                if post_main.comment_to is not None:
+                    post_root = post_main.comment_to
+                    while not post_root:
+                        post_root = post_root.comment_to
+                    post_root_to_json = {
+                        "thePost": post_root.serialize(), 
+                        "like": request.user in post_root.likers.all(), 
+                        "isUsers": post_root.owner == request.user
+                    }
+                posts.append({
+                    "postRoot": post_root_to_json,
+                    "postMain": {
+                        "thePost": post_main.serialize(),
+                        "like": request.user in post_main.likers.all(),
+                        "isUsers": post_main.owner == request.user
+                    },
+                    "postComment": {
+                        "thePost": post.serialize(), 
+                        "like": liked_before, "isUsers": is_users_post
+                    }
+                })
         pages = Paginator(posts, 10)
         return JsonResponse({
             "posts": pages.page(page).object_list,

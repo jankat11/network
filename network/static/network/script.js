@@ -451,6 +451,25 @@ function follow(status, user) {
 
 
 function createPostItem(post) {
+    let type = arguments[1] ? arguments[1] : ""
+    console.log("this is type:", type)
+    if (type === "post") {
+        return createPost(post)
+    } else if (type === "comment") {
+        let div1 = post.postRoot ? createPost(post.postRoot) : ""
+        let div2 = createPost(post.postMain)
+        let div3 = createPost(post.postComment)
+        let div = document.createElement("div")
+        div.append(div1)
+        div.append(div2)
+        div.append(div3)
+        div.className = "commentTree"
+        return div
+    }
+}
+
+
+function createPost(post) {
     let div = document.createElement("div")
     let id = post.thePost.id
     let like = post.like
@@ -487,15 +506,15 @@ function getPosts() {
             document.querySelector("#main").style.display = "none"
             document.querySelector("#all_posts").append(noPost)
         } else {
-            getPostsList(data, arguments[2])
+            getPostsList(data, arguments[2], arguments[3] ? arguments[3] : "")
         }
     });
 }
 
 
-function getPostsList(data, page) {
+function getPostsList(data, page, type) {
     data.posts.forEach(post => {
-        let div = createPostItem(post)
+        let div = createPostItem(post, type)
         let wrapperPost = document.createElement("div")
         wrapperPost.append(div)
         document.querySelector("#all_posts").append(wrapperPost)
@@ -583,7 +602,7 @@ function getComment(post, commentForm) {
     .then(response => response.json())
     .then(data => {
         for (let item of data.list) {
-            commentItem = createPostItem(item)
+            commentItem = createPostItem(item, "post")
             wrapper = document.createElement("div")
             wrapper.className = "commentWrapper"
             commentItem.className = "post form-group postItem border border-light commentSection"
@@ -798,7 +817,7 @@ function getThePost() {
     fetch(`/get_post/${arguments[0]}`)
     .then(response => response.json())
     .then(post => {
-        let div = createPostItem(post)
+        let div = createPostItem(post, "post")
         document.querySelector("#all_posts").append(div)
         if (arguments[1] != "noCom") {
             comment(div, div.childNodes[8].firstElementChild)

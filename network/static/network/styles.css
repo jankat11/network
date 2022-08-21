@@ -107,6 +107,11 @@
     word-wrap: break-word;
 }
 
+.commentTree {
+    border-left: dotted 3px #449cac93;
+    margin-bottom: 50px;
+}
+
 .proResult:hover {
     cursor: pointer;
 }
