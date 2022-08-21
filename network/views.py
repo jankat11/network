@@ -108,7 +108,7 @@ def all_posts(request, post_type, page=1, status="post"):
                 post_root_to_json = ""
                 if post_main.comment_to is not None:
                     post_root = post_main.comment_to
-                    while not post_root:
+                    while post_root.comment_to:
                         post_root = post_root.comment_to
                     post_root_to_json = {
                         "thePost": post_root.serialize(), 
@@ -124,7 +124,8 @@ def all_posts(request, post_type, page=1, status="post"):
                     },
                     "postComment": {
                         "thePost": post.serialize(), 
-                        "like": liked_before, "isUsers": is_users_post
+                        "like": liked_before, 
+                        "isUsers": is_users_post
                     }
                 })
         pages = Paginator(posts, 10)

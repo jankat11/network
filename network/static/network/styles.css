@@ -108,9 +108,16 @@
 }
 
 .commentTree {
-    border-left: dotted 3px #449cac93;
-    margin-bottom: 50px;
+    padding-top: 20px;
 }
+
+.postGroupHr {
+
+    position: relative;
+    bottom: 20px;
+}
+
+
 
 .proResult:hover {
     cursor: pointer;
@@ -618,3 +625,18 @@ font-size: x-large;
     border-left: dotted 3px #449cac93;
 }
 
+.commentDots {
+    border-left: dotted 3px #449cac93;
+}
+
+.largeDots {
+    height: 40px;
+}
+
+.smallDots {
+    height: 15px;
+}
+
+.largePillow {
+    height: 15px;
+}

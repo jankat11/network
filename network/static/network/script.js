@@ -452,20 +452,40 @@ function follow(status, user) {
 
 function createPostItem(post) {
     let type = arguments[1] ? arguments[1] : ""
+    let order = arguments[2] ? arguments[2] : "otherThanFirst"
     console.log("this is type:", type)
     if (type === "post") {
         return createPost(post)
     } else if (type === "comment") {
-        let div1 = post.postRoot ? createPost(post.postRoot) : ""
-        let div2 = createPost(post.postMain)
-        let div3 = createPost(post.postComment)
-        let div = document.createElement("div")
-        div.append(div1)
-        div.append(div2)
-        div.append(div3)
-        div.className = "commentTree"
-        return div
+        return createCommentTree(post, order)
     }
+}
+
+
+function createCommentTree(post, order) {
+    let div = document.createElement("div")
+    let hr = document.createElement("hr")
+    let postRoot = post.postRoot ? createPost(post.postRoot) : ""
+    let largeDots = document.createElement("div")
+    let largeDotsPillow = document.createElement("div")
+    let postMain = createPost(post.postMain)
+    let smallDots = document.createElement("div")
+    let postComment = createPost(post.postComment)
+    largeDots.className = "commentDots largeDots"
+    smallDots.className = "commentDots smallDots"
+    largeDotsPillow.className = "largePillow"
+    let smallDotsPillow = largeDotsPillow.cloneNode(true)
+    hr.className = "postGroupHr postGroupHr-top"
+    order == "otherThanFirst" ? div.append(hr) : ""
+    div.append(postRoot)
+    postRoot ? div.append(largeDots) : ""
+    postRoot ? div.append(largeDotsPillow) : ""
+    div.append(postMain)
+    div.append(smallDots)
+    div.append(smallDotsPillow)
+    div.append(postComment)
+    div.className = "commentTree"
+    return div
 }
 
 
@@ -513,8 +533,13 @@ function getPosts() {
 
 
 function getPostsList(data, page, type) {
-    data.posts.forEach(post => {
-        let div = createPostItem(post, type)
+    data.posts.forEach((post, index) => {
+        var div;
+        if (index == 0) {
+            div = createPostItem(post, type, "first")
+        } else {
+            div = createPostItem(post, type)
+        }
         let wrapperPost = document.createElement("div")
         wrapperPost.append(div)
         document.querySelector("#all_posts").append(wrapperPost)
