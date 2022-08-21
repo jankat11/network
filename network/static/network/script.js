@@ -199,7 +199,7 @@ function getProfile(user) {
     document.querySelector("#followResultArea").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
     let closeButtonFollow = '<div id="closeWrap2"><button class="btn btn-outline-secondary" type="button" id="closeSearch2">close</button></div>'
     document.querySelector("#postTab").innerHTML = `<span class="postTabMain" id="postsTitle">Posts</span><span class="postTabMain" id="commentsTitle">Comments</span><hr  id="postTabBottom">`
-    header.style.display = "block"
+    
     let userName = `<div id="userName">${user}</div>`
     fetch(`/get_profile/${user}`)
     .then(response => response.json())
@@ -234,7 +234,8 @@ function getProfile(user) {
             getFollowList(user, document.querySelector("#listF"), closeBtn)
         }
         document.querySelectorAll(".postTabMain").forEach(item => togglePostTab(item.id, user)) 
-    });
+    })
+    .then(() => header.style.display = "block")
 }
 
 
