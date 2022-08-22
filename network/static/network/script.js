@@ -8,32 +8,33 @@ window.onpopstate = event => {
     if (event.persisted) {
         window.location.reload(); 
     }
-    if (event.state.section == "following") {
-         followings()
-    } else if (event.state.section.slice(0, 7) == "profile") {
-         profilePage(event.state.section.slice(8))
-    } else if (event.state.section.slice(0, 1) == "C"){
-        document.querySelector("#title").innerHTML = ""
-        let list = event.state.section.split("-")
-        if (list.length == 2) {
-            getProfile(event.state.section.slice(9))
-            getPostHelper("profile", event.state.section.slice(9), 1, "comment")
-        } else if (list.length == 3) {
-            getProfile(list[1])
-            getPostHelper("profile", list[1], list[2], "comment")
+    if (event.section) {
+        if (event.state.section == "following") {
+            followings()
+        } else if (event.state.section.slice(0, 7) == "profile") {
+            profilePage(event.state.section.slice(8))
+        } else if (event.state.section.slice(0, 1) == "C"){
+            document.querySelector("#title").innerHTML = ""
+            let list = event.state.section.split("-")
+            if (list.length == 2) {
+                getProfile(event.state.section.slice(9))
+                getPostHelper("profile", event.state.section.slice(9), 1, "comment")
+            } else if (list.length == 3) {
+                getProfile(list[1])
+                getPostHelper("profile", list[1], list[2], "comment")
+            }
+        } else if (event.state.section == "notifications") {
+            notificationPage()
+        } else if (event.state.section == "allposts" || event.state.section == "home") {
+            removePagination()
+            getPage("all_posts")
+        } else if (event.state.section.slice(0,4) == "post") {
+            getThePost(event.state.section.slice(4))
+        } else if (event.state.section.slice(0,4) == "page") {
+            let argS = event.state.section.slice(4).split("-")
+            removePagination()
+            getPage(argS[0], argS[1], parseInt(argS[2]))
         }
-    } else if (event.state.section == "notifications") {
-        notificationPage()
-    } else if (event.state.section == "allposts" || event.state.section == "home") {
-         removePagination()
-         getPage("all_posts")
-    } else if (event.state.section.slice(0,4) == "post") {
-         getThePost(event.state.section.slice(4))
-    } else if (event.state.section.slice(0,4) == "page") {
-        let argS = event.state.section.slice(4).split("-")
-        console.log(argS[0], argS[1], argS[2])
-        removePagination()
-        getPage(argS[0], argS[1], parseInt(argS[2]))
     }
 }
 
@@ -126,7 +127,6 @@ if(document.querySelector("#profileM")) {
     let profileName = document.querySelector("#profileM").firstElementChild.dataset.profile
 
     document.querySelector("#profileM").onclick = () => {
-        console.log("hello", profileName)
         profilePage(profileName)
         history.pushState({section: `profile-${profileName}`}, "", `profile`);
         $('.collapse').collapse("hide");
@@ -322,7 +322,6 @@ function saveAbout(textArea) {
 
 function getFollowList(user, results, closeBtn) {
     let page = arguments[3] ? arguments[3] : 1
-    console.log(page)
     fetch(`/get_follow_results/${user}/${page}`)
     .then(response => response.json())
     .then(data => {
@@ -408,7 +407,6 @@ function getUserSearch(value, page, results) {
         if (data.length == 0) {
             results.innerHTML = "No result."
         }
-        console.log(data)
         for (let user of data) {
             createSearchResult(user, results)
         }
@@ -472,7 +470,7 @@ function createCommentTree(post, order) {
     postRoot ? postRoot.classList.add("postRoot") : ""
     let largeDots = document.createElement("div")
     let largeDotsPillow = document.createElement("div")
-    let postMain = createPost(post.postMain)
+    let postMain = post.postMain ? createPost(post.postMain) : ""
     postMain ? postMain.classList.add("p" + postMain.dataset.id) : ""
     postMain ? postMain.classList.add("postMain") : ""
     let smallDots = document.createElement("div")
@@ -486,7 +484,7 @@ function createCommentTree(post, order) {
     order == "otherThanFirst" ? div.append(hr) : ""
     div.append(postRoot)
     postRoot ? postRoot.classList.add("tree") : ""
-    postMain.classList.add("tree")
+    postMain ? postMain.classList.add("tree") : ""
     postComment.classList.add("tree")
     smallDots.classList.add("tree")
     largeDots.classList.add("tree")
@@ -494,8 +492,8 @@ function createCommentTree(post, order) {
     postRoot ? div.append(largeDots) : ""
     postRoot ? div.append(largeDotsPillow) : ""
     div.append(postMain)
-    div.append(smallDots)
-    div.append(smallDotsPillow)
+    postComment.dataset.comment == "true" ? div.append(smallDots) : ""
+    postComment.dataset.comment == "true" ? div.append(smallDotsPillow) : ""
     div.append(postComment)
     div.className = "commentTree"
     return div
@@ -727,26 +725,27 @@ function deletePost(post)  {
         .then(result => {
             console.log(result)
             if (result.success) {
-                if (post.dataset.nocom == "noCom") {
-                    while(post.nextElementSibling) {
-                        post.nextElementSibling.remove()
-                    }  
-                }
-                if (post.dataset.comment == "true" && !post.classList.contains("tree")) {
-                    let count = post.parentElement.parentElement.firstElementChild.childNodes[8] ? post.parentElement.parentElement.firstElementChild.childNodes[8].lastElementChild : ""
-                   
-                    let after = post.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling
-                    if ([...after.classList][after.classList.length - 1] == "after") {
-                        after.childNodes[8].lastElementChild.innerHTML = parseInt(after.childNodes[8].lastElementChild.innerHTML) - 1
-                    } else {
-                       count ? count.innerHTML = parseInt(count.innerHTML) - 1 : ""
+                let topElement = post.parentElement.parentElement.firstElementChild
+                topElement.classList.contains("postGroupHr") ? topElement = topElement.nextElementSibling : ""
+                if (post.dataset.comment == "true" && !post.classList.contains("tree") && !topElement.classList.contains("tree")) {
+                    let count = topElement.childNodes[8] ? topElement.childNodes[8].lastElementChild : ""
+                    console.log(topElement, "hi")
+                    count ? count.innerHTML = parseInt(count.innerHTML) - 1 : ""
+                } else if (post.dataset.comment == "true" && !post.classList.contains("tree") && topElement.classList.contains("tree")) {
+                    let sibling = post.parentElement.previousElementSibling
+                    console.log(sibling)
+                    while (!sibling.classList.contains("tree")) {
+                        sibling = sibling.previousElementSibling
                     }
+                    sibling.childNodes[8].lastElementChild.innerHTML = parseInt(sibling.childNodes[8].lastElementChild.innerHTML) - 1
                 }
+
                 if (post.classList.contains("tree")) {
                     post.previousElementSibling ? post.previousElementSibling.remove() : ""
                     post.previousElementSibling ? post.previousElementSibling.remove() : ""
                     
                     let id = post.previousElementSibling ? "p" + post.previousElementSibling.dataset.id : ""
+                    console.log(post.previousElementSibling)
                     if (id) {
                         if  (document.querySelector(`.${id}`)) {
                             document.querySelectorAll(`.${id}`).forEach(item => {
@@ -760,12 +759,14 @@ function deletePost(post)  {
                     }
                 }
                 if ([...post.childNodes][8].firstElementChild.innerHTML == "💬...") {
-                    text.style ? text.style.margin = "0px" : "";
-                    button ? button.style.margin = "0px" : "";
-                    [...post.parentElement.childNodes].forEach(node => {
-                        node.style ? node.style.height = "0%" : ""
-                        node.remove()
-                    })
+                    if (!post.classList.contains("tree")) {
+                        text.style ? text.style.margin = "0px" : "";
+                        button ? button.style.margin = "0px" : "";
+                        [...post.parentElement.childNodes].forEach(node => {
+                            node.style ? node.style.height = "0%" : ""
+                            node.remove()
+                        })
+                    }
                 }
                 let idNo = "p" + post.dataset.id
                 if  (document.querySelector(`.${idNo}`)) {
@@ -776,7 +777,7 @@ function deletePost(post)  {
                         item.remove()
                     });
                 }
-                post ? post.remove() : ""
+                post ? post.remove() : "" 
             }
         });
     }
@@ -831,7 +832,6 @@ function editPage(button) {
             console.log(result.success)
             let edited = document.createElement("span")
             edited.innerHTML = " |  " + " edited " + result.time
-            console.log(button.parentElement.childNodes)
             button.parentElement.childNodes[4].innerHTML = text.value
             button.parentElement.childNodes[2].innerHTML = ""
             button.parentElement.childNodes[2].append(edited)
@@ -876,50 +876,19 @@ function getPage() {
 
 
 function getThePost() {
-    if (arguments.length == 2 || arguments.length == 4) {
-        cleanPage(arguments[1])
-    } else {
-        cleanPage()
-    }
+    cleanPage()
     fetch(`/get_post/${arguments[0]}`)
     .then(response => response.json())
     .then(post => {
-        let div = createPostItem(post, "post")
+        let div = createPostItem(post, "comment")
         document.querySelector("#all_posts").append(div)
-        if (arguments[1] != "noCom") {
-            comment(div, div.childNodes[8].firstElementChild)
-        }
-        if (arguments[1] == "after") {
-            div.classList.add("after")
-        } else if (arguments[1] == "noCom") {
-            div.setAttribute("data-nocom", "noCom")
-            div.childNodes[8].firstElementChild.onclick = () => {
-                document.querySelectorAll(".dots").forEach(item => {
-                    let nodes = []
-                    let lastElement = item.nextElementSibling;
-                    while(lastElement) {
-                        nodes.push(lastElement)
-                        lastElement = lastElement.nextElementSibling
-                    }
-                    nodes.forEach(node => node.remove())
-                    item.remove()
-                })
-            }
-        }
-        if (arguments.length == 4) {
-            let dots = document.createElement("div")
-            dots.className = "dots"
-            document.querySelector("#all_posts").append(dots)
-            getThePost(arguments[2], arguments[3])
-        } 
+        comment(div.lastElementChild, div.lastElementChild.childNodes[8].firstElementChild)
     });
 }
 
 
 function cleanPage() {
-    if (arguments[0] != "after") {
-        document.querySelector("#all_posts").innerHTML = ""
-    }
+    document.querySelector("#all_posts").innerHTML = ""
     document.querySelector("#new_post_area").style.display = "none"
     document.querySelector("#title").innerHTML = ""
     document.querySelector("#profileHeader").style.display = "none"
@@ -1026,24 +995,6 @@ function textCorrection(element) {
 };
 
 
-function blockBottomComments(postDiv, icon) {
-    let parent = postDiv.parentElement
-    while (postDiv.nextElementSibling) {
-        postDiv.nextElementSibling.style.display = "none"
-        postDiv = postDiv.nextElementSibling
-    }
-    icon.onclick = () => {
-        parent.childNodes.forEach(node => {
-            if (node.style != undefined) {
-                if (node.style.display == "none") {  
-                    node.style.display = "block"
-                }
-            }
-        });
-    }
-}
-
-
 $(window).click(function(event) {
         let icon = event.target
         let likes = icon.nextElementSibling
@@ -1105,8 +1056,6 @@ $(window).click(function(event) {
             if (event.persisted) {
                 window.location.reload(); 
             }
-            console.log(icon.innerHTML.length)
-            icon.innerHTML.length == 2 ? blockBottomComments(icon.parentElement.parentElement, icon) : ""
             comment(icon.parentElement.parentElement, icon)
             
         } else if ([...icon.classList].includes("postItem")) {
@@ -1121,13 +1070,12 @@ $(window).click(function(event) {
             }
         } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "reply") || icon.dataset.type == "reply") {
             if (icon.parentElement.parentElement.dataset.type == "reply") {
-                let postId = icon.parentElement.parentElement.dataset.main
-                let postId2 = icon.parentElement.parentElement.dataset.content
-                getThePost(postId, "noCom", postId2, "after")  
+                let postId = icon.parentElement.parentElement.dataset.content
+                getThePost(postId)  
                 history.pushState({section: `post${postId}`}, "", `post`)
             } else if (icon.dataset.type == "reply") {
-                getThePost(icon.dataset.main, "noCom", icon.dataset.content, "after")
-                history.pushState({section: `post${icon.dataset.main}`}, "", `post`)
+                getThePost(icon.dataset.content)
+                history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
             }
         } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "like") || icon.dataset.type == "like") {
             if (icon.className == "toOpenPost") {

@@ -117,7 +117,7 @@ def get_post(request, post_id):
     post = Post.objects.get(id=int(post_id))
     is_users_post = post.owner == request.user
     liked_before =  request.user in post.likers.all()
-    return JsonResponse({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
+    return JsonResponse(get_comment_tree(request, post, liked_before, is_users_post))
 
 
 @csrf_exempt
