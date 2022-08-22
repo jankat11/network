@@ -8,7 +8,7 @@ window.onpopstate = event => {
     if (event.persisted) {
         window.location.reload(); 
     }
-    if (event.section) {
+    if (event.state) {
         if (event.state.section == "following") {
             followings()
         } else if (event.state.section.slice(0, 7) == "profile") {
@@ -716,7 +716,8 @@ function removePagination() {
 
 
 function deletePost(post)  { 
-    let text = [...post.parentElement.childNodes][[...post.parentElement.childNodes].length - 1].firstElementChild ? [...post.parentElement.childNodes][[...post.parentElement.childNodes].length - 1].firstElementChild.nextElementSibling.nextElementSibling : ""
+    let childs = post.parentElement.childNodes
+    let text = [...childs][[...childs].length - 1].firstElementChild ? [...childs][[...childs].length - 1].firstElementChild.nextElementSibling.nextElementSibling : ""
     let button = text.nextElementSibling ? text.nextElementSibling : ""
     post.parentElement.style.paddingBottom = "0px"
     if (confirm('Are sure to delete post?')) {
