@@ -112,12 +112,9 @@
 }
 
 .postGroupHr {
-
     position: relative;
     bottom: 20px;
 }
-
-
 
 .proResult:hover {
     cursor: pointer;

@@ -233,9 +233,11 @@ function getProfile(user) {
             $('.followerArea').collapse("hide");
             getFollowList(user, document.querySelector("#listF"), closeBtn)
         }
-        document.querySelectorAll(".postTabMain").forEach(item => togglePostTab(item.id, user)) 
     })
-    .then(() => header.style.display = "block")
+    .then(() => {
+        header.style.display = "block"
+    })
+    .then(() => document.querySelectorAll(".postTabMain").forEach(item => togglePostTab(item.id, user)) )
 }
 
 
@@ -466,11 +468,16 @@ function createCommentTree(post, order) {
     let div = document.createElement("div")
     let hr = document.createElement("hr")
     let postRoot = post.postRoot ? createPost(post.postRoot) : ""
+    postRoot ? postRoot.classList.add("p" + postRoot.dataset.id) : ""
+    postRoot ? postRoot.classList.add("postRoot") : ""
     let largeDots = document.createElement("div")
     let largeDotsPillow = document.createElement("div")
     let postMain = createPost(post.postMain)
+    postMain ? postMain.classList.add("p" + postMain.dataset.id) : ""
+    postMain ? postMain.classList.add("postMain") : ""
     let smallDots = document.createElement("div")
     let postComment = createPost(post.postComment)
+    postComment ? postComment.classList.add("p" + postComment.dataset.id) : ""
     largeDots.className = "commentDots largeDots"
     smallDots.className = "commentDots smallDots"
     largeDotsPillow.className = "largePillow"
@@ -517,7 +524,6 @@ function createPost(post) {
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
     div.className = "post form-group postItem border border-light"
-    div.id = id
     return div
 }
 
@@ -575,8 +581,7 @@ function createCommentForm(post, commentForm) {
 function comment(post, icon) {
     if (icon.innerHTML == "💬") {
         icon.innerHTML = "💬..."
-        let id = post.dataset.id
-        $(`#${id}`).css("background-color", "rgba(68, 156, 172, 0.101)");
+        post.style.backgroundColor = "rgba(68, 156, 172, 0.101)"
         let commentForm = document.querySelector(".send").cloneNode(true)
         createCommentForm(post, commentForm)
         commentForm.childNodes["7"].onclick = () => {
@@ -713,8 +718,8 @@ function removePagination() {
 
 
 function deletePost(post)  { 
-    let text = [...post.parentElement.childNodes][[...post.parentElement.childNodes].length - 1].firstElementChild.nextElementSibling.nextElementSibling
-    let button = text.nextElementSibling
+    let text = [...post.parentElement.childNodes][[...post.parentElement.childNodes].length - 1].firstElementChild ? [...post.parentElement.childNodes][[...post.parentElement.childNodes].length - 1].firstElementChild.nextElementSibling.nextElementSibling : ""
+    let button = text.nextElementSibling ? text.nextElementSibling : ""
     post.parentElement.style.paddingBottom = "0px"
     if (confirm('Are sure to delete post?')) {
         fetch(`/delete_post/${post.dataset.id}`)
@@ -727,24 +732,51 @@ function deletePost(post)  {
                         post.nextElementSibling.remove()
                     }  
                 }
-                if (post.dataset.comment == "true") {
-                    let count = post.parentElement.parentElement.firstElementChild.childNodes[8].lastElementChild
+                if (post.dataset.comment == "true" && !post.classList.contains("tree")) {
+                    let count = post.parentElement.parentElement.firstElementChild.childNodes[8] ? post.parentElement.parentElement.firstElementChild.childNodes[8].lastElementChild : ""
+                   
                     let after = post.parentElement.parentElement.firstElementChild.nextElementSibling.nextElementSibling
                     if ([...after.classList][after.classList.length - 1] == "after") {
                         after.childNodes[8].lastElementChild.innerHTML = parseInt(after.childNodes[8].lastElementChild.innerHTML) - 1
                     } else {
-                        count.innerHTML = parseInt(count.innerHTML) - 1
+                       count ? count.innerHTML = parseInt(count.innerHTML) - 1 : ""
+                    }
+                }
+                if (post.classList.contains("tree")) {
+                    post.previousElementSibling ? post.previousElementSibling.remove() : ""
+                    post.previousElementSibling ? post.previousElementSibling.remove() : ""
+                    
+                    let id = post.previousElementSibling ? "p" + post.previousElementSibling.dataset.id : ""
+                    if (id) {
+                        if  (document.querySelector(`.${id}`)) {
+                            document.querySelectorAll(`.${id}`).forEach(item => {
+                                item.childNodes[8].lastElementChild.innerHTML = parseInt(item.childNodes[8].lastElementChild.innerHTML) - 1
+                            })
+                        }
+                    }
+    
+                    while (post.nextElementSibling) {
+                        post.nextElementSibling.remove()
                     }
                 }
                 if ([...post.childNodes][8].firstElementChild.innerHTML == "💬...") {
-                    text.style.margin = "0px";
-                    button.style.margin = "0px";
+                    text.style ? text.style.margin = "0px" : "";
+                    button ? button.style.margin = "0px" : "";
                     [...post.parentElement.childNodes].forEach(node => {
-                        node.style.height = "0%";
+                        node.style ? node.style.height = "0%" : ""
                         node.remove()
                     })
                 }
-                post.remove()
+                let idNo = "p" + post.dataset.id
+                if  (document.querySelector(`.${idNo}`)) {
+                    document.querySelectorAll(`.${idNo}`).forEach(item => {
+                        while (item.nextElementSibling) {
+                            item.nextElementSibling.remove()
+                        }
+                        item.remove()
+                    });
+                }
+                post ? post.remove() : ""
             }
         });
     }
@@ -1026,8 +1058,17 @@ $(window).click(function(event) {
                 .then(result => {
                     console.log(result)
                     if (result.success) {
-                        icon.innerHTML = "❤";
-                        likes.innerHTML = parseInt(likes.innerHTML) + 1;
+                        let idNo = "p" + icon.dataset.id
+                        if  (document.querySelector(`.${idNo}`)) {
+                            document.querySelectorAll(`.${idNo}`).forEach(item => {
+                                item.childNodes[6].innerHTML = "❤";
+                                item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) + 1;
+                            });
+                        } else {
+                            icon.innerHTML = "❤";
+                            likes.innerHTML = parseInt(likes.innerHTML) + 1;
+                        }
+                    
                     }
                 });
             } else if (icon.innerHTML == "❤") {
@@ -1036,8 +1077,17 @@ $(window).click(function(event) {
                 .then(result => {
                     console.log(result)
                     if (result.success) {
-                        icon.innerHTML = "🤍";
-                        likes.innerHTML = parseInt(likes.innerHTML) - 1;
+                        let idNo = "p" + icon.dataset.id
+                        if  (document.querySelector(`.${idNo}`)) {
+                            document.querySelectorAll(`.${idNo}`).forEach(item => {
+                                item.childNodes[6].innerHTML = "🤍";
+                                item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) - 1;
+                            });
+                        } else {
+                            icon.innerHTML = "🤍";
+                            likes.innerHTML = parseInt(likes.innerHTML) - 1;
+                        }
+                    
                     }
                 });
             }
@@ -1049,7 +1099,7 @@ $(window).click(function(event) {
             } else {
                 alert("Login to see profile.")
             }
-        } else if (icon.className == "commentIcon") {
+        } else if (icon.className == "commentIcon" && !icon.parentElement.parentElement.classList.contains("postMain") && !icon.parentElement.parentElement.classList.contains("postRoot")) {
             if (header.dataset.profile == "AnonymousUser") {
                 window.location.href = `/login`
             }
@@ -1062,13 +1112,13 @@ $(window).click(function(event) {
             
         } else if ([...icon.classList].includes("postItem")) {
             if (header.dataset.profile != "AnonymousUser") {
-                getThePost(icon.id)
-                history.pushState({section: `post${icon.id}`}, "", `post`)
+                getThePost(icon.dataset.id)
+                history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
             }
         } else if ([...icon.classList].includes("postContent")) {
             if (header.dataset.profile != "AnonymousUser") {
-                getThePost(icon.parentElement.id)
-                history.pushState({section: `post${icon.parentElement.id}`}, "", `post`)
+                getThePost(icon.parentElement.dataset.id)
+                history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
             }
         } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "reply") || icon.dataset.type == "reply") {
             if (icon.parentElement.parentElement.dataset.type == "reply") {
@@ -1088,6 +1138,11 @@ $(window).click(function(event) {
             } else {
                 getThePost(icon.dataset.content)
                 history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
+            }
+        } else if (icon.parentElement.parentElement.classList.contains("postMain") || icon.parentElement.parentElement.classList.contains("postRoot")) {
+            if (header.dataset.profile != "AnonymousUser") {
+                getThePost(icon.parentElement.parentElement.dataset.id)
+                history.pushState({section: `post${icon.parentElement.parentElement.dataset.id}`}, "", `post`)
             }
         }
     });   
