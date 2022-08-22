@@ -912,7 +912,7 @@ function getThePost() {
             document.querySelector("#all_posts").append(dots)
             getThePost(arguments[2], arguments[3])
         } 
-    })
+    });
 }
 
 
@@ -1087,7 +1087,6 @@ $(window).click(function(event) {
                             icon.innerHTML = "🤍";
                             likes.innerHTML = parseInt(likes.innerHTML) - 1;
                         }
-                    
                     }
                 });
             }
