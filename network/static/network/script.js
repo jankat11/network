@@ -331,7 +331,11 @@ function getFollowList(user, results, closeBtn) {
         }  else if (results == document.querySelector("#listF")) {
             createFollowList(results, list[1], closeBtn, page, user)
         }
-    });
+    })
+    .then(() => {
+        window.location.href = `#followResultArea` 
+        window.scrollBy(0, -90)
+    })
 }
 
 
@@ -664,7 +668,13 @@ function getComment(post, commentForm) {
         }
         post.parentElement.appendChild(commentForm)
         giveRemainChar(commentForm.childNodes["5"])
-    });
+    })
+    .then(() => {
+        if(document.querySelector(`#p${post.dataset.id}`)) {
+            window.location.href = `#p${post.dataset.id}`
+            window.scrollBy(0, -35)
+        }
+    })
 }
 
 
@@ -887,11 +897,7 @@ function getThePost() {
         div.lastElementChild.setAttribute("data-opened", "opened")
         div.lastElementChild.id = "p" + arguments[0]
         comment(div.lastElementChild, div.lastElementChild.childNodes[8].firstElementChild)
-    })
-    .then(() => {
-        window.location.href = `#p${arguments[0]}`
-    })
-    
+    })    
 }
 
 
