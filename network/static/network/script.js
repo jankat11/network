@@ -521,6 +521,7 @@ function createPost(post) {
     div.innerHTML = `${postOwner}${clock}${date} ${content}${heart}${comment}${post.isUsers ? edit + save + deletePost: ""}`
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
+    div.setAttribute("data-opened", "close")
     div.className = "post form-group postItem border border-light"
     return div
 }
@@ -785,7 +786,6 @@ function deletePost(post)  {
 }
 
 
-
 function editPage(button) {
     var saveButton;
     button.style.display = "none"
@@ -883,8 +883,15 @@ function getThePost() {
     .then(post => {
         let div = createPostItem(post, "comment")
         document.querySelector("#all_posts").append(div)
+        console.log(div, "hi there") 
+        div.lastElementChild.setAttribute("data-opened", "opened")
+        div.lastElementChild.id = "p" + arguments[0]
         comment(div.lastElementChild, div.lastElementChild.childNodes[8].firstElementChild)
-    });
+    })
+    .then(() => {
+        window.location.href = `#p${arguments[0]}`
+    })
+    
 }
 
 
@@ -997,103 +1004,106 @@ function textCorrection(element) {
 
 
 $(window).click(function(event) {
-        let icon = event.target
-        let likes = icon.nextElementSibling
-        console.log(icon)    
-        if (icon.classList[0] == "heartIcon") {
-            if (header.dataset.profile == "AnonymousUser") {
-                window.location.href = `/login`
-            }
-            if (icon.innerHTML == "🤍") {
-                fetch(`/like_post/${icon.dataset.id}`)
-                .then(response => response.json())
-                .then(result => {
-                    console.log(result)
-                    if (result.success) {
-                        let idNo = "p" + icon.dataset.id
-                        if  (document.querySelector(`.${idNo}`)) {
-                            document.querySelectorAll(`.${idNo}`).forEach(item => {
-                                item.childNodes[6].innerHTML = "❤";
-                                item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) + 1;
-                            });
-                        } else {
-                            icon.innerHTML = "❤";
-                            likes.innerHTML = parseInt(likes.innerHTML) + 1;
-                        }
-                    
+    let icon = event.target
+    let likes = icon.nextElementSibling
+    console.log(icon)    
+    if (icon.classList[0] == "heartIcon") {
+        if (header.dataset.profile == "AnonymousUser") {
+            window.location.href = `/login`
+        }
+        if (icon.innerHTML == "🤍") {
+            fetch(`/like_post/${icon.dataset.id}`)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                if (result.success) {
+                    let idNo = "p" + icon.dataset.id
+                    if  (document.querySelector(`.${idNo}`)) {
+                        document.querySelectorAll(`.${idNo}`).forEach(item => {
+                            item.childNodes[6].innerHTML = "❤";
+                            item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) + 1;
+                        });
+                    } else {
+                        icon.innerHTML = "❤";
+                        likes.innerHTML = parseInt(likes.innerHTML) + 1;
                     }
-                });
-            } else if (icon.innerHTML == "❤") {
-                fetch(`/unlike_post/${icon.dataset.id}`)
-                .then(response => response.json())
-                .then(result => {
-                    console.log(result)
-                    if (result.success) {
-                        let idNo = "p" + icon.dataset.id
-                        if  (document.querySelector(`.${idNo}`)) {
-                            document.querySelectorAll(`.${idNo}`).forEach(item => {
-                                item.childNodes[6].innerHTML = "🤍";
-                                item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) - 1;
-                            });
-                        } else {
-                            icon.innerHTML = "🤍";
-                            likes.innerHTML = parseInt(likes.innerHTML) - 1;
-                        }
+                }
+            });
+        } else if (icon.innerHTML == "❤") {
+            fetch(`/unlike_post/${icon.dataset.id}`)
+            .then(response => response.json())
+            .then(result => {
+                console.log(result)
+                if (result.success) {
+                    let idNo = "p" + icon.dataset.id
+                    if  (document.querySelector(`.${idNo}`)) {
+                        document.querySelectorAll(`.${idNo}`).forEach(item => {
+                            item.childNodes[6].innerHTML = "🤍";
+                            item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) - 1;
+                        });
+                    } else {
+                        icon.innerHTML = "🤍";
+                        likes.innerHTML = parseInt(likes.innerHTML) - 1;
                     }
-                });
-            }
-        } else if (icon.className == "postOwner" || icon.className == "maker") {
-            if (header.dataset.profile != "AnonymousUser") {
-                removePagination()
-                getPage("profile", icon.innerHTML)
-                history.pushState({section: `profile-${icon.innerHTML}`}, "", `profile`)
-            } else {
-                alert("Login to see profile.")
-            }
-        } else if (icon.className == "commentIcon" && !icon.parentElement.parentElement.classList.contains("postMain") && !icon.parentElement.parentElement.classList.contains("postRoot")) {
-            if (header.dataset.profile == "AnonymousUser") {
-                window.location.href = `/login`
-            }
-            if (event.persisted) {
-                window.location.reload(); 
-            }
-            comment(icon.parentElement.parentElement, icon)
-            
-        } else if ([...icon.classList].includes("postItem")) {
-            if (header.dataset.profile != "AnonymousUser") {
+                }
+            });
+        }
+    } else if (icon.className == "postOwner" || icon.className == "maker") {
+        if (header.dataset.profile != "AnonymousUser") {
+            removePagination()
+            getPage("profile", icon.innerHTML)
+            history.pushState({section: `profile-${icon.innerHTML}`}, "", `profile`)
+        } else {
+            alert("Login to see profile.")
+        }
+    } else if (icon.className == "commentIcon" && !icon.parentElement.parentElement.classList.contains("postMain") && !icon.parentElement.parentElement.classList.contains("postRoot")) {
+        if (header.dataset.profile == "AnonymousUser") {
+            window.location.href = `/login`
+        }
+        if (event.persisted) {
+            window.location.reload(); 
+        }
+        comment(icon.parentElement.parentElement, icon)
+        
+    } else if ([...icon.classList].includes("postItem")) {
+        if (header.dataset.profile != "AnonymousUser") {
+            if (icon.dataset.opened == "close") {
                 getThePost(icon.dataset.id)
                 history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
             }
-        } else if ([...icon.classList].includes("postContent")) {
-            if (header.dataset.profile != "AnonymousUser") {
+        }
+    } else if ([...icon.classList].includes("postContent")) {
+        if (header.dataset.profile != "AnonymousUser") {
+            if (icon.parentElement.dataset.opened == "close") {
                 getThePost(icon.parentElement.dataset.id)
                 history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
             }
-        } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "reply") || icon.dataset.type == "reply") {
-            if (icon.parentElement.parentElement.dataset.type == "reply") {
-                let postId = icon.parentElement.parentElement.dataset.content
-                getThePost(postId)  
-                history.pushState({section: `post${postId}`}, "", `post`)
-            } else if (icon.dataset.type == "reply") {
-                getThePost(icon.dataset.content)
-                history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
-            }
-        } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "like") || icon.dataset.type == "like") {
-            if (icon.className == "toOpenPost") {
-                let postId = icon.parentElement.parentElement.dataset.content
-                getThePost(postId)
-                history.pushState({section: `post${postId}`}, "", `post`)
-            } else {
-                getThePost(icon.dataset.content)
-                history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
-            }
-        } else if (icon.parentElement.parentElement.classList.contains("postMain") || icon.parentElement.parentElement.classList.contains("postRoot")) {
-            if (header.dataset.profile != "AnonymousUser") {
-                getThePost(icon.parentElement.parentElement.dataset.id)
-                history.pushState({section: `post${icon.parentElement.parentElement.dataset.id}`}, "", `post`)
-            }
         }
-    });   
+    } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "reply") || icon.dataset.type == "reply") {
+        if (icon.parentElement.parentElement.dataset.type == "reply") {
+            let postId = icon.parentElement.parentElement.dataset.content
+            getThePost(postId)  
+            history.pushState({section: `post${postId}`}, "", `post`)
+        } else if (icon.dataset.type == "reply") {
+            getThePost(icon.dataset.content)
+            history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
+        }
+    } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "like") || icon.dataset.type == "like") {
+        if (icon.className == "toOpenPost") {
+            let postId = icon.parentElement.parentElement.dataset.content
+            getThePost(postId)
+            history.pushState({section: `post${postId}`}, "", `post`)
+        } else {
+            getThePost(icon.dataset.content)
+            history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
+        }
+    } else if (icon.parentElement.parentElement.classList.contains("postMain") || icon.parentElement.parentElement.classList.contains("postRoot")) {
+        if (header.dataset.profile != "AnonymousUser") {
+            getThePost(icon.parentElement.parentElement.dataset.id)
+            history.pushState({section: `post${icon.parentElement.parentElement.dataset.id}`}, "", `post`)
+        }
+    }
+});   
 
 
 
