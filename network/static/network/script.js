@@ -145,6 +145,21 @@ if(document.querySelector("#notificationM")) {
     document.querySelector("#notificationM").onclick = () => {
         notificationPage()
         history.pushState({section: "notifications"}, "", `notifications`)
+        $('.collapse').collapse("hide");
+    }
+}
+
+
+if(document.querySelector("#searArea")) {
+    document.querySelector("#searArea").onclick = () => {
+        $('.collapse').collapse("hide");
+    }
+}
+
+
+if(document.querySelector("#topPagination")) {
+    document.querySelector("#topPagination").onclick = () => {
+        $('.collapse').collapse("hide");
     }
 }
 
@@ -333,8 +348,8 @@ function getFollowList(user, results, closeBtn) {
         }
     })
     .then(() => {
-        window.location.href = `#followResultArea` 
-        window.scrollBy(0, -90)
+        window.location.href = `#followerLink` 
+        window.scrollBy(0, -5)
     })
 }
 

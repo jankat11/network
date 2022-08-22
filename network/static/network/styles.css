@@ -37,6 +37,11 @@
     }   
 }
 
+@media (max-width: 500px)  {#profileHeader{
+    margin: 10px; 
+    }   
+}
+
 @media (max-width: 500px)  {#mobileSiteIcon{
     margin-left: 0px;
     }   
@@ -514,6 +519,9 @@
 #notificationM {
     padding-right: 0px;
     padding-left: 0px;
+    position: relative;
+    bottom: 2px;
+    
 }
 
 .notTime {
