@@ -76,7 +76,7 @@ def all_posts(request, post_type, page=1, status="post"):
             is_users_post = post.owner == request.user
             liked_before =  request.user in post.likers.all()
             posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
-        pages = Paginator(posts, 10)
+        pages = Paginator(posts, 25)
         return JsonResponse({
             "posts": pages.page(page).object_list,
             "pageCount" : pages.num_pages or "zero"
@@ -90,7 +90,7 @@ def all_posts(request, post_type, page=1, status="post"):
                 liked_before =  request.user in post.likers.all()
                 posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
         sorted_posts = sorted(posts, key=lambda post : post["thePost"]["id"], reverse=True)
-        pages = Paginator(sorted_posts, 10)
+        pages = Paginator(sorted_posts, 25)
         return JsonResponse({
             "posts": pages.page(page).object_list,
             "pageCount" : pages.num_pages or "zero"
@@ -106,7 +106,7 @@ def all_posts(request, post_type, page=1, status="post"):
                 posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
             else:
                 posts.append(get_comment_tree(request, post, liked_before, is_users_post))
-        pages = Paginator(posts, 10)
+        pages = Paginator(posts, 25)
         return JsonResponse({
             "posts": pages.page(page).object_list,
             "pageCount" : pages.num_pages or "zero"
