@@ -232,14 +232,13 @@
 
 
 .heart, .comment {
-    position: relative;  
+    margin-bottom: 5px; 
     display: inline-block;
 }
 .comment {
     margin-left: 50px;
 }
 .heart {
-    
     margin-left: 20px;
 }
 
@@ -283,7 +282,7 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     padding: 5px;
     margin: 5px;
-    width: 80%;
+    width: 70%;
     word-wrap: break-word;
     color: #07405a;
 }
