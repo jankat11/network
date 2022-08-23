@@ -48,7 +48,7 @@
     }   
 }
 
-@media (min-width: 1440px)  {.body, #searchIcon2{
+@media (min-width: 1440px)  {.indexBody, #searchIcon2{
     width: 60%; 
     margin-left: 20%;
     }   
@@ -713,6 +713,10 @@ font-size: x-large;
 }
 
 
-#searchIcon2, .bg-light {
+#searchIcon2, .coverS {
     border-radius: 0 0 20px 20px;
+}
+
+.coverS .collapse{
+    background-color: white;
 }

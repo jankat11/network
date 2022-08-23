@@ -234,9 +234,6 @@ function getProfile(user) {
         document.querySelector("#calendar").innerHTML = calendar
         if (profile.selfProfile != user && profile.selfProfile != "") {
             let theButton = document.querySelector(`.followButton`)
-            console.log(theButton)
-            console.log(profile.followed)
-            console.log(profile.selfProfile)
             theButton.onclick = () => follow(theButton.innerHTML, user);
         }
         if (document.querySelector("#aboutInfo")) {
@@ -345,10 +342,25 @@ function getFollowList(user, results, closeBtn) {
     .then(response => response.json())
     .then(data => {
         let list = [data.followerList, data.followList]
-        if (results == document.querySelector("#listFw")) {
-            createFollowList(results, list[0], closeBtn, page, user)
-        }  else if (results == document.querySelector("#listF")) {
-            createFollowList(results, list[1], closeBtn, page, user)
+        if (list[0].length == 0 && results == document.querySelector("#listFw")) {
+            document.querySelector("#listFw").innerHTML = "<h5 class='noYet'>Empty</h5>"
+            createCloseBtn(results, closeBtn)
+            return false
+        } else if (list[1].length == 0 && results == document.querySelector("#listF")){
+            document.querySelector("#listF").innerHTML = "<h5 class='noYet'>Empty</h5>"
+            createCloseBtn(results, closeBtn)
+            return false
+        }
+        return list
+    })
+    .then(list => {
+        if (list) {
+            if (results == document.querySelector("#listFw")) {
+                createFollowList(results, list[0], closeBtn, page, user)
+            }  else if (results == document.querySelector("#listF")) {
+                console.log(list[1])
+                createFollowList(results, list[1], closeBtn, page, user)
+            }
         }
     })
 }
@@ -1132,6 +1144,7 @@ $(window).click(function(event) {
             history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
         }
     } else if (icon.parentElement.parentElement.classList.contains("postMain") || icon.parentElement.parentElement.classList.contains("postRoot")) {
+        $('.collapse').collapse("hide");
         getThePost(icon.parentElement.parentElement.dataset.id)
         history.pushState({section: `post${icon.parentElement.parentElement.dataset.id}`}, "", `post`)
     }
