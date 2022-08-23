@@ -206,7 +206,6 @@ def get_follow_results(request, user_name, page):
 def follow(request, user_name):
     user = User.objects.get(username=user_name)
     user.followers.add(request.user)
-    
     Notification.objects.create(owner=user, maker=request.user, not_type="follow")
     return JsonResponse({"success": "user succesfuly followed"}, status=200)
 
@@ -270,7 +269,6 @@ def like_post(request, post_id):
         post = Post.objects.get(id=post_id)
     except:
         return JsonResponse({"error": "post not found."}, status=404)
-
     if request.user.liked_posts.filter(id=post_id).count() != 0:
         return JsonResponse({"error": "the post was already liked."}, status=404)
     if post.owner != request.user:
@@ -300,7 +298,6 @@ def search(request, user, page):
 
 def login_view(request):
     if request.method == "POST":
-
         # Attempt to sign user in
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -330,7 +327,6 @@ def logout_view(request):
 
 def register(request):
     if request.method == "POST":
-
         form = RegisterForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data["username"]
@@ -354,7 +350,6 @@ def register(request):
             try:
                 user = User.objects.create_user(username, email, password)
                 user.save()
-
             except IntegrityError:
                 return render(request, "network/register.html", {
                     "message": "Username already taken.",

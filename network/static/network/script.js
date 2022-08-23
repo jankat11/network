@@ -549,6 +549,7 @@ function getPosts() {
         if (data.posts.length == 0) {
             let noPost = document.createElement("h4")
             noPost.innerHTML = "No post yet!"
+            noPost.className = 'noYet'
             document.querySelector("#main").style.display = "none"
             document.querySelector("#all_posts").append(noPost)
         } else {
@@ -648,7 +649,6 @@ function removeCommentSections(icon, post) {
         post.nextElementSibling.remove()  
     }
 }
-
 
 
 function getComment(post, commentForm, page=1, loadMore=false, loadItem="") {
@@ -937,6 +937,7 @@ function getNotifications() {
     fetch(`/get_notifications/${page}`)
     .then(response => response.json())
     .then(data => {
+        console.log(data)
         let notWrapper = document.createElement("div")
         let the_person = person
         for (let notification of data.notList) {
@@ -968,7 +969,12 @@ function getNotifications() {
             }
         }
         document.querySelector("#all_posts").append(notWrapper)
-    });
+        return data
+    })
+    .then(data => {
+        console.log(data.notList)
+        data.notList.length == 0 ? document.querySelector("#all_posts").innerHTML = "<h4 class='noYet'>No notifications yet.</h4>" : ""
+    })
 }
 
 
