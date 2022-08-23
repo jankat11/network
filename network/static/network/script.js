@@ -100,6 +100,7 @@ document.querySelectorAll(".searchB2").forEach(button => {
     }
 });
 
+
 if(following) {
     following.addEventListener("click", () => { 
         followings()
@@ -895,6 +896,7 @@ function getPage() {
     let title = document.querySelector("#title")
     if (arguments[0] == "all_posts") {
         title.innerHTML = "All Posts"
+        title.style.marginTop = "10px"
     } else if (arguments[0] == "following") {
         title.innerHTML = "From Your Followings<hr>"
     } else if (arguments[0] == "profile") {
@@ -1102,11 +1104,13 @@ $(window).click(function(event) {
         comment(icon.parentElement.parentElement, icon)
     } else if ([...icon.classList].includes("postItem")) {
         if (icon.dataset.opened == "close") {
+            $('.collapse').collapse("hide");
             getThePost(icon.dataset.id)
             history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
         }
     } else if ([...icon.classList].includes("postContent")) {
         if (icon.parentElement.dataset.opened == "close") {
+            $('.collapse').collapse("hide");
             getThePost(icon.parentElement.dataset.id)
             history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
         }
