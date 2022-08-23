@@ -54,6 +54,10 @@
     }   
 }
 
+@media (min-width: 1440px)  {#searchIcon2, .coverS {
+    border-radius: 0 0 20px 20px;
+    }   
+}
 
 @media (max-width: 500px)  {#mobileSiteIcon{
     margin-left: 0px;
@@ -423,8 +427,7 @@
     width: 100%;
     word-wrap: break-word;
     cursor: default;
-    font-style:normal;
-    font-weight: 700;
+    font-weight: 600;
     color: #07405a;
 }
 
@@ -710,11 +713,6 @@ font-size: x-large;
 .loggin {
     position: relative;
     bottom: 16px;
-}
-
-
-#searchIcon2, .coverS {
-    border-radius: 0 0 20px 20px;
 }
 
 .coverS .collapse{
