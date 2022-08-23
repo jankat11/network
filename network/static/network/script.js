@@ -219,7 +219,7 @@ function getProfile(user) {
     fetch(`/get_profile/${user}`)
     .then(response => response.json())
     .then(profile => {
-        let aboutInfo = `<span id="aboutInfo" class="aboutInfo">${editPen}about</span>`
+        let aboutInfo = profile.selfProfile != "" ? `<span id="aboutInfo" class="aboutInfo">${editPen}about</span>` : ""
         let about = `<div id="aboutUser" class="aboutUser lead">${profile.about ? profile.about : ""}</div>`
         let followButton = `<button id="${user}" class="btn btn-outline-info followsB followButton">follow</button>`
         let unfollowButton = `<button id="${user}" class="btn btn-outline-secondary followButton">unfollow</button>`
@@ -229,10 +229,13 @@ function getProfile(user) {
         let followers = `<a id="followerLink" data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span></a>`
         let follows = `<a id="followLink" data-bs-toggle="collapse" href="#followArea"  aria-expanded="false" aria-controls="followArea"><span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span></a>`
         header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="twoFollow">${followers}${follows}</div>${about}${joined}${profile.selfProfile == user || !profile.selfProfile ? aboutInfo : button}</div>`
-        
+        console.log(header)
         document.querySelector("#calendar").innerHTML = calendar
-        if (profile.selfProfile != user) {
+        if (profile.selfProfile != user && profile.selfProfile != "") {
             let theButton = document.querySelector(`.followButton`)
+            console.log(theButton)
+            console.log(profile.followed)
+            console.log(profile.selfProfile)
             theButton.onclick = () => follow(theButton.innerHTML, user);
         }
         if (document.querySelector("#aboutInfo")) {
@@ -1089,19 +1092,14 @@ $(window).click(function(event) {
             });
         }
     } else if (icon.className == "postOwner" || icon.className == "maker") {
-        if (header.dataset.profile != "AnonymousUser") {
             removePagination()
             getPage("profile", icon.innerHTML)
             history.pushState({section: `profile-${icon.innerHTML}`}, "", `profile`)
-        } else {
-            alert("Login to see profile.")
-        }
     } else if (icon.className == "commentIcon" && !icon.parentElement.parentElement.classList.contains("postMain") && !icon.parentElement.parentElement.classList.contains("postRoot")) {
         if (event.persisted) {
             window.location.reload(); 
         }
         comment(icon.parentElement.parentElement, icon)
-        
     } else if ([...icon.classList].includes("postItem")) {
         if (icon.dataset.opened == "close") {
             getThePost(icon.dataset.id)

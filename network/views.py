@@ -161,13 +161,14 @@ def get_profile(request, user_name):
     user = User.objects.get(username=user_name)
     followers = user.followers
     about = user.about
+    the_user = request.user.username
     return JsonResponse({
         "about": about,
         "follows" : user.follows.count(),
         "followers" : followers.count(),
         "joined" : user.joined(),
-        "selfProfile": request.user.username,
-        "followed": followers.filter(username=request.user.username).count() != 0
+        "selfProfile": the_user,
+        "followed": followers.filter(username=the_user).count() != 0 
     })
 
 
