@@ -348,7 +348,7 @@ function getFollowList(user, results, closeBtn) {
         }
     })
     .then(() => {
-        window.location.href = `#followerLink` 
+        $(`#followerLink`)[0].scrollIntoView({block: 'end',  behavior: 'smooth'}) 
         window.scrollBy(0, -5)
     })
 }
@@ -596,7 +596,7 @@ function createCommentForm(post, commentForm) {
 }
 
 
-function comment(post, icon) {
+function comment(post, icon, openPost=false) {
     if (icon.innerHTML == "💬") {
         icon.innerHTML = "💬..."
         post.style.backgroundColor = "rgba(68, 156, 172, 0.101)"
@@ -625,7 +625,8 @@ function comment(post, icon) {
             icon.nextElementSibling.innerHTML = parseInt(icon.nextElementSibling.innerHTML) + 1
             window.location.href = `#${post.dataset.id}`
         }
-        getComment(post, commentForm)
+        let page = 1
+        getComment(post, commentForm, page, openPost)
     } else {
         removeCommentSections(icon, post)
     }
@@ -654,8 +655,9 @@ function removeCommentSections(icon, post) {
 
 
 
-function getComment(post, commentForm) {
-    let page = arguments[2] ? arguments[2] : 1
+function getComment(post, commentForm, page=1, openPost=false) {
+    console.log(openPost)
+    
     fetch(`/get_comment/${post.dataset.id}/${page}`)
     .then(response => response.json())
     .then(data => {
@@ -686,7 +688,7 @@ function getComment(post, commentForm) {
     })
     .then(() => {
         if(document.querySelector(`#p${post.dataset.id}`)) {
-            window.location.href = `#p${post.dataset.id}`
+            document.querySelector(`#p${post.dataset.id}`).scrollIntoView()
             window.scrollBy(0, -35)
         }
     })
@@ -908,11 +910,10 @@ function getThePost() {
     .then(post => {
         let div = createPostItem(post, "comment")
         document.querySelector("#all_posts").append(div)
-        console.log(div, "hi there") 
         div.lastElementChild.setAttribute("data-opened", "opened")
         div.lastElementChild.id = "p" + arguments[0]
-        comment(div.lastElementChild, div.lastElementChild.childNodes[8].firstElementChild)
-    })    
+        comment(div.lastElementChild, div.lastElementChild.childNodes[8].firstElementChild, openPost = true)
+    })  
 }
 
 

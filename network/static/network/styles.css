@@ -362,6 +362,7 @@
 
 #followerLink, #followLink {
     color: #07405ace;
+    scroll-behavior: smooth;
 }
 
 .followTitle {
