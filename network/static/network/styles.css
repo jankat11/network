@@ -663,9 +663,12 @@ font-size: x-large;
     color: gray;
     padding-right: 7px;
     padding-left: 7px;
+    padding-top: 3px;
+    padding-bottom: 3px;
     width: fit-content;
-    border-radius: 10px;
-    background-color: rgba(68, 157, 172, 0.123)
+    border-radius: 0 10px 10px 0;
+    background-color: rgba(68, 157, 172, 0.123);
+    border-left: solid 3px rgba(68, 156, 172, 0.575);
 }
 
 .commentPillow {
