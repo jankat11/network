@@ -597,30 +597,38 @@ function comment(post, icon) {
     if (icon.innerHTML == "💬") {
         icon.innerHTML = "💬..."
         post.style.backgroundColor = "rgba(68, 156, 172, 0.101)"
-        let commentForm = document.querySelector(".send").cloneNode(true)
-        createCommentForm(post, commentForm)
-        commentForm.childNodes["7"].onclick = () => {
-            if (!commentForm.childNodes["5"].value) {
-                alert("The post must contain at least one character!")
-                return
-            }
-            textCorrection(commentForm.childNodes["5"])
-            fetch("/comment", {
-                method: 'POST',
-                body: JSON.stringify({
-                    postId: post.dataset.id,
-                    content: commentForm.childNodes["5"].value
+        var commentForm;
+        
+        if (header.dataset.profile != "AnonymousUser") {
+            commentForm = document.querySelector(".send").cloneNode(true)
+            createCommentForm(post, commentForm)
+            commentForm.childNodes["7"].onclick = () => {
+                if (!commentForm.childNodes["5"].value) {
+                    alert("The post must contain at least one character!")
+                    return
+                }
+                textCorrection(commentForm.childNodes["5"])
+                fetch("/comment", {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        postId: post.dataset.id,
+                        content: commentForm.childNodes["5"].value
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(result => {
-                console.log(result);
-                commentForm.childNodes["5"].value = ""
-                removeCommentSections(icon, post)
-                comment(post, icon)
-            });
-            icon.nextElementSibling.innerHTML = parseInt(icon.nextElementSibling.innerHTML) + 1
-            window.location.href = `#${post.dataset.id}`
+                .then(response => response.json())
+                .then(result => {
+                    console.log(result);
+                    commentForm.childNodes["5"].value = ""
+                    removeCommentSections(icon, post)
+                    comment(post, icon)
+                });
+                icon.nextElementSibling.innerHTML = parseInt(icon.nextElementSibling.innerHTML) + 1
+                window.location.href = `#${post.dataset.id}`
+            }
+        } else if (header.dataset.profile == "AnonymousUser") {
+            commentForm = document.createElement("div")
+            commentPillow = `<div class="commentPillow"></div>`
+            commentForm.innerHTML = `<div class="loggin">${commentPillow}<div class='loginWarn'><a href='/login'>Login to write comment</a></div></div>`
         }
         let page = 1
         getComment(post, commentForm, page)
@@ -677,7 +685,7 @@ function getComment(post, commentForm, page=1, loadMore=false, loadItem="") {
             }
         }
         post.parentElement.appendChild(commentForm)
-        giveRemainChar(commentForm.childNodes["5"])
+        commentForm.childNodes["5"] ? giveRemainChar(commentForm.childNodes["5"]) : ""
     })
     .then(() => {
         if(document.querySelector(`#p${post.dataset.id}`)) {
@@ -1089,27 +1097,20 @@ $(window).click(function(event) {
             alert("Login to see profile.")
         }
     } else if (icon.className == "commentIcon" && !icon.parentElement.parentElement.classList.contains("postMain") && !icon.parentElement.parentElement.classList.contains("postRoot")) {
-        if (header.dataset.profile == "AnonymousUser") {
-            window.location.href = `/login`
-        }
         if (event.persisted) {
             window.location.reload(); 
         }
         comment(icon.parentElement.parentElement, icon)
         
     } else if ([...icon.classList].includes("postItem")) {
-        if (header.dataset.profile != "AnonymousUser") {
-            if (icon.dataset.opened == "close") {
-                getThePost(icon.dataset.id)
-                history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
-            }
+        if (icon.dataset.opened == "close") {
+            getThePost(icon.dataset.id)
+            history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
         }
     } else if ([...icon.classList].includes("postContent")) {
-        if (header.dataset.profile != "AnonymousUser") {
-            if (icon.parentElement.dataset.opened == "close") {
-                getThePost(icon.parentElement.dataset.id)
-                history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
-            }
+        if (icon.parentElement.dataset.opened == "close") {
+            getThePost(icon.parentElement.dataset.id)
+            history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
         }
     } else if ((icon.className == "toOpenPost" && icon.parentElement.parentElement.dataset.type == "reply") || icon.dataset.type == "reply") {
         if (icon.parentElement.parentElement.dataset.type == "reply") {
@@ -1130,10 +1131,8 @@ $(window).click(function(event) {
             history.pushState({section: `post${icon.dataset.content}`}, "", `post`)
         }
     } else if (icon.parentElement.parentElement.classList.contains("postMain") || icon.parentElement.parentElement.classList.contains("postRoot")) {
-        if (header.dataset.profile != "AnonymousUser") {
-            getThePost(icon.parentElement.parentElement.dataset.id)
-            history.pushState({section: `post${icon.parentElement.parentElement.dataset.id}`}, "", `post`)
-        }
+        getThePost(icon.parentElement.parentElement.dataset.id)
+        history.pushState({section: `post${icon.parentElement.parentElement.dataset.id}`}, "", `post`)
     }
 });   
 

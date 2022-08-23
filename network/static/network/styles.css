@@ -28,7 +28,7 @@
     }   
 }
 
-@media (max-width: 1023px)  {.aboutUser{
+@media (max-width: 1023px)  {.aboutUser, .loginWarn{
     font-size: small
     }   
 }
@@ -656,4 +656,24 @@ font-size: x-large;
 
 .noYet {
     margin-left: 10px;
+    color: darkgray;
+}
+
+.loginWarn {
+    color: gray;
+    padding-right: 7px;
+    padding-left: 7px;
+    width: fit-content;
+    border-radius: 10px;
+    background-color: rgba(68, 157, 172, 0.123)
+}
+
+.commentPillow {
+    height: 20px;
+    border-left: solid 3px rgba(68, 156, 172, 0.575);
+}
+
+.loggin {
+    position: relative;
+    bottom: 16px;
 }
