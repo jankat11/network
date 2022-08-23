@@ -220,7 +220,7 @@ function getProfile(user) {
     .then(response => response.json())
     .then(profile => {
         let aboutInfo = `<span id="aboutInfo" class="aboutInfo">${editPen}about</span>`
-        let about = `<div id="aboutUser" class="aboutUser">${profile.about ? profile.about : ""}</div>`
+        let about = `<div id="aboutUser" class="aboutUser lead">${profile.about ? profile.about : ""}</div>`
         let followButton = `<button id="${user}" class="btn btn-outline-info followsB followButton">follow</button>`
         let unfollowButton = `<button id="${user}" class="btn btn-outline-secondary followButton">unfollow</button>`
         let button = profile.followed ? unfollowButton : followButton

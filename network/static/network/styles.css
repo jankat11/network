@@ -27,6 +27,11 @@
     font-size: 40px;
     }   
 }
+
+@media (max-width: 1023px)  {.aboutUser{
+    font-size: small
+    }   
+}
 @media (min-width: 1023px)  {#mobileBar{
     display: none;
     }   
@@ -381,13 +386,16 @@
 }
 
 .aboutUser {
-    margin-left: 25px;
+    margin-left: 30px;
     padding-right: 30px;
     margin-top: 10px;
     display: inline-block;
     width: 100%;
     word-wrap: break-word;
     cursor: default;
+    font-style:normal;
+    font-weight: 700;
+    color: #07405a;
 }
 
 .aboutTextEdit{
