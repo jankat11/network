@@ -347,10 +347,6 @@ function getFollowList(user, results, closeBtn) {
             createFollowList(results, list[1], closeBtn, page, user)
         }
     })
-    .then(() => {
-        $(`#followerLink`)[0].scrollIntoView({block: 'end',  behavior: 'smooth'}) 
-        window.scrollBy(0, -5)
-    })
 }
 
 
