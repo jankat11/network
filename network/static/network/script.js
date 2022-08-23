@@ -592,7 +592,7 @@ function createCommentForm(post, commentForm) {
 }
 
 
-function comment(post, icon, openPost=false) {
+function comment(post, icon) {
     if (icon.innerHTML == "💬") {
         icon.innerHTML = "💬..."
         post.style.backgroundColor = "rgba(68, 156, 172, 0.101)"
@@ -622,7 +622,7 @@ function comment(post, icon, openPost=false) {
             window.location.href = `#${post.dataset.id}`
         }
         let page = 1
-        getComment(post, commentForm, page, openPost)
+        getComment(post, commentForm, page)
     } else {
         removeCommentSections(icon, post)
     }
@@ -651,9 +651,7 @@ function removeCommentSections(icon, post) {
 
 
 
-function getComment(post, commentForm, page=1, openPost=false) {
-    console.log(openPost)
-    
+function getComment(post, commentForm, page=1, loadMore=false, loadItem="") {
     fetch(`/get_comment/${post.dataset.id}/${page}`)
     .then(response => response.json())
     .then(data => {
@@ -670,13 +668,12 @@ function getComment(post, commentForm, page=1, openPost=false) {
                 wrapper.style.borderLeft = "none"
             }
         }
-        if (data.comments.length > 10 && data.list.length == 10) {
+        if (data.hasNext) {
             let load = createLoadItem()
             load.innerHTML = "<h5 class='loadInfo'><i>load more comments</i><h5>"
             post.parentElement.appendChild(load)
             load.onclick = () => {
-                load.remove()
-                getComment(post, commentForm, page + 1)
+                getComment(post, commentForm, page + 1, loadMore=true, loadItem=load)
             }
         }
         post.parentElement.appendChild(commentForm)
@@ -686,6 +683,17 @@ function getComment(post, commentForm, page=1, openPost=false) {
         if(document.querySelector(`#p${post.dataset.id}`)) {
             document.querySelector(`#p${post.dataset.id}`).scrollIntoView()
             window.scrollBy(0, -35)
+        }
+    })
+    .then(() => {
+        if (loadMore) {
+            loadItem.scrollIntoView()
+            window.scrollBy(0, -100)
+        }
+    })
+    .then(() => {
+        if (loadMore) {
+            loadItem.remove()
         }
     })
 }
@@ -908,7 +916,7 @@ function getThePost() {
         document.querySelector("#all_posts").append(div)
         div.lastElementChild.setAttribute("data-opened", "opened")
         div.lastElementChild.id = "p" + arguments[0]
-        comment(div.lastElementChild, div.lastElementChild.childNodes[8].firstElementChild, openPost = true)
+        comment(div.lastElementChild, div.lastElementChild.childNodes[8].firstElementChild)
     })  
 }
 

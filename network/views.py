@@ -152,8 +152,8 @@ def get_comment(request, post_id, page=1):
         comments.append({"thePost": comment.serialize(), "like": liked_before, "isUsers": is_users_post, "sortkey": sort_key})
     commentList = Paginator(sorted(comments, key=lambda item: item["sortkey"]), 10)
     return JsonResponse({
-        "comments" : comments,
-        "list" : commentList.page(page).object_list
+        "list" : commentList.page(page).object_list,
+        "hasNext": commentList.page(page).has_next()
     })
 
      
