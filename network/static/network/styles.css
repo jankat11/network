@@ -639,7 +639,7 @@ font-size: x-large;
 }
 
 .commentDots {
-    border-left: dotted 3px #449cac93;
+    border-left: dotted 3px #449dace7;
 }
 
 .largeDots {
@@ -666,7 +666,7 @@ font-size: x-large;
     padding-top: 3px;
     padding-bottom: 3px;
     width: fit-content;
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 10px 10px 3px;
     background-color: rgba(68, 157, 172, 0.123);
     border-left: solid 3px rgba(68, 156, 172, 0.575);
 }
