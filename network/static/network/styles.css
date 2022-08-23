@@ -1,6 +1,7 @@
 .body {
     padding: 40px;
     padding-bottom: 20px;
+    padding-top: 20px;
 }
 
 @media (max-width: 1024px)  {#desktopBar{
@@ -47,14 +48,28 @@
     }   
 }
 
-@media (max-width: 500px)  {#mobileSiteIcon{
-    margin-left: 0px;
+@media (min-width: 1440px)  {.body, #searchIcon2{
+    width: 60%; 
+    margin-left: 20%;
     }   
 }
 
 
+@media (max-width: 500px)  {#mobileSiteIcon{
+    margin-left: 0px;
+    }   
+}
+@media (max-width: 500px)  {#searchResults, #searchResults2{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    margin-left: 0px !important;
+    
+    }   
+}
+
 @media (max-width: 500px)  {#title{
     margin-left: 10px;
+    margin-top: 10px;
     }   
 }
 
@@ -135,6 +150,7 @@
     cursor: pointer;
     font-style: italic;
     color: gray;
+    padding-bottom: 10px;
 }
 
 #navbarToggleExternalContent {
@@ -177,10 +193,21 @@
     border-radius: 16px;
     padding: 3px;
     letter-spacing: 1px;
+    margin-top: 10px;
+    margin-right: 10px;
 }
 
 #searchResults, #searchResults2 {
-    margin-left: 20px;
+    margin-right: 5px !important;
+    margin-left: 10px;
+    padding-left: 20px;
+    background-color: rgba(89, 130, 163, 0.068) !important;
+    border-radius: 20px;
+    word-wrap: break-word;
+}
+
+.searchPillow {
+    height: 20px;
 }
 
 #post_button {
@@ -683,4 +710,9 @@ font-size: x-large;
 .loggin {
     position: relative;
     bottom: 16px;
+}
+
+
+#searchIcon2, .bg-light {
+    border-radius: 0 0 20px 20px;
 }

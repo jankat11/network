@@ -80,7 +80,7 @@ document.querySelectorAll(".searchB").forEach(button => {
             return
         }
         let results = document.querySelector("#searchResults")
-        results.innerHTML = ""
+        results.innerHTML = '<div class="searchPillow"></div>'
         let page = 1
         getUserSearch(value, page, results)
     }
@@ -94,7 +94,7 @@ document.querySelectorAll(".searchB2").forEach(button => {
             return
         }
         let results = document.querySelector("#searchResults2")
-        results.innerHTML = ""
+        results.innerHTML = '<div class="searchPillow"></div>'
         let page = 1
         getUserSearch(value, page, results)
     }
@@ -896,7 +896,6 @@ function getPage() {
     let title = document.querySelector("#title")
     if (arguments[0] == "all_posts") {
         title.innerHTML = "All Posts"
-        title.style.marginTop = "10px"
     } else if (arguments[0] == "following") {
         title.innerHTML = "From Your Followings<hr>"
     } else if (arguments[0] == "profile") {
