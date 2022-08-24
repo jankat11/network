@@ -563,7 +563,7 @@ function createPost(post) {
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
     div.setAttribute("data-opened", "close")
-    div.className = "post form-group postItem border border-light"
+    div.className = `post form-group postItem border border-light`
     return div
 }
 
@@ -596,10 +596,12 @@ function getPostsList(data, page, type) {
         let wrapperPost = document.createElement("div")
         wrapperPost.append(div)
         document.querySelector("#all_posts").append(wrapperPost)
+        
         pages.style.display = "block"
         document.querySelector("#bottomPagination").style.display = "block"
     });
-    pagination(page, data.pageCount)
+    $("#all_posts").hide().fadeIn(()=> pagination(page, data.pageCount))
+    
 }
 
 
@@ -860,7 +862,6 @@ function deletePost(post)  {
                         $(`#toDelete`).remove()
                     })
                 }
-
             }
         })
     }
@@ -1011,7 +1012,7 @@ function getNotifications() {
             }
             notWrapper.append(notItem)
         }
-        if (data.notifications.length > 10 && data.notList.length == 10) {
+        if (data.notifications.length > 30 && data.notList.length == 30) {
             let load = createLoadItem()
             load.innerHTML = "<h5 class='loadInfo notLoad'><i>load more</i><h5>"
             notWrapper.appendChild(load)
