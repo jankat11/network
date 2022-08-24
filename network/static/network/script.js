@@ -5,6 +5,8 @@ const header = document.querySelector("#profileHeader")
 const notification = document.querySelector("#notification")
 
 window.onpopstate = event => {
+    document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+    $('.collapse').collapse("hide")
     if (event.persisted) {
         window.location.reload(); 
     }
@@ -120,6 +122,7 @@ if(profile) {
     profile.onclick = () => {
         profilePage(profileName)
         history.pushState({section: `profile-${profileName}`}, "", `profile`);
+        document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
         $('.collapse').collapse("hide");
     }
 }
@@ -139,6 +142,8 @@ if(notification) {
     notification.onclick = () => {
         notificationPage()
         history.pushState({section: "notifications"}, "", `notifications`)
+        document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+        $('.collapse').collapse("hide");
     }
 }
 
@@ -1115,9 +1120,11 @@ $(window).click(function(event) {
             });
         }
     } else if (icon.className == "postOwner" || icon.className == "maker") {
-            removePagination()
-            getPage("profile", icon.innerHTML)
-            history.pushState({section: `profile-${icon.innerHTML}`}, "", `profile`)
+        $('.collapse').collapse("hide");
+        document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+        removePagination()
+        getPage("profile", icon.innerHTML)
+        history.pushState({section: `profile-${icon.innerHTML}`}, "", `profile`)
     } else if (icon.className == "commentIcon" && !icon.parentElement.parentElement.classList.contains("postMain") && !icon.parentElement.parentElement.classList.contains("postRoot")) {
         if (event.persisted) {
             window.location.reload(); 
@@ -1125,12 +1132,14 @@ $(window).click(function(event) {
         comment(icon.parentElement.parentElement, icon)
     } else if ([...icon.classList].includes("postItem")) {
         if (icon.dataset.opened == "close") {
+            document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
             $('.collapse').collapse("hide");
             getThePost(icon.dataset.id)
             history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
         }
     } else if ([...icon.classList].includes("postContent")) {
         if (icon.parentElement.dataset.opened == "close") {
+            document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
             $('.collapse').collapse("hide");
             getThePost(icon.parentElement.dataset.id)
             history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
