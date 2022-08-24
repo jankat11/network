@@ -558,7 +558,7 @@ function createPost(post) {
     let comment = `<div class="comment"><span class="commentIcon">💬</span> <span class="commentCount">${comments}</span> </div>`
     let edit = `<button data-id="${id}" onclick="editPage(event.target)" class="edit btn btn-outline-link btn-sm">🖊️edit</button>`
     let save = `<button data-id="${id}" class="save btn btn-outline-info btn-sm" style="display: none;">SAVE</button>`
-    let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="delete btn btn-outline-link btn-sm hidden-xs">🗑️delete</button>`
+    let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement, event.target)" class="delete btn btn-outline-link btn-sm hidden-xs">🗑️delete</button>`
     div.innerHTML = `${postOwner}${clock}${date} ${content}${heart}${comment}${post.isUsers ? edit + save + deletePost: ""}`
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
@@ -616,6 +616,8 @@ function createCommentForm(post, commentForm) {
     commentForm.childNodes["5"].value = ""
     commentForm.childNodes["5"].className = "form-control commentText newPost"
     commentForm.lastElementChild.innerHTML = ""
+    commentForm.style.display = "none"
+    commentForm.classList.add(`cf${post.dataset.id}`) 
 }
 
 
@@ -685,13 +687,14 @@ function removeCommentSections(icon, post) {
 
 
 function getComment(post, commentForm, page=1, loadMore=false, loadItem="") {
+    var wrapper;
     fetch(`/get_comment/${post.dataset.id}/${page}`)
     .then(response => response.json())
     .then(data => {
         for (let item of data.list) {
             commentItem = createPostItem(item, "post")
             wrapper = document.createElement("div")
-            wrapper.className = "commentWrapper"
+            wrapper.className = `commentWrapper w${post.dataset.id}`
             commentItem.className = "post form-group postItem border border-light commentSection"
             wrapper.append(commentItem)
             post.parentElement.appendChild(wrapper)
@@ -700,7 +703,21 @@ function getComment(post, commentForm, page=1, loadMore=false, loadItem="") {
                 wrapper.style.paddingLeft = "0%"
                 wrapper.style.borderLeft = "none"
             }
+            wrapper.style.display = "none"
         }
+        return data
+    })
+    .then(data => {
+        $(`.w${post.dataset.id}`).fadeIn()
+        return data
+    })
+    .then(data => {
+        post.parentElement.append(commentForm)
+        $(`.cf${post.dataset.id}`).fadeIn()
+        commentForm.childNodes["5"] ? giveRemainChar(commentForm.childNodes["5"]) : ""
+        return data
+    })
+    .then(data => {
         if (data.hasNext) {
             let load = createLoadItem()
             load.innerHTML = "<h5 class='loadInfo'><i>load more comments</i><h5>"
@@ -709,8 +726,6 @@ function getComment(post, commentForm, page=1, loadMore=false, loadItem="") {
                 getComment(post, commentForm, page + 1, loadMore=true, loadItem=load)
             }
         }
-        post.parentElement.appendChild(commentForm)
-        commentForm.childNodes["5"] ? giveRemainChar(commentForm.childNodes["5"]) : ""
     })
     .then(() => {
         if(document.querySelector(`#p${post.dataset.id}`)) {
@@ -780,12 +795,17 @@ function removePagination() {
 }
 
 
-function deletePost(post)  { 
+
+function deletePost(post, target)  { 
     let childs = post.parentElement.childNodes
+    !post.classList.contains("tree") ? post.parentElement.setAttribute("id", "toDelete") : post.setAttribute("id", "toDelete")
+    console.log(post)
+    console.log(post.parentElement)
     let text = [...childs][[...childs].length - 1].firstElementChild ? [...childs][[...childs].length - 1].firstElementChild.nextElementSibling.nextElementSibling : ""
     let button = text.nextElementSibling ? text.nextElementSibling : ""
     post.parentElement.style.paddingBottom = "0px"
-    if (confirm('Are sure to delete post?')) {
+    document.querySelector("#alertConfirmDelete").click()
+    document.querySelector("#deleteLastConfirm").onclick = () => {
         fetch(`/delete_post/${post.dataset.id}`)
         .then(response => response.json())
         .then(result => {
@@ -807,8 +827,8 @@ function deletePost(post)  {
                 }
 
                 if (post.classList.contains("tree")) {
-                    post.previousElementSibling ? post.previousElementSibling.remove() : ""
-                    post.previousElementSibling ? post.previousElementSibling.remove() : ""
+                    post.previousElementSibling ? $(`.p${post.dataset.id}`).prev().slideUp(500).remove(): ""
+                    post.previousElementSibling ? $(`.p${post.dataset.id}`).prev().slideUp(500).remove() : ""
                     
                     let id = post.previousElementSibling ? "p" + post.previousElementSibling.dataset.id : ""
                     console.log(post.previousElementSibling)
@@ -819,19 +839,8 @@ function deletePost(post)  {
                             })
                         }
                     }
-    
                     while (post.nextElementSibling) {
-                        post.nextElementSibling.remove()
-                    }
-                }
-                if ([...post.childNodes][8].firstElementChild.innerHTML == "💬...") {
-                    if (!post.classList.contains("tree")) {
-                        text.style ? text.style.margin = "0px" : "";
-                        button ? button.style.margin = "0px" : "";
-                        [...post.parentElement.childNodes].forEach(node => {
-                            node.style ? node.style.height = "0%" : ""
-                            node.remove()
-                        })
+                        $(`.p${post.dataset.id}`).next().slideUp(500).remove()
                     }
                 }
                 let idNo = "p" + post.dataset.id
@@ -840,12 +849,15 @@ function deletePost(post)  {
                         while (item.nextElementSibling) {
                             item.nextElementSibling.remove()
                         }
-                        item.remove()
+                        $(`.p${post.dataset.id}`).slideUp(500);
                     });
                 }
-                post ? post.remove() : "" 
+                $(`#toDelete`).slideUp(500);
             }
-        });
+        })
+        .then(() => {
+            post ? post.remove() : "" 
+        })
     }
 }
 

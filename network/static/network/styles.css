@@ -4,6 +4,7 @@
     padding-top: 20px;
 }
 
+  
 @media (max-width: 1024px)  {#desktopBar{
     display: none;
     }   
@@ -473,7 +474,7 @@
     word-wrap: break-word
 }
 
-.postContent:hover {
+.postContent:hover, .joinedDate:hover, .postDate:hover, .postClock:hover {
     cursor: default;
 }
 
