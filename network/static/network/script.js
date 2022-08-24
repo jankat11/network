@@ -558,7 +558,7 @@ function createPost(post) {
     let comment = `<div class="comment"><span class="commentIcon">💬</span> <span class="commentCount">${comments}</span> </div>`
     let edit = `<button data-id="${id}" onclick="editPage(event.target)" class="edit btn btn-outline-link btn-sm">🖊️edit</button>`
     let save = `<button data-id="${id}" class="save btn btn-outline-info btn-sm" style="display: none;">SAVE</button>`
-    let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement, event.target)" class="delete btn btn-outline-link btn-sm hidden-xs">🗑️delete</button>`
+    let deletePost = `<button data-id="${id}" onclick="deletePost(event.target.parentElement)" class="delete btn btn-outline-link btn-sm hidden-xs">🗑️delete</button>`
     div.innerHTML = `${postOwner}${clock}${date} ${content}${heart}${comment}${post.isUsers ? edit + save + deletePost: ""}`
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
@@ -621,7 +621,7 @@ function createCommentForm(post, commentForm) {
 }
 
 
-function comment(post, icon) {
+function comment(post, icon, fast) {
     if (icon.innerHTML == "💬") {
         icon.innerHTML = "💬..."
         post.style.backgroundColor = "rgba(68, 156, 172, 0.101)"
@@ -646,8 +646,8 @@ function comment(post, icon) {
                 .then(result => {
                     console.log(result);
                     commentForm.childNodes["5"].value = ""
-                    removeCommentSections(icon, post)
-                    comment(post, icon)
+                    removeCommentSections(icon, post, fast=true)
+                    comment(post, icon, fast=true)
                 });
                 icon.nextElementSibling.innerHTML = parseInt(icon.nextElementSibling.innerHTML) + 1
                 window.location.href = `#${post.dataset.id}`
@@ -655,10 +655,10 @@ function comment(post, icon) {
         } else if (header.dataset.profile == "AnonymousUser") {
             commentForm = document.createElement("div")
             commentPillow = `<div class="commentPillow"></div>`
-            commentForm.innerHTML = `<div class="loggin">${commentPillow}<div class='loginWarn'><a href='/login'>Login to write comment</a></div></div>`
+            commentForm.innerHTML = `<div style="display: none;" class="loggin cf${post.dataset.id}">${commentPillow}<div class='loginWarn'><a href='/login'>Login to write comment</a></div></div>`
         }
         let page = 1
-        getComment(post, commentForm, page)
+        getComment(post, commentForm, page, fast=false)
     } else {
         removeCommentSections(icon, post)
     }
@@ -673,20 +673,23 @@ function giveRemainChar(element) {
 }
 
 
-function removeCommentSections(icon, post) {
+function removeCommentSections(icon, post, fast=false) {
     icon.innerHTML = "💬"
+    post.classList.add(`o${post.dataset.id}`)
+    console.log(post)
     post.style.backgroundColor = "white"
     post.parentElement.style.paddingBottom = "0px"
-    while (post.nextElementSibling) {
-        while (post.nextElementSibling.classList.contains("tree")) {
-            post = post.nextElementSibling
-        }
-        post.nextElementSibling.remove()  
+    if (fast) {
+        $(`.o${post.dataset.id}`).nextAll().remove()
+    } else if (!fast) {
+        $(`.o${post.dataset.id}`).nextAll().slideUp(200, function() {
+            $(`.o${post.dataset.id}`).nextAll().remove()
+        })
     }
 }
 
 
-function getComment(post, commentForm, page=1, loadMore=false, loadItem="") {
+function getComment(post, commentForm, page=1, loadMore=false, loadItem="", fast) {
     var wrapper;
     fetch(`/get_comment/${post.dataset.id}/${page}`)
     .then(response => response.json())
@@ -708,12 +711,12 @@ function getComment(post, commentForm, page=1, loadMore=false, loadItem="") {
         return data
     })
     .then(data => {
-        $(`.w${post.dataset.id}`).fadeIn()
+        fast ? $(`.w${post.dataset.id}`).fadeIn() : $(`.w${post.dataset.id}`).slideDown(300)
         return data
     })
     .then(data => {
         post.parentElement.append(commentForm)
-        $(`.cf${post.dataset.id}`).fadeIn()
+        $(`.cf${post.dataset.id}`).slideDown(200)
         commentForm.childNodes["5"] ? giveRemainChar(commentForm.childNodes["5"]) : ""
         return data
     })
@@ -796,7 +799,7 @@ function removePagination() {
 
 
 
-function deletePost(post, target)  { 
+function deletePost(post)  { 
     let childs = post.parentElement.childNodes
     !post.classList.contains("tree") ? post.parentElement.setAttribute("id", "toDelete") : post.setAttribute("id", "toDelete")
     console.log(post)

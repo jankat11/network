@@ -701,19 +701,21 @@ font-size: x-large;
     padding-top: 3px;
     padding-bottom: 3px;
     width: fit-content;
-    border-radius: 0 10px 10px 3px;
+    border-radius: 0px 10px 10px 0px;
     background-color: rgba(68, 157, 172, 0.123);
-    border-left: solid 3px rgba(68, 156, 172, 0.575);
+    border-left: dotted 3px rgba(68, 156, 172, 0.575);
+    margin-top: 2px;
 }
 
 .commentPillow {
     height: 20px;
     border-left: solid 3px rgba(68, 156, 172, 0.575);
+    border-radius: 0px 0px 0px 0px;
 }
 
 .loggin {
     position: relative;
-    bottom: 16px;
+    bottom: 14px;
 }
 
 .coverS .collapse{
