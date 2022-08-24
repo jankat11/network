@@ -843,7 +843,7 @@ function deletePost(post)  {
                         }
                     }
                     while (post.nextElementSibling) {
-                        $(`.p${post.dataset.id}`).next().slideUp(500).remove()
+                        $(`.p${post.dataset.id}`).next().slideUp(300).remove()
                     }
                 }
                 let idNo = "p" + post.dataset.id
@@ -852,14 +852,16 @@ function deletePost(post)  {
                         while (item.nextElementSibling) {
                             item.nextElementSibling.remove()
                         }
-                        $(`.p${post.dataset.id}`).slideUp(500);
+                        $(`.p${post.dataset.id}`).slideUp(300);
                     });
                 }
-                $(`#toDelete`).slideUp(500);
+                if (post) {
+                    $(`#toDelete`).slideUp(300, function() {
+                        $(`#toDelete`).remove()
+                    })
+                }
+
             }
-        })
-        .then(() => {
-            post ? post.remove() : "" 
         })
     }
 }
