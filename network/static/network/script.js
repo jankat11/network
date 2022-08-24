@@ -3,9 +3,10 @@ const following = document.querySelector("#following")
 const profile = document.querySelector("#profile")
 const header = document.querySelector("#profileHeader")
 const notification = document.querySelector("#notification")
+const desktopS = document.querySelector("#desktopS") ? document.querySelector("#desktopS") : ""
 
 window.onpopstate = event => {
-    document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+    desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
     $('.collapse').collapse("hide")
     if (event.persisted) {
         window.location.reload(); 
@@ -46,10 +47,6 @@ document.body.addEventListener('click', function() {
 });
 
 document.querySelector(".post_form").onsubmit = () => {
-    if (document.querySelector(".newPost").value == "") {
-        alert("The post must contain at least one character!")
-        return false;
-    }
     textCorrection(document.querySelector(".newPost"))
 }
 document.querySelector("#topPagination").append(pages)
@@ -78,7 +75,7 @@ document.querySelectorAll(".searchB").forEach(button => {
     button.onclick = () => {
         let value =  button.parentElement.previousElementSibling.value
         if (!value) {
-            alert("enter at least one character")
+            document.querySelector("#alertEmptySearch").click()
             return
         }
         let results = document.querySelector("#searchResults")
@@ -92,12 +89,12 @@ document.querySelectorAll(".searchB2").forEach(button => {
     button.onclick = () => {
         let value =  button.parentElement.previousElementSibling.value
         if (!value) {
-            alert("enter at least one character")
-            return
+            document.querySelector("#alertEmptySearch").click()
         }
         let results = document.querySelector("#searchResults2")
         results.innerHTML = '<div class="searchPillow"></div>'
         let page = 1
+        !value ? value = "emptyResultHasBeenEnteredTag" : ""
         getUserSearch(value, page, results)
     }
 });
@@ -122,7 +119,7 @@ if(profile) {
     profile.onclick = () => {
         profilePage(profileName)
         history.pushState({section: `profile-${profileName}`}, "", `profile`);
-        document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+        desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
         $('.collapse').collapse("hide");
     }
 }
@@ -142,7 +139,7 @@ if(notification) {
     notification.onclick = () => {
         notificationPage()
         history.pushState({section: "notifications"}, "", `notifications`)
-        document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+        desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
         $('.collapse').collapse("hide");
     }
 }
@@ -436,7 +433,7 @@ function createSearchResult(user, results) {
     personName.onclick = () => {
         removePagination()
         getPage("profile", user)
-        document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+        desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
         history.pushState({section: `profile-${user}`}, "", `profile`)
         $('.mobileSearchArea').collapse("hide");
         $('.desktopSearchArea').collapse("hide");
@@ -633,7 +630,6 @@ function comment(post, icon) {
             createCommentForm(post, commentForm)
             commentForm.childNodes["7"].onclick = () => {
                 if (!commentForm.childNodes["5"].value) {
-                    alert("The post must contain at least one character!")
                     return
                 }
                 textCorrection(commentForm.childNodes["5"])
@@ -1121,7 +1117,7 @@ $(window).click(function(event) {
         }
     } else if (icon.className == "postOwner" || icon.className == "maker") {
         $('.collapse').collapse("hide");
-        document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+        desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
         removePagination()
         getPage("profile", icon.innerHTML)
         history.pushState({section: `profile-${icon.innerHTML}`}, "", `profile`)
@@ -1132,14 +1128,14 @@ $(window).click(function(event) {
         comment(icon.parentElement.parentElement, icon)
     } else if ([...icon.classList].includes("postItem")) {
         if (icon.dataset.opened == "close") {
-            document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+            desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
             getThePost(icon.dataset.id)
             history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
         }
     } else if ([...icon.classList].includes("postContent")) {
         if (icon.parentElement.dataset.opened == "close") {
-            document.querySelector("#desktopS").setAttribute("data-bs-target", "#searchIcon2")
+            desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
             getThePost(icon.parentElement.dataset.id)
             history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
