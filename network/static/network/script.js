@@ -254,7 +254,7 @@ function getProfile(user) {
         }
     })
     .then(() => {
-        header.style.display = "block"
+        $("#profileHeader").fadeIn()
     })
     .then(() => {
         document.querySelector("#postsTitle").innerHTML = "Posts"
