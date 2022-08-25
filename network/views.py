@@ -72,14 +72,12 @@ def index(request):
 def all_posts(request, post_type, page=1, status="post"):
     if post_type.split("-")[0] == "all_posts":
         posts = []
-        for post in Post.objects.filter(comment=False).order_by("-id"):
+        for post in Post.objects.filter(comment=False).order_by("-id")[(page * 25) - 25:page * 25]:
             is_users_post = post.owner == request.user
             liked_before =  request.user in post.likers.all()
             posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
-        pages = Paginator(posts, 25)
         return JsonResponse({
-            "posts": pages.page(page).object_list,
-            "pageCount" : pages.num_pages or "zero"
+            "posts": posts
         })
     elif post_type.split("-")[0] == "following":
         posts = []

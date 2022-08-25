@@ -1,4 +1,4 @@
-const pages = document.querySelector("#bottomPagination").cloneNode(true)
+
 const following = document.querySelector("#following")
 const profile = document.querySelector("#profile")
 const header = document.querySelector("#profileHeader")
@@ -49,7 +49,7 @@ document.body.addEventListener('click', function() {
 document.querySelector(".post_form").onsubmit = () => {
     textCorrection(document.querySelector(".newPost"))
 }
-document.querySelector("#topPagination").append(pages)
+
 giveRemainChar(document.querySelector(".newPost"))
 
 
@@ -160,13 +160,6 @@ if(document.querySelector("#searArea")) {
 }
 
 
-if(document.querySelector("#topPagination")) {
-    document.querySelector("#topPagination").onclick = () => {
-        $('.collapse').collapse("hide");
-    }
-}
-
-
 if(document.querySelector(".mLink")) {
     document.querySelectorAll(".mLink").forEach(link => {
         link.onclick = () => document.querySelector(".hamburger").click()
@@ -214,8 +207,6 @@ if(document.querySelector("#allPostsM")) {
 
 
 function getProfile(user) {
-    document.querySelector("#main").style.display = "none"
-    document.querySelector("#topPagination").style.display = "none"
     document.querySelector("#followResultArea").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
     let closeButtonFollow = '<div id="closeWrap2"><button class="btn btn-outline-secondary" type="button" id="closeSearch2">close</button></div>'
     document.querySelector("#postTab").innerHTML = `<span class="postTabMain" id="postsTitle"></span><span class="postTabMain" id="commentsTitle">`
@@ -294,11 +285,7 @@ function getPostHelper(profile, user, num, status) {
     }
     removePagination() 
     document.querySelector("#all_posts").innerHTML = ""
-    document.querySelector("#topPagination").style.display = "none"
-    document.querySelector("#main").style.display = "none"
     getPosts(profile, user, num, status)
-    clickPages(profile, user, status)
-    selectPages(profile, user, status)
 }
 
 
@@ -572,20 +559,19 @@ function getPosts() {
     fetch(`/all_posts/${arguments[0]}-${arguments[1]}/${arguments[2]}/${arguments[3]}`)
     .then(response => response.json())
     .then(data => {
-        if (data.posts.length == 0) {
+        if (data.posts.length == 0 && document.querySelector("#all_posts").innerHTML == "" ) {
             let noPost = document.createElement("h4")
             noPost.innerHTML = "No post yet!"
             noPost.className = 'noYet'
-            document.querySelector("#main").style.display = "none"
             document.querySelector("#all_posts").append(noPost)
         } else {
-            getPostsList(data, arguments[2], arguments[3] ? arguments[3] : "")
+            getPostsList(data, arguments[2], arguments[3] ? arguments[3] : "", arguments[1], arguments[0])
         }
     });
 }
 
 
-function getPostsList(data, page, type) {
+function getPostsList(data, page, type, profile, status) {
     data.posts.forEach((post, index) => {
         var div;
         if (index == 0) {
@@ -596,11 +582,8 @@ function getPostsList(data, page, type) {
         let wrapperPost = document.createElement("div")
         wrapperPost.append(div)
         document.querySelector("#all_posts").append(wrapperPost)
-        
-        pages.style.display = "block"
-        document.querySelector("#bottomPagination").style.display = "block"
     });
-    $("#all_posts").hide().fadeIn(()=> pagination(page, data.pageCount))
+    pagination(status, profile, page, type)
     
 }
 
@@ -752,51 +735,31 @@ function getComment(post, commentForm, page=1, loadMore=false, loadItem="", fast
 }
 
 
-function pagination(page, pageCount) {
-    if (pageCount == 1 || pageCount == "zero") {
-        document.querySelector("#main").style.display = "none"
-        document.querySelector("#topPagination").style.display = "none"
-    } else {
-        document.querySelector("#main").style.display = "block"
-        document.querySelector("#topPagination").style.display = "block"
-    }
-    document.querySelectorAll("option").forEach(opt => opt.remove())
-    for (let pageNum = 1; pageNum <= pageCount; pageNum++) {
-        let option = document.createElement("option")
-        option.value = pageNum
-        option.innerHTML = pageNum
-        option.className = "selectedPage"
-        document.querySelectorAll("select")[0].append(option.cloneNode(true))
-        document.querySelectorAll("select")[1].append(option)
-    }
-    document.querySelectorAll("select")[1].value = page
-    document.querySelectorAll("select")[0].value = page
-    document.querySelectorAll(".nextPage").forEach(button => {
-        if (page == pageCount) {
-            button.style.display = "none"
-        } else {
-            button.style.display = "block"
-            button.setAttribute("data-page", page + 1)
+function pagination(status, profile, page, type) {
+    window.addEventListener("scroll", pageLoad)
+
+    $(window).click(function(event) {
+        let icon = event.target
+        if ([...icon.classList].includes("postItem") || [...icon.classList].includes("postContent")
+         || icon.className == "postOwner" || icon.className == "maker" || icon.id == "profile" || icon.id == "notificaton" || icon.id == "following" || icon.id == "strongProfile" 
+         || icon.id ==  "notificatonM" || icon.className == "proResult" || icon.className == "postTabMain") {
+            window.removeEventListener("scroll", pageLoad)
         }
-    });
-    document.querySelectorAll(".previousPage").forEach(button => {
-        if (page == 1) {
-            button.style.display = "none"
-        } else {
-            button.style.display = "block"
-            button.setAttribute("data-page", page - 1)
-        }
-    });
-    document.querySelectorAll(".lastPage").forEach(button => {
-        button.setAttribute("data-page", pageCount)
-        button.innerHTML = pageCount 
-    });
+    })
+
+    window.addEventListener("popstate", () => window.removeEventListener("scroll", pageLoad))
+
+    function pageLoad() {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            getPosts(status, profile, page + 1, type)
+            window.removeEventListener("scroll", pageLoad)
+        } 
+    }
 }
 
 
 function removePagination() {
     document.querySelector("#all_posts").innerHTML = ""
-    pages.style.display = "none"
 }
 
 
@@ -926,7 +889,6 @@ function editPage(button) {
 
 
 function getPage() {
-    document.querySelector("#main").style.display = "block"
     document.querySelector("#all_posts").innerHTML = ""
     document.querySelector("#postTab").innerHTML = ""
     document.querySelector("#followResultArea").innerHTML = ""
@@ -936,15 +898,12 @@ function getPage() {
     if (arguments[0] == "all_posts") {
         title.innerHTML = "All Posts"
     } else if (arguments[0] == "following") {
-        document.querySelector("#main").style.display = "none"
-        document.querySelector("#topPagination").style.display = "none"
         title.innerHTML = "From Your Followings<hr>"
     } else if (arguments[0] == "profile") {
         title.innerHTML = ""
         getProfile(arguments[1])
     } else if (arguments[0] == "notification") {
         title.innerHTML = "Notifications:<hr>"
-        document.querySelector("#main").style.display = "none"
         getNotifications()
     } else if (arguments[0].slice(0,4) == "post") {
         title.innerHTML = ""
@@ -952,8 +911,6 @@ function getPage() {
     }
     arguments[0] == "all_posts" && following ? form.style.display = "block" : form.style.display = "none"
     if (arguments[0] != "notification" && arguments[0].slice(0,4) != "post") {
-        clickPages(arguments[0], arguments[1], "post")
-        selectPages(arguments[0], arguments[1], "post")
         let pageNum = arguments[2] ? arguments[2] : 1
         getPosts(arguments[0], arguments[1], pageNum, "post")
     }
@@ -979,8 +936,6 @@ function cleanPage() {
     document.querySelector("#new_post_area").style.display = "none"
     document.querySelector("#title").innerHTML = ""
     document.querySelector("#profileHeader").style.display = "none"
-    document.querySelector("#main").style.display = "none"
-    document.querySelector("#topPagination").style.display = "none"
     document.querySelector("#postTab").innerHTML = ""
 }
 
@@ -1042,42 +997,6 @@ function createLoadItem() {
 function getRepr(notification, content) {
     let contentRepr = notification[content].length > 10 ? notification[content].slice(0, 10) + "..." : notification[content]
     return `<span class="contentRepr"><i class="toOpenPost">\"${contentRepr}\"</i></span>`
-}
-
-
-function clickPages(status, profile, type) {
-    document.querySelectorAll(".page-link").forEach(pageButton => {
-        pageButton.onclick = () => {
-            let pageNum = parseInt(pageButton.dataset.page)
-            removePagination()
-            document.querySelector("#bottomPagination").style.display = "none"
-            let pro = profile ? profile : ""
-            if (type == "comment") {
-                history.pushState({section: `Cprofile-${profile}-${pageNum}`}, "", `profile`)
-            } else {
-                history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
-            }
-            getPosts(status, profile, pageNum, type)    
-        }
-    });
-}
-
-
-function selectPages(status, profile, type) {
-    document.querySelectorAll(".form-select").forEach(pageButton => {
-        pageButton.onchange = () => {
-            let pageNum = parseInt(pageButton.value)
-            removePagination()
-            document.querySelector("#bottomPagination").style.display = "none"
-            let pro = profile ? profile : ""
-            if (type == "comment") {
-                history.pushState({section: `Cprofile-${profile}-${pageNum}`}, "", `profile`)
-            } else {
-                history.pushState({section: `page${status ? status : ""}-${pro}-${pageNum}`}, "", `pages`)
-            }
-            getPosts(status, profile, pageNum, type)
-        }
-    });
 }
 
 
