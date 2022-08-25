@@ -29,8 +29,22 @@ window.onpopstate = event => {
         } else if (event.state.section == "notifications") {
             notificationPage()
         } else if (event.state.section == "allposts" || event.state.section == "home") {
-            removePagination()
-            getPage("all_posts")
+            let previousElementScroll = localStorage.getItem("allPost")
+            let previousElementOrder = localStorage.getItem("allPostOrder")
+            let lastPage = previousElementOrder % 25 == 0 ? Math.floor((previousElementOrder / 25)) : Math.floor((previousElementOrder / 25) + 1)
+            let page = 1
+            removePagination();
+            document.querySelector("#new_post_area").style.display = "block";
+            ( function recursivePageLoad() {
+                if (page <= lastPage) {
+                    let auto = page != lastPage ? "auto" : ""
+                    getPosts("all_posts", "", page, "post", auto) 
+                    .then(() => page++)
+                    .then(() => recursivePageLoad())   
+                }
+            })()
+            
+
         } else if (event.state.section.slice(0,4) == "post") {
             getThePost(event.state.section.slice(4))
         } else if (event.state.section.slice(0,4) == "page") {
@@ -53,7 +67,14 @@ document.querySelector(".post_form").onsubmit = () => {
 giveRemainChar(document.querySelector(".newPost"))
 
 
-document.addEventListener("DOMContentLoaded", () => {    
+document.addEventListener("DOMContentLoaded", () => {   
+    localStorage.clear()
+    localStorage.setItem("allPost", 0)
+    localStorage.setItem("following", 0)
+    localStorage.setItem("profile", 0)
+    localStorage.setItem("allPostOrder", 0)
+    localStorage.setItem("followingOrder", 0)
+    localStorage.setItem("profileOrder", 0)
     history.pushState({section: `home`}, "", `home`)
     if (header.dataset.profile != "AnonymousUser") {
         let notCount = document.querySelector("#notCount")
@@ -70,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
     removePagination()
     getPage("all_posts")
 });
+
 
 document.querySelectorAll(".searchB").forEach(button => {
     button.onclick = () => {
@@ -551,12 +573,13 @@ function createPost(post) {
     div.setAttribute("data-comment", post.thePost.comment)
     div.setAttribute("data-opened", "close")
     div.className = `post form-group postItem border border-light`
+    div.id = "post" + post.thePost.id
     return div
 }
 
 
 function getPosts() {
-    fetch(`/all_posts/${arguments[0]}-${arguments[1]}/${arguments[2]}/${arguments[3]}`)
+    return fetch(`/all_posts/${arguments[0]}-${arguments[1]}/${arguments[2]}/${arguments[3]}`)
     .then(response => response.json())
     .then(data => {
         if (data.posts.length == 0 && document.querySelector("#all_posts").innerHTML == "" ) {
@@ -565,13 +588,14 @@ function getPosts() {
             noPost.className = 'noYet'
             document.querySelector("#all_posts").append(noPost)
         } else {
-            getPostsList(data, arguments[2], arguments[3] ? arguments[3] : "", arguments[1], arguments[0])
+            getPostsList(data, arguments[2], arguments[3] ? arguments[3] : "", arguments[1], arguments[0], arguments[4] ? arguments[4]: "")
         }
     });
 }
 
 
-function getPostsList(data, page, type, profile, status) {
+function getPostsList(data, page, type, profile, status, auto) {
+    let postCount = document.querySelector("#all_posts").childNodes.length
     data.posts.forEach((post, index) => {
         var div;
         if (index == 0) {
@@ -580,11 +604,12 @@ function getPostsList(data, page, type, profile, status) {
             div = createPostItem(post, type)
         }
         let wrapperPost = document.createElement("div")
+        div.setAttribute("data-order", `${postCount + parseInt(index) + 1}`)
         wrapperPost.append(div)
         document.querySelector("#all_posts").append(wrapperPost)
     });
+    if (!auto)
     pagination(status, profile, page, type)
-    
 }
 
 
@@ -912,7 +937,7 @@ function getPage() {
     arguments[0] == "all_posts" && following ? form.style.display = "block" : form.style.display = "none"
     if (arguments[0] != "notification" && arguments[0].slice(0,4) != "post") {
         let pageNum = arguments[2] ? arguments[2] : 1
-        getPosts(arguments[0], arguments[1], pageNum, "post")
+        return getPosts(arguments[0], arguments[1], pageNum, "post")
     }
 }
 
@@ -1008,6 +1033,7 @@ function textCorrection(element) {
 
 
 $(window).click(function(event) {
+    let title = document.querySelector("#title")
     let icon = event.target
     let likes = icon.nextElementSibling
     console.log(icon)    
@@ -1067,6 +1093,10 @@ $(window).click(function(event) {
         if (icon.dataset.opened == "close") {
             desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
+            if (title.innerHTML = "All Posts") {
+                localStorage.setItem("allPost", window.scrollY)
+                localStorage.setItem("allPostOrder", icon.dataset.order)
+            }
             getThePost(icon.dataset.id)
             history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
         }
@@ -1074,6 +1104,10 @@ $(window).click(function(event) {
         if (icon.parentElement.dataset.opened == "close") {
             desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
+            if (title.innerHTML = "All Posts") {
+                localStorage.setItem("allPost", window.scrollY)
+                localStorage.setItem("allPostOrder", icon.parentElement.dataset.order)
+            }
             getThePost(icon.parentElement.dataset.id)
             history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
         }
