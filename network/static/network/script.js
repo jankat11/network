@@ -35,16 +35,18 @@ window.onpopstate = event => {
             let page = 1
             removePagination();
             document.querySelector("#new_post_area").style.display = "block";
-            ( function recursivePageLoad() {
+            (function recursivePageLoad() {
                 if (page <= lastPage) {
                     let auto = page != lastPage ? "auto" : ""
-                    getPosts("all_posts", "", page, "post", auto) 
+                    return getPosts("all_posts", "", page, "post", auto) 
                     .then(() => page++)
-                    .then(() => recursivePageLoad())   
-                }
+                    .then(() => recursivePageLoad()) 
+                }  
             })()
-            
-
+            $(document).on('DOMNodeInserted', () => {
+                if (document.querySelector(`#${previousElementScroll}`))
+                document.querySelector(`#${previousElementScroll}`).scrollIntoView() 
+            });
         } else if (event.state.section.slice(0,4) == "post") {
             getThePost(event.state.section.slice(4))
         } else if (event.state.section.slice(0,4) == "page") {
@@ -1094,7 +1096,7 @@ $(window).click(function(event) {
             desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
             if (title.innerHTML = "All Posts") {
-                localStorage.setItem("allPost", window.scrollY)
+                localStorage.setItem("allPost", icon.id)
                 localStorage.setItem("allPostOrder", icon.dataset.order)
             }
             getThePost(icon.dataset.id)
@@ -1105,7 +1107,7 @@ $(window).click(function(event) {
             desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
             if (title.innerHTML = "All Posts") {
-                localStorage.setItem("allPost", window.scrollY)
+                localStorage.setItem("allPost", icon.parentElement.id)
                 localStorage.setItem("allPostOrder", icon.parentElement.dataset.order)
             }
             getThePost(icon.parentElement.dataset.id)
