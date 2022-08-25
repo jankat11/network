@@ -8,9 +8,7 @@ const desktopS = document.querySelector("#desktopS") ? document.querySelector("#
 window.onpopstate = event => {
     desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
     $('.collapse').collapse("hide")
-    if (event.persisted) {
-        window.location.reload(); 
-    }
+    event.persisted ? window.location.reload() : ""; 
     if (event.state) {
         if (event.state.section == "following") {
             followings()
@@ -29,11 +27,16 @@ window.onpopstate = event => {
         } else if (event.state.section == "notifications") {
             notificationPage()
         } else if (event.state.section == "allposts" || event.state.section == "home") {
-            let previousElementScroll = localStorage.getItem("allPost")
-            let previousElementOrder = localStorage.getItem("allPostOrder")
+            let previousElement = localStorage.getItem("allPost") != 0 ? localStorage.getItem("allPost") : "padding"
+            let previousElementOrder = localStorage.getItem("allPostOrder") != 0 ? localStorage.getItem("allPostOrder") : 1
+            previousElementOrder = parseInt(previousElementOrder)
             let lastPage = previousElementOrder % 25 == 0 ? Math.floor((previousElementOrder / 25)) : Math.floor((previousElementOrder / 25) + 1)
             let page = 1
-            removePagination();
+            document.querySelector("#all_posts").innerHTML = ""
+            document.querySelector("#postTab").innerHTML = ""
+            document.querySelector("#followResultArea").innerHTML = ""
+            header.style.display = "none"
+            title.innerHTML = "All Posts"
             document.querySelector("#new_post_area").style.display = "block";
             (function recursivePageLoad() {
                 if (page <= lastPage) {
@@ -43,10 +46,17 @@ window.onpopstate = event => {
                     .then(() => recursivePageLoad()) 
                 }  
             })()
-            $(document).on('DOMNodeInserted', () => {
-                if (document.querySelector(`#${previousElementScroll}`))
-                document.querySelector(`#${previousElementScroll}`).scrollIntoView() 
-            });
+            function scroll() {
+                if (document.querySelector(`#${previousElement}`))
+                document.querySelector(`#${previousElement}`).scrollIntoView() 
+            }
+            document.addEventListener('DOMNodeInserted', scroll)
+            setTimeout(() => { 
+                document.removeEventListener('DOMNodeInserted', scroll)
+                window.scrollBy(0, -(window.innerHeight / 3))  
+            }, 1000)
+            
+      
         } else if (event.state.section.slice(0,4) == "post") {
             getThePost(event.state.section.slice(4))
         } else if (event.state.section.slice(0,4) == "page") {
@@ -74,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("allPost", 0)
     localStorage.setItem("following", 0)
     localStorage.setItem("profile", 0)
-    localStorage.setItem("allPostOrder", 0)
+    localStorage.setItem("allPostOrder", 1)
     localStorage.setItem("followingOrder", 0)
     localStorage.setItem("profileOrder", 0)
     history.pushState({section: `home`}, "", `home`)
@@ -126,6 +136,8 @@ document.querySelectorAll(".searchB2").forEach(button => {
 
 if(following) {
     following.addEventListener("click", () => { 
+        localStorage.setItem("following", 0)
+        localStorage.setItem("followingOrder", 1)
         followings()
         history.pushState({section: "following"}, "", `following`);
     });
@@ -133,6 +145,8 @@ if(following) {
 
 if(document.querySelector("#followingM")) {
     document.querySelector("#followingM").addEventListener("click", () => { 
+        localStorage.setItem("following", 0)
+        localStorage.setItem("followingOrder", 1)
         followings()
         history.pushState({section: "following"}, "", `following`);
     });
@@ -141,6 +155,8 @@ if(document.querySelector("#followingM")) {
 if(profile) {
     let profileName = profile.firstElementChild.textContent
     profile.onclick = () => {
+        localStorage.setItem("profile", 0)
+        localStorage.setItem("profileOrder", 1)
         profilePage(profileName)
         history.pushState({section: `profile-${profileName}`}, "", `profile`);
         desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
@@ -150,8 +166,9 @@ if(profile) {
 
 if(document.querySelector("#profileM")) {
     let profileName = document.querySelector("#profileM").firstElementChild.dataset.profile
-
     document.querySelector("#profileM").onclick = () => {
+        localStorage.setItem("profile", 0)
+        localStorage.setItem("profileOrder", 1)
         profilePage(profileName)
         history.pushState({section: `profile-${profileName}`}, "", `profile`);
         $('.collapse').collapse("hide");
@@ -215,6 +232,8 @@ function notificationPage() {
 
 if(document.querySelector("#allPosts")) {
     document.querySelector("#allPosts").addEventListener("click", () => {
+        localStorage.setItem("allPost", 0)
+        localStorage.setItem("allPostOrder", 1)
         removePagination()
         getPage("all_posts")
         history.pushState({section: "allposts"}, "", `allposts`)
@@ -223,6 +242,8 @@ if(document.querySelector("#allPosts")) {
 
 if(document.querySelector("#allPostsM")) {
     document.querySelector("#allPostsM").addEventListener("click", () => {
+        localStorage.setItem("allPost", 0)
+        localStorage.setItem("allPostOrder", 1)
         removePagination()
         getPage("all_posts")
         history.pushState({section: "allposts"}, "", `allposts`)
@@ -927,7 +948,7 @@ function getPage() {
     } else if (arguments[0] == "following") {
         title.innerHTML = "From Your Followings<hr>"
     } else if (arguments[0] == "profile") {
-        title.innerHTML = ""
+        title.innerHTML = "<span></span>"
         getProfile(arguments[1])
     } else if (arguments[0] == "notification") {
         title.innerHTML = "Notifications:<hr>"
@@ -1095,9 +1116,15 @@ $(window).click(function(event) {
         if (icon.dataset.opened == "close") {
             desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
-            if (title.innerHTML = "All Posts") {
+            if (title.innerHTML == "All Posts") {
                 localStorage.setItem("allPost", icon.id)
-                localStorage.setItem("allPostOrder", icon.dataset.order)
+                localStorage.setItem("allPostOrder", icon.dataset.order)   
+            } else if (title.innerHTML == "From Your Followings<hr>") {
+                localStorage.setItem("following", icon.id)
+                localStorage.setItem("followingOrder", icon.dataset.order)
+            } else if (title.innerHTML == "<span></span>") {
+                localStorage.setItem("profile", icon.id)
+                localStorage.setItem("profileOrder", icon.dataset.order)
             }
             getThePost(icon.dataset.id)
             history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
@@ -1106,9 +1133,15 @@ $(window).click(function(event) {
         if (icon.parentElement.dataset.opened == "close") {
             desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
-            if (title.innerHTML = "All Posts") {
+            if (title.innerHTML == "All Posts") {
                 localStorage.setItem("allPost", icon.parentElement.id)
-                localStorage.setItem("allPostOrder", icon.parentElement.dataset.order)
+                localStorage.setItem("allPostOrder", icon.parentElement.dataset.order)   
+            } else if (title.innerHTML == "From Your Followings<hr>") {
+                localStorage.setItem("following", icon.parentElement.id)
+                localStorage.setItem("followingOrder", icon.parentElement.dataset.order)
+            } else if (title.innerHTML == "<span></span>") {
+                localStorage.setItem("profile", icon.parentElement.id)
+                localStorage.setItem("profileOrder", icon.parentElement.dataset.order)
             }
             getThePost(icon.parentElement.dataset.id)
             history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
