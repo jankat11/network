@@ -1040,7 +1040,7 @@ function getNotifications() {
 
 function createLoadItem() {
     let load = document.createElement("div")
-    load.style.width = "50%"
+    load.style.width = "240px"
     load.style.paddingLeft = "2.5%" 
     return load
 }
