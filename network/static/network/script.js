@@ -484,9 +484,12 @@ function getUserSearch(value, page, results) {
         console.log(data)
         if (data.length == 0) {
             results.html("No result.")
-        }
-        for (let user of data) {
-            createSearchResult(user, results)
+        } else {
+            $(results).hide()
+            for (let user of data) {
+                createSearchResult(user, results)
+            }
+            $(results).fadeIn()
         }
         if (data.length >= 10) {
             getMoreResultFunc(results, page, getUserSearch, value)
@@ -662,7 +665,7 @@ function createCommentForm(post, commentForm) {
 function comment(post, icon, fast) {
     if (icon.innerHTML == "💬") {
         icon.innerHTML = "💬..."
-        post.style.backgroundColor = "rgba(68, 156, 172, 0.101)"
+        post.style.backgroundColor = "#82b2cf1a"
         var commentForm;
         if (header.dataset.profile != "AnonymousUser") {
             commentForm = document.querySelector(".send").cloneNode(true)
@@ -748,7 +751,7 @@ function getComment(post, commentForm, page=1, loadMore=false, loadItem="", fast
         return data
     })
     .then(data => {
-        fast ? $(`.w${post.dataset.id}`).fadeIn() : $(`.w${post.dataset.id}`).slideDown(300)
+        fast ? $(`.w${post.dataset.id}`).fadeIn() : $(`.w${post.dataset.id}`).fadeIn()
         return data
     })
     .then(data => {
@@ -955,7 +958,7 @@ function getPage() {
         title.innerHTML = ""
         getThePost(arguments[0].slice(4))
     }
-    arguments[0] == "all_posts" && following ? form.style.display = "block" : form.style.display = "none"
+    arguments[0] == "all_posts" && following ? $(form).fadeIn(180) : form.style.display = "none"
     if (arguments[0] != "notification" && arguments[0].slice(0,4) != "post") {
         let pageNum = arguments[2] ? arguments[2] : 1
         return getPosts(arguments[0], arguments[1], pageNum, "post")

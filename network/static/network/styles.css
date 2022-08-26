@@ -4,6 +4,25 @@
     padding-top: 20px;
     margin-bottom: 30px;
 }
+.mainTag {
+    position: absolute;
+    top: 16px;
+    font-size: 10px;
+    left: 80px;
+    font-family: Lucida Bright;
+    font-weight: bold;
+    color: #011d69;
+}
+
+.netw {
+    position: relative;
+    top: 5px;
+    left: 3px;
+    font-family: Lucida Bright;
+    color: #01101f;
+    font-size: 20px;
+ 
+}
 
 @media (max-width: 1024px)  {#desktopBar{
     display: none;
@@ -62,6 +81,10 @@
 
 @media (max-width: 500px)  {#mobileSiteIcon{
     margin-left: 0px;
+    }   
+}
+@media (max-width: 500px)  {.mainTag{
+    left: 55px;
     }   
 }
 @media (max-width: 500px)  {#searchResults, #searchResults2{
@@ -225,7 +248,7 @@
 .newPost {
     width: 100%;
     border: 1px solid rgb(153, 152, 152);
-    border-left: solid 3px rgba(68, 156, 172, 0.575);
+    border-left: solid 4px #1044744d;
 }
 
 .post {
@@ -472,7 +495,8 @@
 .postItem {
     box-shadow: 0px 0px 10px 5px rgba(104, 143, 175, 0.192);
     padding-top: 5px;
-    word-wrap: break-word
+    word-wrap: break-word;
+
 }
 
 .postContent:hover, .joinedDate:hover, .postDate:hover, .postClock:hover {
@@ -519,16 +543,16 @@
     width: 100%;
     padding-left: 3%;
     margin-top: 10px;
-    border-left: solid 3px #449cac93;
+    border-left: solid 3px #10447442;
 }
 
 .commentText {
     margin-top: 20px;
-    border-left: solid 3px rgba(68, 156, 172, 0.575);
+    border-left: solid 3px #10447442;
 }
 
 .commentSection {
-    box-shadow: -10px 0px 5px 0px rgba(68, 157, 172, 0.151);
+    box-shadow: -10px 0px 5px 0px rgba(52, 130, 175, 0.151);
 }
 
 .charAmount {
