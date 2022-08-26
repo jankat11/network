@@ -11,9 +11,10 @@ window.onpopstate = event => {
     event.persisted ? window.location.reload() : ""; 
     if (event.state) {
         if (event.state.section == "following") {
-            autoLoad("following", "From Your Followings<hr>", "none", "following")
+            autoLoad("following", "From Your Followings<hr>", "none", "following", "")
         } else if (event.state.section.slice(0, 7) == "profile") {
-            profilePage(event.state.section.slice(8))
+            getProfile(event.state.section.slice(8))
+            autoLoad("profile", "<span></span>", "none", "profile", event.state.section.slice(8))
         } else if (event.state.section.slice(0, 1) == "C"){
             document.querySelector("#title").innerHTML = ""
             let list = event.state.section.split("-")
@@ -27,7 +28,7 @@ window.onpopstate = event => {
         } else if (event.state.section == "notifications") {
             notificationPage()
         } else if (event.state.section == "allposts" || event.state.section == "home") {
-            autoLoad("allPost", "All Posts", "block", "all_posts")      
+            autoLoad("allPost", "All Posts", "block", "all_posts", "")      
         } else if (event.state.section.slice(0,4) == "post") {
             getThePost(event.state.section.slice(4))
         } else if (event.state.section.slice(0,4) == "page") {
@@ -52,12 +53,7 @@ giveRemainChar(document.querySelector(".newPost"))
 
 document.addEventListener("DOMContentLoaded", () => {   
     localStorage.clear()
-    localStorage.setItem("allPost", 0)
-    localStorage.setItem("following", 0)
-    localStorage.setItem("profile", 0)
-    localStorage.setItem("allPostOrder", 1)
-    localStorage.setItem("followingOrder", 0)
-    localStorage.setItem("profileOrder", 0)
+    setLocals()
     history.pushState({section: `home`}, "", `home`)
     if (header.dataset.profile != "AnonymousUser") {
         let notCount = document.querySelector("#notCount")
@@ -180,19 +176,19 @@ if(document.querySelector(".mLink")) {
 }
 
 
-function autoLoad(request, titleContent, newPost, postKey) {
+function autoLoad(request, titleContent, newPost, postKey, profileName) {
     let previousElement = localStorage.getItem(request) != 0 ? localStorage.getItem(request) : "padding"
     let previousElementOrder = localStorage.getItem(`${request}Order`) != 0 ? localStorage.getItem(`${request}Order`) : 1
     previousElementOrder = parseInt(previousElementOrder)
     let lastPage = previousElementOrder % 25 == 0 ? Math.floor((previousElementOrder / 25)) : Math.floor((previousElementOrder / 25) + 1)
     let page = 1
-    cleanPage()
+    request == "profile" ? cleanPagePart() : cleanPage() 
     title.innerHTML = titleContent
     document.querySelector("#new_post_area").style.display = newPost;
     (function recursivePageLoad() {
         if (page <= lastPage) {
             let auto = page != lastPage ? "auto" : ""
-            return getPosts(postKey, "", page, "post", auto) 
+            return getPosts(postKey, profileName, page, "post", auto) 
             .then(() => page++)
             .then(() => recursivePageLoad()) 
         }  
@@ -269,7 +265,6 @@ function getProfile(user) {
         let followers = `<a id="followerLink" data-bs-toggle="collapse" href="#followerArea"  aria-expanded="false" aria-controls="followerArea"><span class='userCount'>${profile.followers}<span class=userFollow> followers</span></span></a>`
         let follows = `<a id="followLink" data-bs-toggle="collapse" href="#followArea"  aria-expanded="false" aria-controls="followArea"><span class='userCount'>${profile.follows}<span class=userFollow> follows</span></span></a>`
         header.innerHTML = `<div class="proHead">${image}${userName}</div><div class="proBottom"><div class="twoFollow">${followers}${follows}</div>${about}${joined}${profile.selfProfile == user || !profile.selfProfile ? aboutInfo : button}</div>`
-        console.log(header)
         document.querySelector("#calendar").innerHTML = calendar
         if (profile.selfProfile != user && profile.selfProfile != "") {
             let theButton = document.querySelector(`.followButton`)
@@ -313,6 +308,15 @@ function togglePostTab(id, user) {
             history.pushState({section: `profile-${user}`}, "", `profile`)
         }
     }
+}
+
+function setLocals() {
+    localStorage.setItem("allPost", 0)
+    localStorage.setItem("following", 0)
+    localStorage.setItem("profile", 0)
+    localStorage.setItem("allPostOrder", 1)
+    localStorage.setItem("followingOrder", 0)
+    localStorage.setItem("profileOrder", 0)
 }
 
 
@@ -794,9 +798,7 @@ function pagination(status, profile, page, type) {
             window.removeEventListener("scroll", pageLoad)
         }
     })
-
     window.addEventListener("popstate", () => window.removeEventListener("scroll", pageLoad))
-
     function pageLoad() {
         if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
             getPosts(status, profile, page + 1, type)
@@ -983,6 +985,13 @@ function cleanPage() {
     $("#postTab").html("")
 }
 
+function cleanPagePart() {
+    $("#new_post_area").hide()
+    $("#title").html("")
+    $("#all_posts").html("")
+}
+
+
 
 function getNotifications() {
     let page = arguments[0] ? arguments[0] : 1
@@ -1109,7 +1118,7 @@ $(window).click(function(event) {
         comment(icon.parentElement.parentElement, icon)
     } else if ([...icon.classList].includes("postItem")) {
         var refac = ""
-        if (icon.dataset.comment == "true") {
+        if (icon.dataset.comment == "true" && title.innerHTML && ![...icon.classList].includes("tree")) {
             refac = icon.parentElement
             function getRoot(refac) {
                 while (!refac.dataset.comment) {
@@ -1143,19 +1152,20 @@ $(window).click(function(event) {
                 }  
             } else if (title.innerHTML == "<span></span>") {
                 if (refac) {
-                    localStorage.setItem("profile", refac.id)
-                    localStorage.setItem("profileOrder", refac.dataset.order) 
+                    localStorage.setItem("profile", !icon.classList.contains("tree") ? refac.id : 0)
+                    localStorage.setItem("profileOrder", !icon.classList.contains("tree") ? refac.dataset.order : 0) 
                 } else {
-                    localStorage.setItem("profile", icon.id)
-                    localStorage.setItem("profileOrder", icon.dataset.order) 
+                    localStorage.setItem("profile", !icon.classList.contains("tree") ? icon.id : 0)
+                    localStorage.setItem("profileOrder", !icon.classList.contains("tree") ? icon.dataset.order : 0) 
                 }  
             }
+
             getThePost(icon.dataset.id)
             history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
         }
     } else if ([...icon.classList].includes("postContent")) {
         var refac = ""
-        if (icon.parentElement.dataset.comment == "true") {
+        if (icon.parentElement.dataset.comment == "true" && title.innerHTML && ![...icon.parentElement.classList].includes("tree")) {
             refac = icon.parentElement.parentElement
             function getRoot(refac) {
                 while (!refac.dataset.comment) {
@@ -1189,11 +1199,11 @@ $(window).click(function(event) {
                 }  
             } else if (title.innerHTML == "<span></span>") {
                 if (refac) {
-                    localStorage.setItem("profile", refac.id)
-                    localStorage.setItem("profileOrder", refac.dataset.order) 
+                    localStorage.setItem("profile", !icon.parentElement.classList.contains("tree") ? refac.id : 0)
+                    localStorage.setItem("profileOrder", !icon.parentElement.classList.contains("tree") ? refac.dataset.order : 0) 
                 } else {
-                    localStorage.setItem("profile", icon.parentElement.id)
-                    localStorage.setItem("profileOrder", icon.parentElement.dataset.order) 
+                    localStorage.setItem("profile", !icon.parentElement.classList.contains("tree") ? icon.parentElement.id : 0)
+                    localStorage.setItem("profileOrder", !icon.parentElement.classList.contains("tree") ? icon.parentElement.dataset.order : 0) 
                 }  
             }
             getThePost(icon.parentElement.dataset.id)
