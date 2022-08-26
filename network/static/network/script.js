@@ -76,32 +76,33 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-document.querySelectorAll(".searchB").forEach(button => {
-    button.onclick = () => {
-        let value =  button.parentElement.previousElementSibling.value
+$(".searchB").each(function() {
+    $(this).click(function() {
+        let value = $(this).parent().prev().val()
         if (!value) {
-            document.querySelector("#alertEmptySearch").click()
+            $("#alertEmptySearch").click()
             return
         }
-        let results = document.querySelector("#searchResults")
-        results.innerHTML = '<div class="searchPillow"></div>'
+        let results = $("#searchResults")
+        $(results).html('<div class="searchPillow"></div>') 
         let page = 1
         getUserSearch(value, page, results)
-    }
+    })
 });
 
-document.querySelectorAll(".searchB2").forEach(button => {
-    button.onclick = () => {
-        let value =  button.parentElement.previousElementSibling.value
+$(".searchB2").each(function() {
+    $(this).click(function() {
+        let value =  $(this).parent().prev().val()
         if (!value) {
-            document.querySelector("#alertEmptySearch").click()
+            $("#alertEmptySearch").click()
+            setTimeout(() => $('#searchIcon2').collapse("hide"), 2000)
         }
-        let results = document.querySelector("#searchResults2")
-        results.innerHTML = '<div class="searchPillow"></div>'
+        let results = $("#searchResults2")
+        $(results).html('<div class="searchPillow"></div>') 
         let page = 1
         !value ? value = "emptyResultHasBeenEnteredTag" : ""
         getUserSearch(value, page, results)
-    }
+    })
 });
 
 
@@ -218,10 +219,10 @@ function profilePage(profileName) {
 }
 
 function notificationPage() {
-    document.querySelector("#notCount").style.display = "none"
-    document.querySelector("#notCountM").style.display = "none"
-    document.querySelector("#notIcon").setAttribute("fill", "currentColor")
-    document.querySelector("#notIconM").setAttribute("fill", "gray")
+    $("#notCount").hide()
+    $("#notCountM").hide()
+    $("#notIcon").attr("fill", "currentColor")
+    $("#notIconM").attr("fill", "gray")
     removePagination()
     getPage("notification")
     fetch("read_notifications")
@@ -476,8 +477,9 @@ function getUserSearch(value, page, results) {
     fetch(`/search/${value}/${page}`)
     .then(response => response.json())
     .then(data => {
+        console.log(data)
         if (data.length == 0) {
-            results.innerHTML = "No result."
+            results.html("No result.")
         }
         for (let user of data) {
             createSearchResult(user, results)
@@ -658,7 +660,6 @@ function comment(post, icon, fast) {
         icon.innerHTML = "💬..."
         post.style.backgroundColor = "rgba(68, 156, 172, 0.101)"
         var commentForm;
-        
         if (header.dataset.profile != "AnonymousUser") {
             commentForm = document.querySelector(".send").cloneNode(true)
             createCommentForm(post, commentForm)
@@ -812,15 +813,11 @@ function removePagination() {
 
 
 function deletePost(post)  { 
-    let childs = post.parentElement.childNodes
     !post.classList.contains("tree") ? post.parentElement.setAttribute("id", "toDelete") : post.setAttribute("id", "toDelete")
-    console.log(post)
-    console.log(post.parentElement)
-    let text = [...childs][[...childs].length - 1].firstElementChild ? [...childs][[...childs].length - 1].firstElementChild.nextElementSibling.nextElementSibling : ""
-    let button = text.nextElementSibling ? text.nextElementSibling : ""
     post.parentElement.style.paddingBottom = "0px"
     document.querySelector("#alertConfirmDelete").click()
-    document.querySelector("#deleteLastConfirm").onclick = () => {
+    let confirm = $("#deleteLastConfirm")
+    $(confirm).click( () => {
         fetch(`/delete_post/${post.dataset.id}`)
         .then(response => response.json())
         .then(result => {
@@ -874,7 +871,7 @@ function deletePost(post)  {
                 }
             }
         })
-    }
+    })
 }
 
 
@@ -979,11 +976,11 @@ function getThePost() {
 
 
 function cleanPage() {
-    document.querySelector("#all_posts").innerHTML = ""
-    document.querySelector("#new_post_area").style.display = "none"
-    document.querySelector("#title").innerHTML = ""
-    document.querySelector("#profileHeader").style.display = "none"
-    document.querySelector("#postTab").innerHTML = ""
+    $("#all_posts").html("")
+    $("#new_post_area").hide()
+    $("#title").html("")
+    $("#profileHeader").hide()
+    $("#postTab").html("")
 }
 
 
@@ -1111,35 +1108,93 @@ $(window).click(function(event) {
         }
         comment(icon.parentElement.parentElement, icon)
     } else if ([...icon.classList].includes("postItem")) {
+        var refac = ""
+        if (icon.dataset.comment == "true") {
+            refac = icon.parentElement
+            function getRoot(refac) {
+                while (!refac.dataset.comment) {
+                    refac = refac.previousElementSibling
+                }
+                return refac
+            }
+            while (getRoot(refac).dataset.comment == "true") {
+                refac = getRoot(refac.parentElement)
+            }
+            refac = getRoot(refac)
+        }
         if (icon.dataset.opened == "close") {
             desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
             if (title.innerHTML == "All Posts") {
-                localStorage.setItem("allPost", icon.id)
-                localStorage.setItem("allPostOrder", icon.dataset.order)   
+                if (refac) {
+                    localStorage.setItem("allPost", refac.id)
+                    localStorage.setItem("allPostOrder", refac.dataset.order) 
+                } else {
+                    localStorage.setItem("allPost", icon.id)
+                    localStorage.setItem("allPostOrder", icon.dataset.order) 
+                }  
             } else if (title.innerHTML == "From Your Followings<hr>") {
-                localStorage.setItem("following", icon.id)
-                localStorage.setItem("followingOrder", icon.dataset.order)
+                if (refac) {
+                    localStorage.setItem("following", refac.id)
+                    localStorage.setItem("followingOrder", refac.dataset.order) 
+                } else {
+                    localStorage.setItem("following", icon.id)
+                    localStorage.setItem("followingOrder", icon.dataset.order) 
+                }  
             } else if (title.innerHTML == "<span></span>") {
-                localStorage.setItem("profile", icon.id)
-                localStorage.setItem("profileOrder", icon.dataset.order)
+                if (refac) {
+                    localStorage.setItem("profile", refac.id)
+                    localStorage.setItem("profileOrder", refac.dataset.order) 
+                } else {
+                    localStorage.setItem("profile", icon.id)
+                    localStorage.setItem("profileOrder", icon.dataset.order) 
+                }  
             }
             getThePost(icon.dataset.id)
             history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
         }
     } else if ([...icon.classList].includes("postContent")) {
+        var refac = ""
+        if (icon.parentElement.dataset.comment == "true") {
+            refac = icon.parentElement.parentElement
+            function getRoot(refac) {
+                while (!refac.dataset.comment) {
+                    refac = refac.previousElementSibling
+                }
+                return refac
+            }
+            while (getRoot(refac).dataset.comment == "true") {
+                refac = getRoot(refac.parentElement)
+            }
+            refac = getRoot(refac)
+        }
         if (icon.parentElement.dataset.opened == "close") {
             desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
             $('.collapse').collapse("hide");
             if (title.innerHTML == "All Posts") {
-                localStorage.setItem("allPost", icon.parentElement.id)
-                localStorage.setItem("allPostOrder", icon.parentElement.dataset.order)   
+                if (refac) {
+                    localStorage.setItem("allPost", refac.id)
+                    localStorage.setItem("allPostOrder", refac.dataset.order) 
+                } else {
+                    localStorage.setItem("allPost", icon.parentElement.id)
+                    localStorage.setItem("allPostOrder", icon.parentElement.dataset.order) 
+                }  
             } else if (title.innerHTML == "From Your Followings<hr>") {
-                localStorage.setItem("following", icon.parentElement.id)
-                localStorage.setItem("followingOrder", icon.parentElement.dataset.order)
+                if (refac) {
+                    localStorage.setItem("following", refac.id)
+                    localStorage.setItem("followingOrder", refac.dataset.order) 
+                } else {
+                    localStorage.setItem("following", icon.parentElement.id)
+                    localStorage.setItem("followingOrder", icon.parentElement.dataset.order) 
+                }  
             } else if (title.innerHTML == "<span></span>") {
-                localStorage.setItem("profile", icon.parentElement.id)
-                localStorage.setItem("profileOrder", icon.parentElement.dataset.order)
+                if (refac) {
+                    localStorage.setItem("profile", refac.id)
+                    localStorage.setItem("profileOrder", refac.dataset.order) 
+                } else {
+                    localStorage.setItem("profile", icon.parentElement.id)
+                    localStorage.setItem("profileOrder", icon.parentElement.dataset.order) 
+                }  
             }
             getThePost(icon.parentElement.dataset.id)
             history.pushState({section: `post${icon.parentElement.dataset.id}`}, "", `post`)
