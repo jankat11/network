@@ -11,7 +11,7 @@ window.onpopstate = event => {
     event.persisted ? window.location.reload() : ""; 
     if (event.state) {
         if (event.state.section == "following") {
-            followings()
+            autoLoad("following", "From Your Followings<hr>", "none", "following")
         } else if (event.state.section.slice(0, 7) == "profile") {
             profilePage(event.state.section.slice(8))
         } else if (event.state.section.slice(0, 1) == "C"){
@@ -27,36 +27,7 @@ window.onpopstate = event => {
         } else if (event.state.section == "notifications") {
             notificationPage()
         } else if (event.state.section == "allposts" || event.state.section == "home") {
-            let previousElement = localStorage.getItem("allPost") != 0 ? localStorage.getItem("allPost") : "padding"
-            let previousElementOrder = localStorage.getItem("allPostOrder") != 0 ? localStorage.getItem("allPostOrder") : 1
-            previousElementOrder = parseInt(previousElementOrder)
-            let lastPage = previousElementOrder % 25 == 0 ? Math.floor((previousElementOrder / 25)) : Math.floor((previousElementOrder / 25) + 1)
-            let page = 1
-            document.querySelector("#all_posts").innerHTML = ""
-            document.querySelector("#postTab").innerHTML = ""
-            document.querySelector("#followResultArea").innerHTML = ""
-            header.style.display = "none"
-            title.innerHTML = "All Posts"
-            document.querySelector("#new_post_area").style.display = "block";
-            (function recursivePageLoad() {
-                if (page <= lastPage) {
-                    let auto = page != lastPage ? "auto" : ""
-                    return getPosts("all_posts", "", page, "post", auto) 
-                    .then(() => page++)
-                    .then(() => recursivePageLoad()) 
-                }  
-            })()
-            function scroll() {
-                if (document.querySelector(`#${previousElement}`))
-                document.querySelector(`#${previousElement}`).scrollIntoView() 
-            }
-            document.addEventListener('DOMNodeInserted', scroll)
-            setTimeout(() => { 
-                document.removeEventListener('DOMNodeInserted', scroll)
-                window.scrollBy(0, -(window.innerHeight / 3))  
-            }, 1000)
-            
-      
+            autoLoad("allPost", "All Posts", "block", "all_posts")      
         } else if (event.state.section.slice(0,4) == "post") {
             getThePost(event.state.section.slice(4))
         } else if (event.state.section.slice(0,4) == "page") {
@@ -207,6 +178,34 @@ if(document.querySelector(".mLink")) {
     })
 }
 
+
+function autoLoad(request, titleContent, newPost, postKey) {
+    let previousElement = localStorage.getItem(request) != 0 ? localStorage.getItem(request) : "padding"
+    let previousElementOrder = localStorage.getItem(`${request}Order`) != 0 ? localStorage.getItem(`${request}Order`) : 1
+    previousElementOrder = parseInt(previousElementOrder)
+    let lastPage = previousElementOrder % 25 == 0 ? Math.floor((previousElementOrder / 25)) : Math.floor((previousElementOrder / 25) + 1)
+    let page = 1
+    cleanPage()
+    title.innerHTML = titleContent
+    document.querySelector("#new_post_area").style.display = newPost;
+    (function recursivePageLoad() {
+        if (page <= lastPage) {
+            let auto = page != lastPage ? "auto" : ""
+            return getPosts(postKey, "", page, "post", auto) 
+            .then(() => page++)
+            .then(() => recursivePageLoad()) 
+        }  
+    })()
+    function scroll() {
+        if (document.querySelector(`#${previousElement}`))
+        document.querySelector(`#${previousElement}`).scrollIntoView({behavior: "auto", block: "center", inline: "nearest"}) 
+    }
+    document.addEventListener('DOMNodeInserted', scroll)
+    
+    setTimeout(() => { 
+        document.removeEventListener('DOMNodeInserted', scroll)
+    }, 1000)
+}
 
 function followings() {
     removePagination()
@@ -1028,7 +1027,6 @@ function getNotifications() {
         return data
     })
     .then(data => {
-        console.log(data.notList)
         data.notList.length == 0 ? document.querySelector("#all_posts").innerHTML = "<h4 class='noYet'>No notifications yet.</h4>" : ""
     })
 }
