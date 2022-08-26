@@ -7,9 +7,9 @@
 .mainTag {
     position: absolute;
     top: 16px;
-    font-size: 10px;
+    font-size: 11px;
     left: 80px;
-    font-family: Lucida Bright;
+    font-family: 'Times New Roman', Times, serif;
     font-weight: bold;
     color: #011d69;
 }
@@ -18,9 +18,9 @@
     position: relative;
     top: 5px;
     left: 3px;
-    font-family: Lucida Bright;
+    font-family: 'Times New Roman', Times, serif;
     color: #01101f;
-    font-size: 20px;
+    font-size: 21px;
  
 }
 
@@ -85,6 +85,10 @@
 }
 @media (max-width: 1023px)  {.mainTag{
     left: 75px;
+    }   
+}
+@media (max-width: 500px)  {.mainTag{
+    left: 55px;
     }   
 }
 @media (max-width: 500px)  {#searchResults, #searchResults2{
