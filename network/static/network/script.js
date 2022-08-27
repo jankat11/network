@@ -219,8 +219,8 @@ function profilePage(profileName) {
 function notificationPage() {
     $("#notCount").hide()
     $("#notCountM").hide()
-    $("#notIcon").attr("fill", "currentColor")
-    $("#notIconM").attr("fill", "gray")
+    $("#notIcon").attr("fill", "#022c5570")
+    $("#notIconM").attr("fill", "#022c5570")
     removePagination()
     getPage("notification")
     fetch("read_notifications")
@@ -799,9 +799,9 @@ function pagination(status, profile, page, type) {
 
     $(window).click(function(event) {
         let icon = event.target
-        if ([...icon.classList].includes("postItem") || [...icon.classList].includes("postContent")
-         || icon.className == "postOwner" || icon.className == "maker" || icon.id == "profile" || icon.id == "notificaton" || icon.id == "following" || icon.id == "strongProfile" 
-         || icon.id ==  "notificatonM" || icon.className == "proResult" || icon.className == "postTabMain") {
+        if ([...icon.classList].includes("postItem") || [...icon.classList].includes("postContent") || icon.classList.contains("removeScroll")
+         || icon.className == "postOwner" || icon.className == "maker" || icon.id == "profile" || icon.id == "notification" || icon.id == "following" || icon.id == "strongProfile" || icon.id == "followingM"
+         || icon.id ==  "notificationM" || icon.className == "proResult" || icon.className == "postTabMain" || icon.id == "allPosts" || icon.id == "allPostsM") {
             window.removeEventListener("scroll", pageLoad)
         }
     })
@@ -1023,7 +1023,7 @@ function getNotifications() {
                 notItem.innerHTML = `${time}<span class="notBody">${chat} <span class="maker">${notification.maker}</span></span> replied: ${getRepr(notification, "content")} to your post ${getRepr(notification, "reply_to")}`
             }
             if (notification.read == true) {
-                notItem.style.backgroundColor = "#d1d0d02a"
+                notItem.style.backgroundColor = "#d1d0d06a"
             }
             notWrapper.append(notItem)
         }
