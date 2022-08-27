@@ -997,9 +997,9 @@ function cleanPagePart() {
 
 function getNotifications() {
     let page = arguments[0] ? arguments[0] : 1
-    var amount;
+    var count = arguments[1] ? arguments[1] : parseInt(document.querySelector("#amount").innerHTML);
     console.log(document.querySelector("#notificationM"), "this is nottM")
-    amount = parseInt(document.querySelector("#amount").innerHTML) - (page - 1) * 30
+    amount =  count - (page - 1) * 30
     let notWrapper = document.createElement("div")
     $("#notCount").hide()
     $("#notCountM").hide()
@@ -1017,13 +1017,13 @@ function getNotifications() {
             notItem.setAttribute("data-type", notification.type)
             let time = `<span class="notTime">${notification.time}</span>`
             if (notification.type == "follow") {
-                notItem.innerHTML = `${time}<span class="notBody">${the_person} <span class="maker">${notification.maker}</span></span> follows you `
+                notItem.innerHTML = `<div class="topNot">${the_person} ${time}</div><span class="notBody"><span class="maker">${notification.maker}</span></span> follows you `
             } else if (notification.type == "like") {
-                notItem.innerHTML = `${time}<span class="notBody">${heart} <span class="maker">${notification.maker}</span></span> liked your post: ${getRepr(notification, "content")}`
+                notItem.innerHTML = `<div class="topNot">${heart}${time}</div><span class="notBody"> <span class="maker">${notification.maker}</span></span> liked your post: ${getRepr(notification, "content")}`
             } else if (notification.type == "reply") {
-                notItem.innerHTML = `${time}<span class="notBody">${chat} <span class="maker">${notification.maker}</span></span> replied: ${getRepr(notification, "content")} to your post ${getRepr(notification, "reply_to")}`
+                notItem.innerHTML = `<div class="topNot">${chat}${time}</div><span class="notBody"> <span class="maker">${notification.maker}</span></span> replied: ${getRepr(notification, "content")} to your post ${getRepr(notification, "reply_to")}`
             }
-            notItem.style.backgroundColor =  index + 1 <= amount ?  "white" : "#d1d0d06a"
+            notItem.style.backgroundColor =  index + 1 <= amount ?  "white" : "rgb(152 177 201 / 17%)"
             notWrapper.append(notItem)  
         })
         document.querySelector("#all_posts").append(notWrapper)
@@ -1046,11 +1046,13 @@ function getNotifications() {
             notWrapper.appendChild(load)
             load.onclick = () => {
                 load.remove()
-                getNotifications(page + 1)
+                getNotifications(page + 1, count)
             }
         }
     })
-
+    .then(() => {
+        document.querySelector("#amount").innerHTML = 0
+    })
 }
 
 
@@ -1063,7 +1065,7 @@ function createLoadItem() {
 
 
 function getRepr(notification, content) {
-    let contentRepr = notification[content].length > 10 ? notification[content].slice(0, 10) + "..." : notification[content]
+    let contentRepr = notification[content].length > 10 ? notification[content].slice(0, 16) + "..." : notification[content]
     return `<span class="contentRepr"><i class="toOpenPost">\"${contentRepr}\"</i></span>`
 }
 

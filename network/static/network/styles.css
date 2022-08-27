@@ -4,6 +4,7 @@
     padding-top: 20px;
     margin-bottom: 30px;
 }
+
 .mainTag {
     position: absolute;
     top: 16px;
@@ -616,20 +617,27 @@
 
 .notTime {
     color: gray;
-    font-size: small;
-    background-color: rgb(253, 253, 205);
+    font-size: smaller;
+    
     padding-left: 2px;
+    letter-spacing: 0px;
 }
 
 .notBody {
     font-weight: bold;
     font-size: large;
-    margin-left: 3%;
+    margin-left: 2px;
+    
+
+
 }
 
 .notItem {
     margin-top: 5px;
     cursor: pointer;
+    padding-left: 10px;
+
+    
 }
 
 .person {
@@ -641,6 +649,7 @@
 }
 
 .contentRepr {
+    
     font-weight: 400;
     color: rgb(94, 94, 94);
     
@@ -691,7 +700,6 @@
 #notCountM {
     position: relative;
     bottom: 1px;
-    left: 1px;
 }
 
 .bi-bell {
@@ -788,4 +796,8 @@ font-size: x-large;
 .hamburger:focus {
     border:none;
     outline: none;
+}
+
+#hede {
+    width: 180px;
 }
