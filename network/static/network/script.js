@@ -1076,40 +1076,47 @@ $(window).click(function(event) {
         if (header.dataset.profile == "AnonymousUser") {
             window.location.href = `/login`
         }
-        if (icon.innerHTML == "🤍") {
+        if (icon.innerHTML == "🤍" && icon.classList.contains("heartIcon")) {
+            let idNo = "p" + icon.dataset.id
+            if  (document.querySelector(`.${idNo}`)) {
+                document.querySelectorAll(`.${idNo}`).forEach(item => {
+                    item.childNodes[6].innerHTML = "❤";
+                    item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) + 1;
+                });
+            } else {
+                icon.innerHTML = "❤";
+                likes.innerHTML = parseInt(likes.innerHTML) + 1;
+            }
             fetch(`/like_post/${icon.dataset.id}`)
             .then(response => response.json())
-            .then(result => {
-                console.log(result)
+            .then(result => {        
                 if (result.success) {
-                    let idNo = "p" + icon.dataset.id
-                    if  (document.querySelector(`.${idNo}`)) {
-                        document.querySelectorAll(`.${idNo}`).forEach(item => {
-                            item.childNodes[6].innerHTML = "❤";
-                            item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) + 1;
-                        });
-                    } else {
-                        icon.innerHTML = "❤";
-                        likes.innerHTML = parseInt(likes.innerHTML) + 1;
-                    }
+                    console.log(result)
+                } else {
+                    icon.innerHTML = "🤍"
+                    likes.innerHTML = parseInt(likes.innerHTML) - 1
                 }
             });
-        } else if (icon.innerHTML == "❤") {
+        } else if (icon.innerHTML == "❤" && icon.classList.contains("heartIcon")) {
+            let idNo = "p" + icon.dataset.id
+            if  (document.querySelector(`.${idNo}`)) {
+                document.querySelectorAll(`.${idNo}`).forEach(item => {
+                    item.childNodes[6].innerHTML = "🤍";
+                    item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) - 1;
+                });
+            } else {
+                icon.innerHTML = "🤍";
+                likes.innerHTML = parseInt(likes.innerHTML) - 1;
+            }
             fetch(`/unlike_post/${icon.dataset.id}`)
             .then(response => response.json())
             .then(result => {
-                console.log(result)
+                
                 if (result.success) {
-                    let idNo = "p" + icon.dataset.id
-                    if  (document.querySelector(`.${idNo}`)) {
-                        document.querySelectorAll(`.${idNo}`).forEach(item => {
-                            item.childNodes[6].innerHTML = "🤍";
-                            item.childNodes[7].innerHTML = parseInt(item.childNodes[7].innerHTML) - 1;
-                        });
-                    } else {
-                        icon.innerHTML = "🤍";
-                        likes.innerHTML = parseInt(likes.innerHTML) - 1;
-                    }
+                    console.log(result)
+                } else {
+                    icon.innerHTML = "❤"
+                    likes.innerHTML = parseInt(likes.innerHTML) + 1;
                 }
             });
         }
