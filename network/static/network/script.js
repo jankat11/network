@@ -699,7 +699,7 @@ function comment(post, icon, fast) {
         } else if (header.dataset.profile == "AnonymousUser") {
             commentForm = document.createElement("div")
             commentPillow = `<div class="commentPillow"></div>`
-            commentForm.innerHTML = `<div style="display: none;" class="loggin cf${post.dataset.id}">${commentPillow}<div class='loginWarn'><a href='/login'>Login to write comment</a></div></div>`
+            commentForm.innerHTML = `<div style="display: none;" class="loggin cf${post.dataset.id}">${commentPillow}<div class='loginWarn'><a class="lgtext" href='/login'>Login to write comment</a></div></div>`
         }
         let page = 1
         getComment(post, commentForm, page, fast=false)

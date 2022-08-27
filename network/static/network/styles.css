@@ -24,6 +24,10 @@
  
 }
 
+.desktopNavbar, .mobileNavbar {
+    background-color: #2262800c;
+    background-image: linear-gradient(to bottom, #082c3d30 , rgba(152, 194, 211, 0.13));
+}
 
 @media (max-width: 1024px)  {#desktopBar{
     display: none;
@@ -718,11 +722,11 @@ font-size: x-large;
 .dots {
     height: 50px;
     width: 100%;
-    border-left: dotted 3px #449cac93;
+    border-left: dotted 3px #10447485;
 }
 
 .commentDots {
-    border-left: dotted 3px #449dace7;
+    border-left: dotted 3px #10447486;
 }
 
 .largeDots {
@@ -751,14 +755,18 @@ font-size: x-large;
     text-align: center;
     text-decoration: underline;
     border-radius: 0px 10px 10px 0px;
-    background-color: rgba(148, 203, 212, 0.123);
-    border-left: dotted 3px rgba(68, 156, 172, 0.575);
+    background-color: #2262800c;
+    border-left: dotted 3px #10447442;
     margin-top: 2px;
+}
+
+.lgtext {
+    color: #022b55d7;
 }
 
 .commentPillow {
     height: 20px;
-    border-left: solid 3px rgba(68, 156, 172, 0.575);
+    border-left: solid 3px #10447442;
     border-radius: 0px 0px 0px 0px;
 }
 
