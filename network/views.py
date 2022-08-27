@@ -17,14 +17,14 @@ from .models import User, Post, Notification
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(min_length=2, max_length=45, label="", strip=True,
+    username = forms.CharField(min_length=2, max_length=32, label="", strip=True,
         widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
     password = forms.CharField(label="", min_length=6, 
         widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
 
  
 class RegisterForm(forms.Form):
-    username = forms.CharField(label="", min_length=2, strip=True, max_length=45, 
+    username = forms.CharField(label="", min_length=2, strip=True, max_length=32, 
         widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
     email = forms.EmailField(label="",
         widget=forms.EmailInput(attrs={"placeholder": "Email", "class": "form-control form-group login"}))

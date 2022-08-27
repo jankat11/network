@@ -24,6 +24,7 @@
  
 }
 
+
 @media (max-width: 1024px)  {#desktopBar{
     display: none;
     }   
@@ -275,6 +276,9 @@
     padding-right: 5px;
     color: #07405a;
     width: fit-content;
+    overflow: hidden;
+    white-space: nowrap;
+
 }
 .postOwner:hover {
     cursor: pointer;
