@@ -214,7 +214,7 @@ def follow(request, user_name):
 def get_notifications(request, page):
     notifications = request.user.notifications.all().order_by("-id")
     the_list = [notification.serialize() for notification in notifications]
-    not_list = Paginator(the_list, 30)
+    not_list = Paginator(the_list, 5)
     return JsonResponse({"notList": not_list.page(page).object_list,  "notifications": the_list})
 
 

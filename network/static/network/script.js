@@ -1028,7 +1028,7 @@ function getNotifications() {
             }
             notWrapper.append(notItem)
         }
-        if (data.notifications.length > 30 && data.notList.length == 30) {
+        if (data.notifications.length > 5 && data.notList.length == 5) {
             let load = createLoadItem()
             load.innerHTML = "<h5 class='loadInfo notLoad'><i>load more</i><h5>"
             notWrapper.appendChild(load)
@@ -1076,7 +1076,7 @@ $(window).click(function(event) {
         if (header.dataset.profile == "AnonymousUser") {
             window.location.href = `/login`
         }
-        if (icon.innerHTML == "🤍" && icon.classList.contains("heartIcon")) {
+        if (icon.innerHTML == "🤍" && icon.classList.contains("heartIcon") && $(header).data("profile") != "AnonymousUser") {
             let idNo = "p" + icon.dataset.id
             if  (document.querySelector(`.${idNo}`)) {
                 document.querySelectorAll(`.${idNo}`).forEach(item => {
