@@ -14,6 +14,8 @@
     color: #011d69;
 }
 
+
+
 .netw {
     position: relative;
     top: 5px;
@@ -156,6 +158,10 @@
 #notArea {
     position: relative;
     right: 10px;
+    top: 10px;
+    width: 26px;
+    height: 45px;
+    padding-top: 0px;
 }
 
 #proArea:hover, #notArea:hover {
@@ -594,9 +600,10 @@
 #notificationM {
     padding-right: 0px;
     padding-left: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     position: relative;
     bottom: 2px;
-    
 }
 
 .notTime {
