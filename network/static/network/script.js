@@ -28,7 +28,8 @@ window.onpopstate = event => {
         } else if (event.state.section == "notifications") {
             notificationPage()
         } else if (event.state.section == "allposts" || event.state.section == "home") {
-            autoLoad("allPost", "All Posts", "block", "all_posts", "")      
+            newPost = $(header).data("profile") == "AnonymousUser" ? "none" : "block"
+            autoLoad("allPost", "All Posts",  newPost, "all_posts", "")      
         } else if (event.state.section.slice(0,4) == "post") {
             getThePost(event.state.section.slice(4))
         } else if (event.state.section.slice(0,4) == "page") {
@@ -1166,7 +1167,6 @@ $(window).click(function(event) {
                     localStorage.setItem("profileOrder", !icon.classList.contains("tree") ? icon.dataset.order : 0) 
                 }  
             }
-
             getThePost(icon.dataset.id)
             history.pushState({section: `post${icon.dataset.id}`}, "", `post`)
         }

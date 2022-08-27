@@ -46,6 +46,7 @@ class SearchForm(forms.Form):
 
 def index(request):
     if request.method == "POST":
+        
         form = PostForm(request.POST)
         if form.is_valid():
             the_content = form.cleaned_data["new_post"]
