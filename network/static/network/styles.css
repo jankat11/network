@@ -26,7 +26,7 @@
 
 .desktopNavbar, .mobileNavbar {
     background-color: #2262800c;
-    background-image: linear-gradient(to bottom, #082c3d25 , rgba(152, 194, 211, 0.13));
+    background-image: linear-gradient(to bottom, #082c3d28 , rgba(152, 194, 211, 0.13));
 }
 
 @media (max-width: 1024px)  {#desktopBar{
