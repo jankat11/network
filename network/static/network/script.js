@@ -108,6 +108,7 @@ if(following) {
         localStorage.setItem("followingOrder", 1)
         followings()
         history.pushState({section: "following"}, "", `following`);
+        $('.collapse').collapse("hide");
     });
 } 
 
@@ -117,6 +118,7 @@ if(document.querySelector("#followingM")) {
         localStorage.setItem("followingOrder", 1)
         followings()
         history.pushState({section: "following"}, "", `following`);
+        $('.collapse').collapse("hide");
     });
 } 
 
@@ -233,6 +235,7 @@ if(document.querySelector("#allPosts")) {
         removePagination()
         getPage("all_posts")
         history.pushState({section: "allposts"}, "", `allposts`)
+        $('.collapse').collapse("hide");
     });
 }
 
@@ -243,6 +246,7 @@ if(document.querySelector("#allPostsM")) {
         removePagination()
         getPage("all_posts")
         history.pushState({section: "allposts"}, "", `allposts`)
+        $('.collapse').collapse("hide");
     });
 }
 

@@ -87,6 +87,10 @@
     left: 75px;
     }   
 }
+@media (min-width: 1023px)  {.mainTag{
+    top: 18px;
+    }   
+}
 @media (max-width: 500px)  {.mainTag{
     left: 55px;
     }   
