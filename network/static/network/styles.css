@@ -14,7 +14,6 @@
     color: #011d69;
 }
 
-
 .netw {
     position: relative;
     top: 5px;
@@ -273,7 +272,9 @@
     font-weight: bolder;
     margin-left: 5px;
     padding-left: 5px;
+    padding-right: 5px;
     color: #07405a;
+    width: fit-content;
 }
 .postOwner:hover {
     cursor: pointer;
