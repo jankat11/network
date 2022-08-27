@@ -799,8 +799,8 @@ function pagination(status, profile, page, type) {
 
     $(window).click(function(event) {
         let icon = event.target
-        if ([...icon.classList].includes("postItem") || [...icon.classList].includes("postContent") || icon.classList.contains("removeScroll")
-         || icon.className == "postOwner" || icon.className == "maker" || icon.id == "profile" || icon.id == "notification" || icon.id == "following" || icon.id == "strongProfile" || icon.id == "followingM"
+        if ([...icon.classList].includes("postItem") || [...icon.classList].includes("postContent") || icon.classList.contains("removeScroll") || icon.id == "followingM"
+         || icon.className == "postOwner" || icon.className == "maker" || icon.id == "profile" || icon.id == "notification" || icon.id == "following" || icon.id == "strongProfile" 
          || icon.id ==  "notificationM" || icon.className == "proResult" || icon.className == "postTabMain" || icon.id == "allPosts" || icon.id == "allPostsM") {
             window.removeEventListener("scroll", pageLoad)
         }
