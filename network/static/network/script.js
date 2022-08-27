@@ -218,15 +218,9 @@ function profilePage(profileName) {
 }
 
 function notificationPage() {
-    $("#notCount").hide()
-    $("#notCountM").hide()
-    $("#notIcon").attr("fill", "#022c5570")
-    $("#notIconM").attr("fill", "#022c5570")
     removePagination()
-    getPage("notification")
-    fetch("read_notifications")
-    .then(response => response.json())
-    .then(result => console.log(result.success))
+    getPage("notification", not = document.querySelector("#amount").innerHTML)
+
 }
 
 if(document.querySelector("#allPosts")) {
@@ -1003,13 +997,19 @@ function cleanPagePart() {
 
 function getNotifications() {
     let page = arguments[0] ? arguments[0] : 1
+    var amount;
+    console.log(document.querySelector("#notificationM"), "this is nottM")
+    amount = parseInt(document.querySelector("#amount").innerHTML) - (page - 1) * 30
+    let notWrapper = document.createElement("div")
+    $("#notCount").hide()
+    $("#notCountM").hide()
+    $("#notIcon").attr("fill", "#022c5570")
+    $("#notIconM").attr("fill", "#022c5570")
     fetch(`/get_notifications/${page}`)
     .then(response => response.json())
     .then(data => {
-        console.log(data)
-        let notWrapper = document.createElement("div")
         let the_person = person
-        for (let notification of data.notList) {
+        data.notList.forEach((notification, index) => {
             let notItem = document.createElement("div")
             notItem.className = "border border-left-0 border-top-0 border-right-0 border-info notItem"
             notItem.setAttribute("data-content", notification.content_id)
@@ -1023,12 +1023,24 @@ function getNotifications() {
             } else if (notification.type == "reply") {
                 notItem.innerHTML = `${time}<span class="notBody">${chat} <span class="maker">${notification.maker}</span></span> replied: ${getRepr(notification, "content")} to your post ${getRepr(notification, "reply_to")}`
             }
-            if (notification.read == true) {
-                notItem.style.backgroundColor = "#d1d0d06a"
-            }
-            notWrapper.append(notItem)
-        }
-        if (data.notifications.length > 5 && data.notList.length == 5) {
+            notItem.style.backgroundColor =  index + 1 <= amount ?  "white" : "#d1d0d06a"
+            notWrapper.append(notItem)  
+        })
+        document.querySelector("#all_posts").append(notWrapper)
+        return data
+    })
+    .then(data => {
+        data.notList.length == 0 ? document.querySelector("#all_posts").innerHTML = "<h4 class='noYet'>No notifications yet.</h4>" : ""
+        return data
+    })
+    .then(data => {
+        fetch("read_notifications")
+        .then(response => response.json())
+        .then(result => console.log(result.success))
+        return data
+    })
+    .then((data) => {
+        if (data.notifications.length > 30 && data.notList.length == 30) {
             let load = createLoadItem()
             load.innerHTML = "<h5 class='loadInfo notLoad'><i>load more</i><h5>"
             notWrapper.appendChild(load)
@@ -1037,12 +1049,8 @@ function getNotifications() {
                 getNotifications(page + 1)
             }
         }
-        document.querySelector("#all_posts").append(notWrapper)
-        return data
     })
-    .then(data => {
-        data.notList.length == 0 ? document.querySelector("#all_posts").innerHTML = "<h4 class='noYet'>No notifications yet.</h4>" : ""
-    })
+
 }
 
 
