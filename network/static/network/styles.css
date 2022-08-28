@@ -147,6 +147,13 @@
     }   
 }
 
+@media (min-width: 1024px)  {.changeForm{
+    width: 50%;
+    }   
+}
+
+
+
 #title {
     color: #07405adc;
 }
@@ -212,11 +219,13 @@
 
 #navbarToggleExternalContent {
     text-align: left;
-    background-color: rgb(238, 238, 238);
+    background-color: #cfdfe2;
     width: 120px;
     position: absolute;
     right: 0px;
     z-index: 6;
+    font-weight: 500;
+    border-radius: 0px 0px 3px 3px;
 }
 
 #new_post_area {
@@ -253,6 +262,7 @@
     letter-spacing: 1px;
     margin-top: 10px;
     margin-right: 10px;
+    ;
 }
 
 #searchResults, #searchResults2 {
@@ -812,4 +822,9 @@ font-size: x-large;
     width: 180px;
 }
 
+.people {
+    position: relative;
+    right: 2px;
+    bottom: 2px;
+}
 

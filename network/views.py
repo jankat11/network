@@ -2,7 +2,7 @@
 import json
 import time
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, hashers
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -22,7 +22,15 @@ class LoginForm(forms.Form):
     password = forms.CharField(label="", min_length=6, 
         widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
 
+class ChangeForm(forms.Form):
+    password = forms.CharField(label="", min_length=6, 
+        widget=forms.PasswordInput(attrs={"placeholder": "Current password", "class": "form-control form-group login"}))
+    new_password = forms.CharField(label="", min_length=6, 
+        widget=forms.PasswordInput(attrs={"placeholder": "New password", "class": "form-control form-group login"}))
+    confirm_new_password = forms.CharField(label="", min_length=6, 
+        widget=forms.PasswordInput(attrs={"placeholder": "Confirm new password", "class": "form-control form-group login"}))
  
+
 class RegisterForm(forms.Form):
     username = forms.CharField(label="", min_length=2, strip=True, max_length=32, 
         widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
@@ -45,8 +53,7 @@ class SearchForm(forms.Form):
 
 
 def index(request):
-    if request.method == "POST":
-        
+    if request.method == "POST":   
         form = PostForm(request.POST)
         if form.is_valid():
             the_content = form.cleaned_data["new_post"]
@@ -294,6 +301,40 @@ def search(request, user, page):
     users = User.objects.filter(username__contains=user).all()
     result = Paginator(sorted([user.username for user in users]), 10)
     return JsonResponse(result.page(page).object_list, safe=False)
+
+
+@login_required
+def settings(request):
+    if request.method == "POST":
+        form = ChangeForm(request.POST)
+        if form.is_valid():
+            password = form.cleaned_data["password"]
+            if hashers.check_password(password, request.user.password):
+                new_password = form.cleaned_data.get("new_password")
+                confirmation = form.cleaned_data.get("confirm_new_password")
+                if new_password == confirmation:
+                    user = request.user
+                    user.set_password(new_password)
+                    user.save()
+                    return render(request, "network/settings.html", {
+                        "changeForm": ChangeForm(),
+                        "successful": "Password changed successfully! Click here to login"
+                    })
+                else:
+                    return render(request, "network/settings.html", {
+                        "changeForm": ChangeForm(),
+                        "message": "Passwords do not match!"
+                    })
+            else:
+                return render(request, "network/settings.html", {
+                    "changeForm": ChangeForm(),
+                    "message": "Your current password is wrong!"
+                })
+        return HttpResponseRedirect(reverse("settings"))
+    else:
+        return render(request, "network/settings.html", {
+            "changeForm": ChangeForm() 
+        })
 
 
 def login_view(request):

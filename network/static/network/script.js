@@ -247,8 +247,8 @@ if(document.querySelector("#allPostsM")) {
 
 
 function getProfile(user) {
-    document.querySelector("#followResultArea").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div><div class="followTitle">Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div><div class="followTitle">Follows:</div><div id="listF"></div></div></div>`
-    let closeButtonFollow = '<div id="closeWrap2"><button class="btn btn-outline-secondary" type="button" id="closeSearch2">close</button></div>'
+    document.querySelector("#followResultArea").innerHTML = `<div class="collapse followerArea theFollowArea" id="followerArea"><div><div class="followTitle"><span class="people">${people}</span>Followers:</div><div id="listFw"></div></div></div><div class="collapse followArea theFollowArea" id="followArea"><div><div class="followTitle"><span class="people">${people}</span>Follows:</div><div id="listF"></div></div></div>`
+    let closeButtonFollow = '<div id="closeWrap2"><button class="btn btn-outline-info" type="button" id="closeSearch2">close</button></div>'
     document.querySelector("#postTab").innerHTML = `<span class="postTabMain" id="postsTitle"></span><span class="postTabMain" id="commentsTitle">`
     let userName = `<div id="userName">${user}</div>`
     fetch(`/get_profile/${user}`)
