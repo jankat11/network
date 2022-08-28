@@ -57,7 +57,7 @@ class Notification(models.Model):
             "owner": self.owner.username,
             "maker": self.maker.username,
             "read": self.read,
-            "time": self.time.strftime("%b %d %Y, %I:%M %p"),
+            "time": self.time.strftime("%b %d %Y, %H:%M"),
             "type": self.not_type,
             "content": self.content.content if self.content else "",
             "content_id": self.content.id if self.content else "",
