@@ -36,7 +36,7 @@ class Post(models.Model):
             "id": self.id,
             "owner": self.owner.username,
             "content": self.content,
-            "time": self.time.strftime("%b %d %Y, %I:%M %p"),
+            "time": self.time.strftime("%m/%d/%Y, %H:%M"),
             "comment": self.comment,
             "comments": self.comments.count(),
             "likes": self.likers.count(),

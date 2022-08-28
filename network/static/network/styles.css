@@ -5,6 +5,8 @@
     margin-bottom: 30px;
 }
 
+
+
 .mainTag {
     position: absolute;
     top: 16px;
@@ -317,7 +319,7 @@
     margin-left: 5px;
     padding: 5px;
     width: auto;
-    margin-top: 10px;
+  
     color: black;
     font-weight: 400;
 }

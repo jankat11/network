@@ -242,7 +242,7 @@ def edit(request, post_id):
         data = json.loads(request.body)
         if data.get("content") is not None:
             post.content = data["content"]
-            post.updated = time.strftime("%b %d %Y, %I:%M %p")
+            post.updated = time.strftime("%m/%d/%Y, %H:%M")
             post.save()
             return JsonResponse(
                 {"success": "succesfully edited",
