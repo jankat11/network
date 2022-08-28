@@ -478,10 +478,10 @@
 
 .aboutUser {
     margin-left: 30px;
-    padding-right: 30px;
+    padding-right: 15px;
     margin-top: 10px;
     display: inline-block;
-    width: 100%;
+    width: fit-content;
     word-wrap: break-word;
     cursor: default;
     font-weight: 600;
