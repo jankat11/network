@@ -1147,6 +1147,49 @@ $(window).click(function(event) {
         $('.collapse').collapse("hide");
         desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
         removePagination()
+        var refac = ""
+        if (icon.parentElement.dataset.comment == "true" && title.innerHTML && ![...icon.parentElement.classList].includes("tree")) {
+            refac = icon.parentElement.parentElement
+            function getRoot(refac) {
+                while (!refac.dataset.comment) {
+                    refac = refac.previousElementSibling
+                }
+                return refac
+            }
+            while (getRoot(refac).dataset.comment == "true") {
+                refac = getRoot(refac.parentElement)
+            }
+            refac = getRoot(refac)
+        }
+        if (icon.parentElement.dataset.opened == "close") {
+            desktopS ? desktopS.setAttribute("data-bs-target", "#searchIcon2") : ""
+            $('.collapse').collapse("hide");
+            if (title.innerHTML == "All Posts") {
+                if (refac) {
+                    localStorage.setItem("allPost", refac.id)
+                    localStorage.setItem("allPostOrder", refac.dataset.order) 
+                } else {
+                    localStorage.setItem("allPost", icon.parentElement.id)
+                    localStorage.setItem("allPostOrder", icon.parentElement.dataset.order) 
+                }  
+            } else if (title.innerHTML == "From Your Followings<hr>") {
+                if (refac) {
+                    localStorage.setItem("following", refac.id)
+                    localStorage.setItem("followingOrder", refac.dataset.order) 
+                } else {
+                    localStorage.setItem("following", icon.parentElement.id)
+                    localStorage.setItem("followingOrder", icon.parentElement.dataset.order) 
+                }  
+            } else if (title.innerHTML == "<span></span>") {
+                if (refac) {
+                    localStorage.setItem("profile", !icon.parentElement.classList.contains("tree") ? refac.id : 0)
+                    localStorage.setItem("profileOrder", !icon.parentElement.classList.contains("tree") ? refac.dataset.order : 0) 
+                } else {
+                    localStorage.setItem("profile", !icon.parentElement.classList.contains("tree") ? icon.parentElement.id : 0)
+                    localStorage.setItem("profileOrder", !icon.parentElement.classList.contains("tree") ? icon.parentElement.dataset.order : 0) 
+                }  
+            }
+        }
         getPage("profile", icon.innerHTML)
         history.pushState({section: `profile-${icon.innerHTML}`}, "", `profile`)
     } else if (icon.className == "commentIcon" && !icon.parentElement.parentElement.classList.contains("postMain") && !icon.parentElement.parentElement.classList.contains("postRoot")) {
