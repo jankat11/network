@@ -11,11 +11,9 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 
-
 from. util import get_comment_tree
 from .models import User, Post, Notification
 from .forms import RegisterForm, LoginForm, PostForm, ChangeForm, SearchForm, SearchFormMobile
-
 
 
 def index(request):
@@ -48,43 +46,50 @@ def index(request):
 def all_posts(request, post_type, page=1, status="post"):
     if post_type.split("-")[0] == "all_posts":
         posts = []
-        for post in Post.objects.filter(comment=False).order_by("-id")[(page * 25) - 25:page * 25]:
-            is_users_post = post.owner == request.user
-            liked_before =  request.user in post.likers.all()
-            posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
-        return JsonResponse({
-            "posts": posts
-        })
-    elif post_type.split("-")[0] == "following":
-        posts = []
-        for user in request.user.follows.all():
-            follower_posts = Post.objects.filter(owner=user, comment=False)
-            for post in follower_posts:
+        try:
+            for post in Post.objects.filter(comment=False).order_by("-id")[(page * 25) - 25:page * 25]:
                 is_users_post = post.owner == request.user
                 liked_before =  request.user in post.likers.all()
                 posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
-        sorted_posts = sorted(posts, key=lambda post : post["thePost"]["id"], reverse=True)
-        pages = Paginator(sorted_posts, 25)
+        except:
+            pass
         return JsonResponse({
-            "posts": pages.page(page).object_list,
-            "pageCount" : pages.num_pages or "zero"
+            "posts": posts
         })
+
+    elif post_type.split("-")[0] == "following":
+        try:
+            posts = []
+            for user in request.user.follows.all():
+                follower_posts = Post.objects.filter(owner=user, comment=False)
+                for post in follower_posts:
+                    is_users_post = post.owner == request.user
+                    liked_before =  request.user in post.likers.all()
+                    posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
+            sorted_posts = sorted(posts, key=lambda post : post["thePost"]["id"], reverse=True)[(page * 25) - 25:page * 25]
+            return JsonResponse({
+                "posts": sorted_posts
+            })
+        except:
+            pass
     elif post_type.split("-")[0] == "profile":
         user_name = post_type.split("-")[1]
         the_user = User.objects.get(username=user_name)
         posts = []
-        for post in Post.objects.filter(owner=the_user, comment=False if status == "post" else True).order_by("-id"):
-            is_users_post = post.owner == request.user
-            liked_before =  request.user in post.likers.all()
-            if status == "post":
-                posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
-            else:
-                posts.append(get_comment_tree(request, post, liked_before, is_users_post))
-        pages = Paginator(posts, 25)
+        try:
+            for post in Post.objects.filter(owner=the_user, comment=False if status == "post" else True).order_by("-id")[(page * 25) - 25:page * 25]:
+                is_users_post = post.owner == request.user
+                liked_before =  request.user in post.likers.all()
+                if status == "post":
+                    posts.append({"thePost": post.serialize(), "like": liked_before, "isUsers": is_users_post})
+                else:
+                    posts.append(get_comment_tree(request, post, liked_before, is_users_post))
+        except:
+            pass
         return JsonResponse({
-            "posts": pages.page(page).object_list,
-            "pageCount" : pages.num_pages or "zero"
+            "posts": posts,
         })
+
 
 
 def get_post(request, post_id):

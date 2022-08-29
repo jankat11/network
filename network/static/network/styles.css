@@ -232,7 +232,7 @@
     cursor: pointer;
     font-style: italic;
     color: gray;
-    padding-bottom: 10px;
+    padding-bottom: 5px;
 }
 
 #navbarToggleExternalContent {
@@ -244,6 +244,7 @@
     z-index: 6;
     font-weight: 500;
     border-radius: 0px 0px 3px 3px;
+    padding-left: 10px;
 }
 
 #new_post_area {
