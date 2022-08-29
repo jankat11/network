@@ -715,7 +715,7 @@ function comment(post, icon, fast) {
 function giveRemainChar(element) {
     element.oninput = () => {
         element.parentElement.lastElementChild.innerHTML = element.value.length == 0 ? "" : `${element.value.length}/1000`
-        element.parentElement.lastElementChild.style.color = element.value.length > 1000 ? "red" : "black"
+        element.parentElement.lastElementChild.style.color = element.value.length >= 1000 ? "red" : "black"
     }
 }
 
