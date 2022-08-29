@@ -165,6 +165,11 @@
     }   
 }
 
+@media (min-width: 1024px)  {.hrSettings{
+    width: 25%;
+    }   
+}
+
 
 
 #title {
@@ -592,7 +597,7 @@
 }
 
 .submitComment {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     border: none;
     color: white;
 }

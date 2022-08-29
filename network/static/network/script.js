@@ -748,7 +748,7 @@ function getComment(post, commentForm, page=1, loadMore=false, loadItem="", fast
             commentItem.className = "post form-group postItem border border-light commentSection"
             wrapper.append(commentItem)
             post.parentElement.appendChild(wrapper)
-            post.parentElement.style.paddingBottom = "30px"
+            post.parentElement.style.paddingBottom = "10px"
             if (wrapper.offsetWidth <= window.innerWidth * 0.40) {
                 wrapper.style.paddingLeft = "0%"
                 wrapper.style.borderLeft = "none"
