@@ -45,31 +45,39 @@ document.body.addEventListener('click', function() {
     document.body.style.overflow = 'scroll';
 });
 
-document.querySelector(".post_form").onsubmit = () => {
-    textCorrection(document.querySelector(".newPost"))
+
+if (document.querySelector(".post_form")) {
+    document.querySelector(".post_form").onsubmit = () => {
+        textCorrection(document.querySelector(".newPost"))
+    }
 }
 
-giveRemainChar(document.querySelector(".newPost"))
+
+document.querySelector(".newPost") ? giveRemainChar(document.querySelector(".newPost")) : ""
 
 
 document.addEventListener("DOMContentLoaded", () => {   
     localStorage.clear()
     setLocals()
-    history.pushState({section: `home`}, "", `home`)
-    if (header.dataset.profile != "AnonymousUser") {
-        let notCount = document.querySelector("#notCount")
-        let notCountM = document.querySelector("#notCountM")
-        let notIcon = document.querySelector("#notIcon")
-        let notIconM = document.querySelector("#notIconM")
-        if(notCount.innerHTML != 0) {
-            notCount.style.display = "inline-block"
-            notCountM.style.display = "inline-block"
-            notIcon.setAttribute("fill", "#1e99ff")
-            notIconM.setAttribute("fill", "#1e99ff")
-        }
-    } 
-    removePagination()
-    getPage("all_posts")
+    document.querySelector("#all_posts") ? history.pushState({section: `home`}, "", `home`) : ""
+    if (header) {
+        if (header.dataset.profile != "AnonymousUser") {
+            let notCount = document.querySelector("#notCount")
+            let notCountM = document.querySelector("#notCountM")
+            let notIcon = document.querySelector("#notIcon")
+            let notIconM = document.querySelector("#notIconM")
+            if(notCount.innerHTML != 0) {
+                notCount.style.display = "inline-block"
+                notCountM.style.display = "inline-block"
+                notIcon.setAttribute("fill", "#1e99ff")
+                notIconM.setAttribute("fill", "#1e99ff")
+            }
+        } 
+    }
+    if (document.querySelector("#all_posts")) {
+        removePagination()
+        getPage("all_posts")
+    }
 });
 
 
