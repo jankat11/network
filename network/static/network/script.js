@@ -888,6 +888,7 @@ function deletePost(post)  {
 
 
 function editPage(button) {
+    button.parentElement.scrollIntoView({block: "center"})
     var saveButton;
     button.style.display = "none"
     let id = button.dataset.id
@@ -900,15 +901,17 @@ function editPage(button) {
     saveButton.style.display = "inline-block"
     let text = document.createElement("textarea")
     text.className = "form-control newPost"
+    text.setAttribute("rows", 3)
     text.value = button.parentElement.childNodes[4].innerHTML
     while (text.value.includes("<br>")) {
         text.value = text.value.replace("<br>", "\n");
     };
+    
     button.parentElement.childNodes[4].innerHTML = ""
     button.parentElement.childNodes[4].appendChild(text)
     text.oninput = () => {
-        if (text.value.length > 1000) {
-            saveButton.innerHTML = "Exceeded!"
+        if (text.value.length >= 1000) {
+            saveButton.innerHTML = "Max!"
             saveButton.style.color = "red"
             saveButton.disabled = true
         } else {
@@ -918,15 +921,15 @@ function editPage(button) {
         }
     }
     saveButton.onclick = () => {
+        text.value = text.value.trim()
         if (!text.value) {
             alert("The post must contain at least one character!")
             return
         }
-        textCorrection(text)
         fetch(`/edit/${button.dataset.id}`, {
             method: 'PUT',
             body: JSON.stringify({
-                content: text.value
+                content: textCorrection(text)
             })
         })
         .then(response => response.json())
@@ -939,7 +942,8 @@ function editPage(button) {
             button.parentElement.childNodes[2].append(edited)
             button.style.display = "inline-block"
             saveButton.style.display = "none"
-        });
+        })
+        
     }
 }
 
@@ -1082,6 +1086,7 @@ function textCorrection(element) {
     while (element.value.includes("\n")) {
         element.value = element.value.replace("\n", "<br>");
     };
+    return(element.value)
 };
 
 
