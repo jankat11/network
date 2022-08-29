@@ -49,7 +49,13 @@ class PostForm(forms.Form):
 
 class SearchForm(forms.Form):
     user = forms.CharField(label="", min_length=1, 
-        widget=forms.TextInput(attrs={"placeholder": "Search profile", "class": "form-control searchInput shadow-none"}))
+        widget=forms.TextInput(attrs={"placeholder": "Search profile", "class": "form-control searchInput searchInputDesktop shadow-none"}))
+
+
+class SearchFormMobile(forms.Form):
+    user = forms.CharField(label="", min_length=1, 
+        widget=forms.TextInput(attrs={"placeholder": "Search profile", "class": "form-control searchInput searchInputMobile shadow-none"}))
+
 
 
 def index(request):
@@ -68,12 +74,14 @@ def index(request):
         return render(request, "network/index.html", {
             "not_count": not_count,
             "postForm": PostForm(),
-            "searchForm": SearchForm()
+            "searchForm": SearchForm(),
+            "searchFormMobile": SearchFormMobile()
         })
     else:
         return render(request, "network/index.html", {
             "postForm": PostForm(),
-            "searchForm": SearchForm()
+            "searchForm": SearchForm(),
+            "searchFormMobile": SearchFormMobile()
         })
 
 

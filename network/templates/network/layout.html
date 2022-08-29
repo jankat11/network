@@ -53,7 +53,7 @@
 
                     <li class="nav-item" style="position: absolute; right: 170px;">
                       <div class="input-group mb-1" >
-                        <span id="searchForm">{{ searchForm }}</span>
+                        {{ searchForm }}
                         <div class="input-group-append">
                           <button id="desktopS" class="btn btn-outline-secondary searchB2" type="button" data-bs-toggle="collapse" data-bs-target="#searchIcon2" aria-controls="searchIcon2" aria-expanded="false" aria-label="Toggle navigation">Search</button>
                         </div>
@@ -158,7 +158,7 @@
               <div class="collapse mobileSearchArea" id="searchIcon">
                 <div class="bg-light p-4 coverS">
                   <div class="input-group mb-3">
-                      {{ searchForm }}
+                      {{ searchFormMobile }}
                     <div class="input-group-append">
                       <button class="btn btn-outline-secondary searchB" type="button">Search</button>
                     </div>
