@@ -45,6 +45,15 @@
     display: none;
     }   
 }
+
+@media (max-width: 1195px)  {#notD{
+    display: none;
+    }   
+}
+@media (max-width: 1195px)  {#searchForm{
+    width: 130px;
+    }   
+}
 @media (max-width: 1024px)  {#userName{
     font-size: 30px;
     }   
@@ -352,6 +361,7 @@
 .heartIcon:hover, .commentIcon:hover, #allPosts:hover, #allPostsM:hover, #following:hover, #followingM:hover, #profile:hover, .maker:hover, #notification:hover{
     cursor: pointer;
 }
+
 
 #profileHeader {
     border-radius: 30px;

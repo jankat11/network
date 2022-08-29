@@ -46,14 +46,14 @@
                         <a class="nav-link" id="following" >Following</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="notification" >Notifications<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" id="notIcon" fill="#022c5570" class="bi bi-bell-fill removeScroll" viewBox="0 0 16 16">
+                        <a class="nav-link" id="notification" ><span id="notD">Notifications</span><svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" id="notIcon" fill="#022c5570" class="bi bi-bell-fill removeScroll" viewBox="0 0 16 16">
                           <path class="removeScroll" d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
                         </svg> <span class="rounded-circle removeScroll" id="notCount">{% if not_count %}{{not_count}}{% endif %}</span></a> 
                     </li>
 
                     <li class="nav-item" style="position: absolute; right: 170px;">
                       <div class="input-group mb-1" >
-                        {{ searchForm }}
+                        <span id="searchForm">{{ searchForm }}</span>
                         <div class="input-group-append">
                           <button id="desktopS" class="btn btn-outline-secondary searchB2" type="button" data-bs-toggle="collapse" data-bs-target="#searchIcon2" aria-controls="searchIcon2" aria-expanded="false" aria-label="Toggle navigation">Search</button>
                         </div>
