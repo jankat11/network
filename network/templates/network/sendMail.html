@@ -17,7 +17,7 @@
     {% if not warning and not success %}
     
     <div id="info" class="alert alert-info" role="alert">
-        We'll send a code to your e-mail.
+        We'll send a reset code to your e-mail.
       </div>
       {% elif warning %}
 
@@ -33,10 +33,12 @@
       </div>
       {% endif %}
     <div class="input-group mb-3">
-        <input type="email" name="email" class="form-control" placeholder="Enter your e-mail address" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        {{mailForm}}
+        {% if not success %}
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" name="mailSubmit" type="submit">Send</button>
         </div>
+        {% endif %}
       </div>
 </form>
 

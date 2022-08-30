@@ -17,7 +17,7 @@ from django.core.mail import send_mail
 from .util import get_comment_tree, code_generator
 from .models import User, Post, Notification
 
-from .forms import RegisterForm, LoginForm, PostForm, ChangeForm, SearchForm, SearchFormMobile, ResetForm
+from .forms import RegisterForm, LoginForm, PostForm, ChangeForm, SearchForm, SearchFormMobile, ResetForm, MailForm
 
 
 def index(request):
@@ -290,7 +290,8 @@ def send_mail_to_user(request):
                     user = User.objects.get(email=mail)
                 except:
                     return render(request, 'network/sendMail.html', {
-                        "warning": "The user with given e-mail does not exist!"
+                        "warning": "The user with given e-mail does not exist!",
+                        "mailForm" : MailForm()
                     })
                 code = code_generator()
                 user.reset_code = code
@@ -309,7 +310,8 @@ def send_mail_to_user(request):
                 })
             except: 
                 return render(request, 'network/sendMail.html', {
-                    "warning": "Server is busy. Try later."
+                    "warning": "Server is busy. Try later.",
+                    "mailForm" : MailForm()
                 })
         if 'resetSubmit' in request.POST:    
             the_user = request.POST["user"]
@@ -328,14 +330,18 @@ def send_mail_to_user(request):
                 return HttpResponseRedirect(reverse("index"))
             elif mail_code != user.reset_code:
                 return render(request, 'network/sendMail.html', {
-                    "redone": "Your code is incorrect! please repeat steps"
+                    "redone": "Your code is incorrect! please repeat steps",
+                    "mailForm" : MailForm()
                 })
             else:
                 return render(request, 'network/sendMail.html', {
-                    "dontMatch": "Passwords don't match! please repeat steps"
+                    "dontMatch": "Passwords don't match! please repeat steps",
+                    "mailForm" : MailForm()
                 })
-
-    return render(request, 'network/sendMail.html')
+    return render(request, 'network/sendMail.html', {
+                    "mailForm" : MailForm()
+                })
+    
 
 
 
@@ -411,6 +417,16 @@ def register(request):
             # Ensure password matches confirmation
             password = form.cleaned_data["password"]
             confirmation = form.cleaned_data["confirmation"]
+
+            try:
+                check = User.objects.get(email=email)
+                if check is not None:
+                    return render(request, "network/register.html", {
+                        "message": "This email already exist!",
+                        "registerForm": RegisterForm()
+                    })  
+            except:
+                pass
 
             if password == "":
                 return render(request, "network/register.html", {

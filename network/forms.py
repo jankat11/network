@@ -28,7 +28,7 @@ class ResetForm(forms.Form):
 class RegisterForm(forms.Form):
     username = forms.CharField(label="", min_length=2, strip=True, max_length=32, 
         widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control form-group login"}))
-    email = forms.EmailField(label="",
+    email = forms.EmailField(label="", min_length=10,
         widget=forms.EmailInput(attrs={"placeholder": "Email", "class": "form-control form-group login"}))
     password = forms.CharField(label="", min_length=6, 
         widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control form-group login"}))
@@ -39,6 +39,10 @@ class RegisterForm(forms.Form):
 class PostForm(forms.Form):
     new_post = forms.CharField(label="", max_length=1000,
         widget=forms.Textarea(attrs={"placeholder": "What are you thinking?", "class": "form-control newPost shadow-none", "rows": "4"}))
+
+class MailForm(forms.Form):
+    email = forms.EmailField(label="", min_length=10,
+        widget=forms.EmailInput(attrs={"placeholder": "Enter your e-mail address", "class": "form-control form-group login"}))
 
 
 class SearchForm(forms.Form):
