@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
-from django.conf import settings
+
 
 
 from .util import get_comment_tree, code_generator
