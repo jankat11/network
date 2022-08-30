@@ -9,11 +9,11 @@ class LoginForm(forms.Form):
 
 class ChangeForm(forms.Form):
     password = forms.CharField(label="", min_length=6, 
-        widget=forms.PasswordInput(attrs={"placeholder": "Current password", "class": "form-control form-group login"}))
+        widget=forms.PasswordInput(attrs={"placeholder": "Current password", "class": "form-control form-group"}))
     new_password = forms.CharField(label="", min_length=6, 
-        widget=forms.PasswordInput(attrs={"placeholder": "New password", "class": "form-control form-group login"}))
+        widget=forms.PasswordInput(attrs={"placeholder": "New password", "class": "form-control form-group"}))
     confirm_new_password = forms.CharField(label="", min_length=6, 
-        widget=forms.PasswordInput(attrs={"placeholder": "Confirm new password", "class": "form-control form-group login"}))
+        widget=forms.PasswordInput(attrs={"placeholder": "Confirm new password", "class": "form-control form-group"}))
 
 
 class ResetForm(forms.Form):

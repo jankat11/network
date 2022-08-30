@@ -165,8 +165,8 @@
     }   
 }
 
-@media (min-width: 1024px)  {.hrSettings{
-    width: 25%;
+@media (min-width: 1024px)  {.hrSettings, .succesfulMessage, #message{
+    width: 50%;
     }   
 }
 
