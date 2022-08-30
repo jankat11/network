@@ -97,6 +97,7 @@ $(".searchB").each(function() {
 
 $(".searchB2").each(function() {
     $(this).click(function() {
+        $('.desktopSearchArea').collapse("show")
         let value =  $(this).parent().prev().val()
         if (!value) {
             $("#alertEmptySearch").click()
