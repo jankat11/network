@@ -128,7 +128,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'network/static')  # specify static root
 django_heroku.settings(locals())
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp-mail.outlook.com'
+EMAIL_HOST = 'smtp.office365.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "social2022@outlook.com.tr"

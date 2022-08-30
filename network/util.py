@@ -1,4 +1,9 @@
-import random
+from string import ascii_lowercase as lower
+from string import ascii_uppercase as upper
+
+from random import randint, choice
+
+
 
 def get_comment_tree(request, post, liked_before, is_users_post):
     post_main = post.comment_to
@@ -29,4 +34,9 @@ def get_comment_tree(request, post, liked_before, is_users_post):
     
     
 def code_generator():
-    pass
+    code = ""
+    for i in range(3):
+        for j in range(5):
+            code += choice([str(randint(0 ,9)), upper[randint(0, 25)], lower[randint(0, 25)]])
+        code = code + "-" if i !=2 else code
+    return code
