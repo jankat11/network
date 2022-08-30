@@ -14,6 +14,15 @@ class ChangeForm(forms.Form):
         widget=forms.PasswordInput(attrs={"placeholder": "New password", "class": "form-control form-group login"}))
     confirm_new_password = forms.CharField(label="", min_length=6, 
         widget=forms.PasswordInput(attrs={"placeholder": "Confirm new password", "class": "form-control form-group login"}))
+
+
+class ResetForm(forms.Form):
+    code = forms.CharField(label="", min_length=6, 
+        widget=forms.PasswordInput(attrs={"placeholder": "The code you received from e-mail", "class": "form-control form-group login"}))
+    new_password = forms.CharField(label="", min_length=6, 
+        widget=forms.PasswordInput(attrs={"placeholder": "New password", "class": "form-control form-group login"}))
+    confirm_new_password = forms.CharField(label="", min_length=6, 
+        widget=forms.PasswordInput(attrs={"placeholder": "Confirm new password", "class": "form-control form-group login"}))
  
 
 class RegisterForm(forms.Form):

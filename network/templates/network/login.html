@@ -12,8 +12,9 @@
         {% csrf_token %}
         {{ loginForm }}
         <input class="btn btn-primary" type="submit" value="Login">
+        <a href="{% url 'send_mail_to_user' %}" id="forgot">Forgot Password?</a>
     </form>
-
-    <div style="margin-top: 5px;">Don't have an account? <a href="{% url 'register' %}">Register here.</a></div>
+    
+    <div style="margin-top: 30px;">Don't have an account? <a href="{% url 'register' %}">Register here.</a></div>
 
 {% endblock %}

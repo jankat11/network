@@ -849,3 +849,17 @@ font-size: x-large;
     bottom: 2px;
 }
 
+#forgot:hover {
+    cursor: pointer;
+}
+
+#forgot {
+    font-size: small;
+    margin-left: 30px;
+    color: #0067dd;
+}
+
+#mailForm {
+    margin-top: 20px; 
+    margin-bottom: 10px; 
+}

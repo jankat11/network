@@ -29,7 +29,7 @@
         {% endif %}
         <form action="{% url 'settings' %}" method="post">
             {% csrf_token %}
-            <div class="changeForm">{{ changeForm }}</div>
+            <div class="changeForm">{{ resetForm }}</div>
             <input class="btn btn-primary" type="submit" value="Change">
         </form>
         <h5 style="margin-top: 50px;"><div style="color: #07405adc;">More settings will be add soon...</div>

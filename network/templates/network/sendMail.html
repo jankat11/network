@@ -1,0 +1,53 @@
+{% extends 'network/layout.html' %}
+
+{% block body %}
+{% if redone %}
+<div class="alert alert-danger login" role="alert">
+    {{redone}}
+  </div>
+{% elif dontMatch %}
+<div class="alert alert-danger login" role="alert">
+    {{dontMatch}}
+  </div>
+{% endif %}
+<h5 style="color: #07405adc; margin-top: 15px;">Forgot your password?</h5>
+<form id="mailForm" class="login" method="post" action="{% url 'send_mail_to_user' %}">
+    {% csrf_token %}
+    <h6 style="color: #07405adc; margin-top: 15px;">STEP 1</h6>
+    {% if not warning and not success %}
+    
+    <div id="info" class="alert alert-info" role="alert">
+        We'll send a code to your e-mail.
+      </div>
+      {% elif warning %}
+
+    <div id="alertWarn" class="alert alert-warning" role="alert">
+        <span >{{ warning }}</span>
+      </div>
+      {% elif success %}
+     
+      <div id="alertWarn" class="alert alert-success" role="alert">
+        <span ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="green" class="bi bi-check-lg" viewBox="0 0 16 16">
+            <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425a.247.247 0 0 1 .02-.022Z"/>
+          </svg>{{ success }}</span>
+      </div>
+      {% endif %}
+    <div class="input-group mb-3">
+        <input type="email" name="email" class="form-control" placeholder="Enter your e-mail address" aria-label="Recipient's username" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" name="mailSubmit" type="submit">Send</button>
+        </div>
+      </div>
+</form>
+
+{% if success %}
+<h6 style="color: #07405adc; margin-top: 15px;">STEP 2</h6>
+<form action="{% url 'send_mail_to_user' %}" method="post">
+    {% csrf_token %}
+    {{resetForm}}
+    <input class="btn btn-primary" name="resetSubmit" type="submit" value="Reset">
+    <input  name="mail" type="hidden" value="{{theMail}}">
+    <input  name="user" type="hidden" value="{{theUser}}">
+</form>
+{% endif %}
+{% endblock %}

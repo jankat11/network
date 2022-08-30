@@ -1,4 +1,6 @@
 
+
+import email
 import json
 import time
 
@@ -10,10 +12,14 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
+from django.conf import settings
 
-from. util import get_comment_tree
+
+from .util import get_comment_tree
 from .models import User, Post, Notification
-from .forms import RegisterForm, LoginForm, PostForm, ChangeForm, SearchForm, SearchFormMobile
+
+from .forms import RegisterForm, LoginForm, PostForm, ChangeForm, SearchForm, SearchFormMobile, ResetForm
 
 
 def index(request):
@@ -274,6 +280,53 @@ def search(request, user, page):
     users = User.objects.filter(username__icontains=user).all()
     result = Paginator(sorted([user.username for user in users]), 10)
     return JsonResponse(result.page(page).object_list, safe=False)
+
+
+def send_mail_to_user(request):
+    if request.method == "POST":
+        code = "555555"
+        if 'mailSubmit' in request.POST:
+            try:
+                mail = request.POST.get("email")
+                user = User.objects.get(email=mail)
+                subject = 'Network Password'
+                message = f'Hi {user.username}, your code is: {code}'
+                recipient_list = [user.email]
+                email_from = "social2022@outlook.com.tr"
+                send_mail(subject, message, email_from, recipient_list )
+                return render(request, 'network/sendMail.html', {
+                    "success": f"successfully sent to your e-mail!",
+                    "resetForm": ResetForm(),
+                    "theUser": user.username,
+                    "theMail": mail
+                })
+            except: 
+                return render(request, 'network/sendMail.html', {
+                    "warning": "The user with given e-mail does not exist!"
+                })
+        if 'resetSubmit' in request.POST:    
+            the_user = request.POST["user"]
+            the_mail = request.POST["mail"]
+            new_password = request.POST.get("new_password")
+            confirmation = request.POST.get("confirm_new_password")
+            mail_code = request.POST["code"]
+            user = User.objects.get(username=the_user, email=the_mail)
+            if mail_code == code and new_password == confirmation:
+                user.set_password(new_password)
+                user.save()
+                login(request, user)
+                return HttpResponseRedirect(reverse("index"))
+            elif mail_code != code:
+                return render(request, 'network/sendMail.html', {
+                    "redone": "Your code is incorrect! please repeat steps"
+                })
+            else:
+                return render(request, 'network/sendMail.html', {
+                    "dontMatch": "Passwords don't match! please repeat steps"
+                })
+
+    return render(request, 'network/sendMail.html')
+
 
 
 @login_required

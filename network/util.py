@@ -1,3 +1,4 @@
+import random
 
 def get_comment_tree(request, post, liked_before, is_users_post):
     post_main = post.comment_to
@@ -26,3 +27,6 @@ def get_comment_tree(request, post, liked_before, is_users_post):
         }
     }
     
+    
+def code_generator():
+    pass
