@@ -136,4 +136,4 @@ EMAIL_HOST = 'smtp.office365.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "social2022@outlook.com.tr"
-EMAIL_HOST_PASSWORD = "asdasd1111"
+EMAIL_HOST_PASSWORD = "asdasd1111" 
