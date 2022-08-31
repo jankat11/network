@@ -611,7 +611,7 @@ function createPost(post) {
     div.setAttribute("data-id", id)
     div.setAttribute("data-comment", post.thePost.comment)
     div.setAttribute("data-opened", "close")
-    div.className = `post form-group postItem border border-light`
+    div.className = `post form-group postItem`
     div.id = "post" + post.thePost.id
     return div
 }
@@ -674,6 +674,8 @@ function comment(post, icon, fast) {
     if (icon.innerHTML == "💬") {
         icon.innerHTML = "💬..."
         post.style.backgroundColor = "#82b2cf1a"
+        post.style.borderLeft = "solid 3px #10447442"
+        post.style.borderRadius = "5px 5px 5px 0px"
         var commentForm;
         if (header.dataset.profile != "AnonymousUser") {
             commentForm = document.querySelector(".send").cloneNode(true)
@@ -726,6 +728,8 @@ function removeCommentSections(icon, post, fast=false) {
     post.classList.add(`o${post.dataset.id}`)
     console.log(post)
     post.style.backgroundColor = "white"
+    post.style.borderLeft = "none"
+    post.style.borderRadius = "5px 5px 5px 5px"
     post.parentElement.style.paddingBottom = "0px"
     if (fast) {
         $(`.o${post.dataset.id}`).nextAll().remove()
@@ -746,7 +750,7 @@ function getComment(post, commentForm, page=1, loadMore=false, loadItem="", fast
             commentItem = createPostItem(item, "post")
             wrapper = document.createElement("div")
             wrapper.className = `commentWrapper w${post.dataset.id}`
-            commentItem.className = "post form-group postItem border border-light commentSection"
+            commentItem.className = "post form-group postItem commentSection"
             wrapper.append(commentItem)
             post.parentElement.appendChild(wrapper)
             post.parentElement.style.paddingBottom = "10px"
