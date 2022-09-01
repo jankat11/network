@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import django_heroku
-
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,9 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 
 
-S0 = os.getenv('SECRET_KEY')
-S1 = os.getenv('SECRET_KEY1')
-S2 = os.getenv('SECRET_KEY2')
+S0 = os.getenv('SECRET_KEY', 'SECRET_KEY0')
+S1 = os.getenv('SECRET_KEY1', "SECRET_KEY11" + "=tf@f8ewxer5n")
+S2 = os.getenv('SECRET_KEY2', 'SECRET_KEY2')
 
 SECRET_KEY = S0 + "&" + S1 + "&" + S2
 
