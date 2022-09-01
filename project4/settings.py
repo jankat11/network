@@ -25,9 +25,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 
 
-S0 = os.getenv('SECRET_KEY', 'SECRET_KEY0')
-S1 = os.getenv('SECRET_KEY1', "SECRET_KEY11" + "=tf@f8ewxer5n")
-S2 = os.getenv('SECRET_KEY2', 'SECRET_KEY2')
+S0 = os.getenv('SECRET_KEY')
+S1 = os.getenv('SECRET_KEY1', "SECRET_KEY11" + "SECRET_KEY12")
+S2 = os.getenv('SECRET_KEY2')
 
 SECRET_KEY = S0 + "&" + S1 + "&" + S2
 
