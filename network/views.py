@@ -301,7 +301,7 @@ def send_mail_to_user(request):
                 subject = 'Network Password'
                 message = f'hi: {user.username}, your code is: {code}'
                 recipient_list = [user.email]
-                email_from = "social2022@outlook.com.tr"
+                email_from = os.getenv('EMAIL_HOST_USER')
                 print(user)
                 send_mail(subject, message, email_from, recipient_list )
                 return render(request, 'network/sendMail.html', {
