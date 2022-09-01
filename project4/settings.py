@@ -32,7 +32,7 @@ S2 = os.getenv('SECRET_KEY2')
 SECRET_KEY = S0 + "&" + S1 + "&" + S2
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["127.0.0.1", "jankat.herokuapp.com"]
 
@@ -134,7 +134,7 @@ STATIC_URL = '/static/'
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'network/static')  # specify static root
-django_heroku.settings(locals())
+django_heroku.settings(locals(), staticfiles=False)
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = os.getenv("EMAIL_HOST")
