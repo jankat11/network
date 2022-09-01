@@ -1,6 +1,7 @@
 
 import json
 import time
+import os
 
 from django.contrib.auth import authenticate, login, logout, hashers
 from django.db import IntegrityError
@@ -11,14 +12,15 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 from django.core.mail import send_mail
-
-
+from dotenv import load_dotenv, find_dotenv
 
 from .util import get_comment_tree, code_generator
 from .models import User, Post, Notification
 
 from .forms import RegisterForm, LoginForm, PostForm, ChangeForm, SearchForm, SearchFormMobile, ResetForm, MailForm
 
+
+load_dotenv(find_dotenv())
 
 def index(request):
     if request.method == "POST":   
@@ -483,3 +485,6 @@ def pages(request):
 
 def post(request):
     return HttpResponseRedirect(reverse("index"))
+
+
+
