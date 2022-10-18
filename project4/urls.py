@@ -23,4 +23,4 @@ urlpatterns = [
     path("adminovich/", admin.site.urls),
     path("", include("network.urls")),
 ]
-
+ 
